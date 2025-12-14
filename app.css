@@ -464,3 +464,173 @@ button:hover{ opacity: .92; }
   padding:8px 10px;
   border-radius:999px;
 }
+/* =========================
+   Graphic overhaul (quiet, structured)
+   ========================= */
+
+/* 背景を“紙×宇宙”の中間に：ノイズ + グラデ + ビネット */
+:root{
+  --paper0: #e9e0cf;
+  --paper1: #e2d8c5;
+  --ink: rgba(12,14,20,.92);
+  --line: rgba(20,24,36,.18);
+
+  --glass: rgba(255,255,255,.22);
+  --glass2: rgba(255,255,255,.12);
+  --shadow0: 0 10px 30px rgba(0,0,0,.18);
+  --shadow1: 0 18px 45px rgba(0,0,0,.22);
+  --ring: 0 0 0 1px rgba(0,0,0,.18) inset, 0 0 0 1px rgba(255,255,255,.22);
+  --liftY: translateY(-2px);
+}
+
+/* 既存のダークトーンを“質感”に寄せる：背景レイヤ追加 */
+body{
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(255,255,255,.30), transparent 55%),
+    radial-gradient(1000px 700px at 90% 0%, rgba(255,255,255,.18), transparent 60%),
+    radial-gradient(900px 700px at 50% 110%, rgba(0,0,0,.10), transparent 55%),
+    linear-gradient(180deg, var(--paper0), var(--paper1));
+  color: var(--ink);
+}
+
+/* ページの「帯」感：ヘッダーをグラフィックに */
+.header{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.12));
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 10px 24px rgba(0,0,0,.10);
+  backdrop-filter: blur(10px);
+}
+.brand h1{
+  letter-spacing: .03em;
+}
+
+/* カード全般を“パネル化” */
+.card{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.34), rgba(255,255,255,.14));
+  border: 1px solid rgba(0,0,0,.10);
+  box-shadow: var(--shadow0);
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+/* パネル上部の細いアクセントライン（画像の緑ライン的） */
+.card::before{
+  content:"";
+  position:absolute;
+  left:12px; right:12px; top:10px;
+  height:6px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, rgba(64,220,140,.0), rgba(64,220,140,.55), rgba(64,220,140,.0));
+  opacity:.35;
+  pointer-events:none;
+}
+
+/* セクションカードはラインを薄く */
+.card.section::before{ opacity:.18; }
+
+/* クリック可能要素は共通で“浮かぶ” */
+.btn, .tagbtn, .oschip, .tagchip, .os-mini, .scard, .favmini{
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    filter .18s ease,
+    border-color .18s ease,
+    background-color .18s ease;
+  will-change: transform, box-shadow;
+}
+
+/* ホバーで浮かび上がる（PC） */
+@media (hover:hover){
+  .btn:hover, .tagbtn:hover, .oschip:hover, .tagchip:hover, .os-mini:hover, .favmini:hover{
+    transform: var(--liftY);
+    box-shadow: var(--shadow1);
+    filter: brightness(1.03) contrast(1.02);
+    border-color: rgba(64,220,140,.35);
+  }
+
+  /* カードも少し持ち上げる（やりすぎない） */
+  .scard:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 16px 38px rgba(0,0,0,.20);
+    border-color: rgba(0,0,0,.12);
+  }
+}
+
+/* タップ端末は押下時に浮く */
+.btn:active, .tagbtn:active, .oschip:active, .tagchip:active, .os-mini:active, .favmini:active{
+  transform: translateY(0);
+  box-shadow: 0 10px 22px rgba(0,0,0,.16);
+  filter: brightness(.99);
+}
+
+/* ボタンの“グラフィック”統一（丸・枠・ガラス） */
+.btn{
+  border: 1px solid rgba(0,0,0,.14);
+  background: rgba(255,255,255,.18);
+  color: var(--ink);
+  box-shadow: 0 10px 24px rgba(0,0,0,.14);
+}
+.btn.primary{
+  background: linear-gradient(180deg, rgba(64,220,140,.38), rgba(64,220,140,.18));
+  border-color: rgba(64,220,140,.35);
+  color: rgba(0,0,0,.85);
+}
+.btn.ghost{
+  background: rgba(255,255,255,.12);
+}
+
+/* タグ・OSチップを“ラベル感”に */
+.tagbtn, .oschip{
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(0,0,0,.12);
+  color: rgba(0,0,0,.72);
+}
+.tagbtn.active, .oschip.active{
+  background: linear-gradient(180deg, rgba(64,220,140,.30), rgba(64,220,140,.14));
+  border-color: rgba(64,220,140,.40);
+  color: rgba(0,0,0,.86);
+}
+
+/* カード内タグチップ */
+.tagchip{
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(64,220,140,.28);
+  color: rgba(0,0,0,.74);
+}
+.tagchip:hover{
+  border-color: rgba(64,220,140,.45);
+}
+
+/* “該当なし”などのメッセージカードもパネル化 */
+.empty, .item{
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(0,0,0,.10);
+}
+
+/* scardの中身（文字）を読みやすく */
+.scard-title{ color: rgba(0,0,0,.88); }
+.scard-summary{ color: rgba(0,0,0,.62); }
+
+/* 展開パネルを“プレート”に（斜線を上品に） */
+.scard-expand{
+  border: 1px solid rgba(0,0,0,.10);
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(0,0,0,.03),
+      rgba(0,0,0,.03) 9px,
+      rgba(255,255,255,0) 9px,
+      rgba(255,255,255,0) 18px
+    ),
+    rgba(255,255,255,.10);
+}
+
+/* フォーカス（キーボード）でも浮き上がる */
+.btn:focus-visible, .tagbtn:focus-visible, .oschip:focus-visible, .tagchip:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(64,220,140,.25), var(--shadow0);
+  border-color: rgba(64,220,140,.45);
+}
+
