@@ -140,10 +140,11 @@ function renderHome(){
     </div>
 
     <div class="card section" style="padding:14px;">
-      <div style="font-size:14px; color:var(--muted); margin-bottom:10px;">OSの構成</div>
-      <div class="grid os">
+      <div class="os-select-title">OSを選択</div>
+
+      <div class="os-select-grid">
         ${OS_META.map(m => `
-          <div class="card os-tile" data-os="${m.key}">
+          <div class="card os-mini" data-os="${m.key}">
             <h3>${escapeHtml(m.title)}</h3>
             <p>${escapeHtml(m.desc)}</p>
           </div>
