@@ -633,4 +633,34 @@ body{
   box-shadow: 0 0 0 3px rgba(64,220,140,.25), var(--shadow0);
   border-color: rgba(64,220,140,.45);
 }
+/* === emergency visibility patch === */
+.cards, .card-grid, #cards, #cardGrid{
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (min-width: 980px){
+  .cards, .card-grid, #cards, #cardGrid{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.scard{
+  display:block !important;
+  min-height: 120px;
+  padding: 14px;
+  background: rgba(255,255,255,.25) !important;
+  border: 1px solid rgba(0,0,0,.12) !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.14) !important;
+  color: rgba(0,0,0,.88) !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* card::before が覆う可能性を殺す */
+.card::before{
+  pointer-events:none !important;
+  z-index: 0 !important;
+}
 
