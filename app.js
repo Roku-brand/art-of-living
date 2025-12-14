@@ -95,29 +95,21 @@ function renderShell(activeTab){
           <h1>処世術禄</h1>
           <small>Shoseijutsu OS</small>
         </div>
+
         <div class="header-actions">
-          <button class="btn ghost" id="btnTop">≪トップ≫</button>
-          <button class="btn ghost" id="btnMy">≪マイページ≫</button>
+          <button class="btn ghost ${activeTab==="top"?"active":""}" id="btnTop">トップ</button>
+          <button class="btn ghost ${activeTab==="list"?"active":""}" id="btnList">処世術一覧</button>
+          <button class="btn ghost ${activeTab==="my"?"active":""}" id="btnMy">マイページ</button>
         </div>
       </div>
     </div>
 
     <div class="container" id="view"></div>
-
-    <div class="bottom-nav">
-      <div class="inner" style="grid-template-columns: repeat(2, 1fr);">
-        <button class="navbtn ${activeTab==="top"?"active":""}" data-nav="#home">トップ</button>
-        <button class="navbtn ${activeTab==="list"?"active":""}" data-nav="#list?os=life">処世術一覧</button>
-      </div>
-    </div>
   `;
 
-  $("#btnTop").onclick = ()=> nav("#home");
-  $("#btnMy").onclick  = ()=> nav("#my");
-
-  document.querySelectorAll("[data-nav]").forEach(b=>{
-    b.onclick = ()=> nav(b.getAttribute("data-nav"));
-  });
+  $("#btnTop").onclick  = ()=> nav("#home");
+  $("#btnList").onclick = ()=> nav("#list?os=life");
+  $("#btnMy").onclick   = ()=> nav("#my");
 }
 
 // ========== 画面：トップ ==========
@@ -129,11 +121,11 @@ function renderHome(){
 自己啓発・心理学・行動科学・対人術・キャリア論などを 5つのOS・195の項目 に集約した「処世術の体系書」`;
 
   view.innerHTML = `
-    <div class="card hero">
-      <div class="hero-title">処世術禄</div>
-      <p class="hero-copy">${escapeHtml(copy)}</p>
+    <div class="card section" style="padding:14px;">
+      <div style="font-size:18px; font-weight:800; margin-bottom:8px;">処世術禄</div>
+      <p class="hero-copy" style="margin:0; white-space:pre-line;">${escapeHtml(copy)}</p>
 
-      <div class="row">
+      <div class="row" style="margin-top:12px;">
         <button class="btn primary" id="goList">処世術一覧へ</button>
         <span class="subtle">7つのOS・200項目（目標値として固定表示）</span>
       </div>
@@ -141,7 +133,6 @@ function renderHome(){
 
     <div class="card section" style="padding:14px;">
       <div class="os-select-title">OSを選択</div>
-
       <div class="os-select-grid">
         ${OS_META.map(m => `
           <div class="card os-mini" data-os="${m.key}">
@@ -158,6 +149,7 @@ function renderHome(){
     el.onclick = ()=> nav(`#list?os=${el.getAttribute("data-os")}`);
   });
 }
+
 
 // ========== 一覧（画像寄せ：タグボタン + カード展開。検索なし） ==========
 function buildTagSet(cards){
@@ -381,7 +373,7 @@ function renderDetail(id){
 
 // ========== マイページ（β） ==========
 function renderMy(){
-  renderShell("top");
+  renderShell("my");
   const view = $("#view");
 
   const favSet = loadFavorites();
