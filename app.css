@@ -292,3 +292,29 @@ textarea{min-height:120px; resize:vertical}
   align-items:center;
   justify-content:space-between;
 }
+/* OSセレクタ（一覧ページ：ヘッダー下） */
+.osbar{
+  display:flex;
+  gap:10px;
+  overflow:auto;
+  padding:10px 12px;
+  scrollbar-width: none;
+}
+.osbar::-webkit-scrollbar{ display:none; }
+
+.oschip{
+  flex:0 0 auto;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid rgba(30,42,68,.75);
+  background: rgba(11,16,32,.55);
+  color: var(--muted);
+  cursor:pointer;
+  white-space:nowrap;
+}
+.oschip.active{
+  color: var(--text);
+  border-color: rgba(201,178,122,.65);
+  background: linear-gradient(180deg, rgba(201,178,122,.18), rgba(11,16,32,.55));
+}
+
