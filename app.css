@@ -224,6 +224,26 @@ button:hover{ opacity: .92; }
   color: var(--muted);
   font-size: 12px;
 }
+.hero-card{
+  padding:12px 14px;
+}
+.page-head{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+@media (min-width: 780px){
+  .page-head{
+    flex-direction:row;
+    align-items:flex-end;
+    justify-content:space-between;
+  }
+}
+.osbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
 
 /* タグボタン列（すべて/タグ） */
 .tagbar{
@@ -663,4 +683,3 @@ body{
   pointer-events:none !important;
   z-index: 0 !important;
 }
-
