@@ -177,25 +177,26 @@ function renderList(osKey){
   };
 
   view.innerHTML = `
-    <div class="card" style="padding:14px;">
-      <div class="page-title">${escapeHtml(meta?.title ?? "人生OS")} の処世術一覧</div>
-      <div class="page-sub">件数：<span id="countAll">${allCards.length}</span> 件</div>
+    <div class="card hero-card">
+      <div class="page-head">
+        <div>
+          <div class="page-title">${escapeHtml(meta?.title ?? "人生OS")} の処世術一覧</div>
+          <div class="page-sub">件数：<span id="countAll">${allCards.length}</span> 件</div>
+        </div>
+        <div class="osbar" id="osbar">
+          ${OS_META.map(m => `
+            <button class="oschip ${m.key===currentOS ? "active" : ""}" data-os="${m.key}">
+              ${escapeHtml(m.title)}
+            </button>
+          `).join("")}
+        </div>
+      </div>
     </div>
 
     <div class="card section" style="padding:0;">
       <div class="tagbar" id="tagbar">
         <button class="tagbtn active" data-tag="">すべて</button>
         ${tags.map(t=>`<button class="tagbtn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
-      </div>
-    </div>
-
-    <div class="card section" style="padding:0;">
-      <div class="tagbar" id="osbar">
-        ${OS_META.map(m => `
-          <button class="oschip ${m.key===currentOS ? "active" : ""}" data-os="${m.key}">
-            ${escapeHtml(m.title)}
-          </button>
-        `).join("")}
       </div>
     </div>
 
