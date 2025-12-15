@@ -660,7 +660,7 @@ body{
   gap: 14px;
 }
 
-@media (min-width: 920px){
+@media (min-width: 980px){
   .cards, .card-grid, #cards, #cardGrid{
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

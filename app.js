@@ -173,7 +173,7 @@ function renderList(osKey){
 
   const state = {
     tag: "",          // 空=すべて
-    expandedId: "" // デフォルトは閉じる
+    expandedId: "" // Default collapsed
   };
 
   view.innerHTML = `
