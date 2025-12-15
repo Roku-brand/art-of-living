@@ -368,7 +368,7 @@ button:hover{ opacity: .92; }
   border-radius:999px;
   border:1px solid rgba(64,220,140,.35);
   background: rgba(64,220,140,.10);
-  color: rgba(210,255,230,.9);
+  color: var(--ink);
   cursor:pointer;
   font-size:12px;
 }
