@@ -313,7 +313,7 @@ button:hover{ opacity: .92; }
 }
 .scard-summary{
   margin:0;
-  color: var(--muted);
+  color: #000;
   font-size:13px;
   line-height:1.6;
 }
@@ -392,17 +392,17 @@ button:hover{ opacity: .92; }
 .scard-expand h4{
   margin:0 0 6px;
   font-size:13px;
-  color: rgba(210,255,230,.92);
+  color: #000;
 }
 .scard-expand ul{
   margin:0 0 10px 18px;
-  color: rgba(232,240,255,.9);
+  color: #000;
   font-size:13px;
   line-height:1.7;
 }
 .scard-expand p{
   margin:0 0 10px;
-  color: rgba(232,240,255,.9);
+  color: #000;
   font-size:13px;
   line-height:1.7;
 }
@@ -656,13 +656,13 @@ body{
 /* === emergency visibility patch === */
 .cards, .card-grid, #cards, #cardGrid{
   display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 14px;
 }
 
-@media (min-width: 980px){
+@media (min-width: 920px){
   .cards, .card-grid, #cards, #cardGrid{
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
