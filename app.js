@@ -173,7 +173,7 @@ function renderList(osKey){
 
   const state = {
     tag: "",          // 空=すべて
-    expandedId: allCards[0]?.id || "" // 最初のカードを開いた状態に近づける（画像寄せ）
+    expandedId: "" // Default collapsed
   };
 
   view.innerHTML = `
@@ -236,12 +236,6 @@ function renderList(osKey){
               <div class="scard-meta">
                 <span class="scard-id">${escapeHtml(c.id)}</span>
               </div>
-
-              <div class="scard-tags">
-                ${(c.tags||[]).map(t=>`
-                  <span class="tagchip" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</span>
-                `).join("")}
-              </div>
             </div>
 
             <div class="scard-side">
@@ -264,6 +258,12 @@ function renderList(osKey){
               <ul>${strategyBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
             </div>
           ` : ``}
+
+          <div class="scard-tags">
+            ${(c.tags||[]).map(t=>`
+              <span class="tagchip" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</span>
+            `).join("")}
+          </div>
         </div>
       `;
     }).join("") || `<div class="card" style="padding:14px; color:var(--muted);">該当するカードがありません。</div>`;
