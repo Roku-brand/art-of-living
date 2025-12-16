@@ -44,16 +44,50 @@ function parseQuery(qs){
 function nav(hash){
   location.hash = hash;
 }
+
+/**
+ * 文字列/配列/その他の型でも「箇条書き表示」できるように正規化する
+ * - 文字列: 改行や先頭の「・」「-」を除去して配列化
+ * - 配列: 要素をString化してtrim
+ * - その他: String化して扱う
+ */
 function splitToBullets(text){
-  // JSONが文章でも見栄え良くする：改行 / ・ / - を箇条書き化
-  const t = (text ?? "").trim();
+  if (text == null) return [];
+
+  // 配列ならそのまま bullet として扱う
+  if (Array.isArray(text)) {
+    return text.map(v => String(v).trim()).filter(Boolean);
+  }
+
+  // 文字列以外は String 化
+  if (typeof text !== "string") text = String(text);
+
+  const t = text.trim();
   if (!t) return [];
+
   const lines = t
     .split(/\n+/)
     .map(x => x.replace(/^\s*[・\-]\s*/,"").trim())
     .filter(Boolean);
-  // 1行だけで長文なら、そのまま1要素
+
   return lines.length ? lines : [t];
+}
+
+/**
+ * データ揺れ吸収（内部OSの pitfall など）
+ * - pitfall -> pitfalls
+ * - strategy/essence が文字列でも配列でもOK（描画側で splitToBullets が吸収）
+ */
+function normalizeCard(c){
+  if (!c || typeof c !== "object") return c;
+
+  const out = { ...c };
+
+  // 内部OSなどで pitfall(単数) が来るケースを吸収
+  if (out.pitfalls == null && out.pitfall != null) out.pitfalls = out.pitfall;
+
+  // 将来の拡張用：他の揺れが出たらここで吸収
+  return out;
 }
 
 // ========== データ読み込み ==========
@@ -66,7 +100,8 @@ async function fetchOS(osKey){
     const res = await fetch(meta.file, { cache: "no-store" });
     if (!res.ok) throw new Error(`${meta.file} ${res.status}`);
     const json = await res.json();
-    return Array.isArray(json) ? json : [];
+    const arr = Array.isArray(json) ? json : [];
+    return arr.map(normalizeCard);
   } catch (e) {
     console.error("fetchOS error:", e);
     return [];
@@ -79,7 +114,10 @@ async function loadAll(){
   OS_META.forEach((m, i) => { DATA.byOS[m.key] = results[i]; });
 
   // personal を extra に混ぜる
-  const mergedExtra = [...(DATA.byOS.extra ?? []), ...personal.map(x => ({...x, os:"extra"}))];
+  const mergedExtra = [
+    ...(DATA.byOS.extra ?? []),
+    ...personal.map(x => normalizeCard({ ...x, os:"extra" }))
+  ];
   DATA.byOS.extra = mergedExtra;
 
   DATA.all = OS_META.flatMap(m => (DATA.byOS[m.key] ?? []));
@@ -221,7 +259,7 @@ function renderList(osKey){
       const isFav = fav.has(c.id);
 
       const essenceBullets = splitToBullets(c.essence);
-      const pitfallsBullets = splitToBullets(c.pitfalls);
+      const pitfallsBullets = splitToBullets(c.pitfalls); // normalizeCardでpitfallも吸収済み
       const strategyBullets = splitToBullets(c.strategy);
 
       return `
@@ -325,7 +363,9 @@ function findCardById(id){
 function renderDetail(id){
   renderShell("list");
   const view = $("#view");
-  const card = findCardById(id);
+  const cardRaw = findCardById(id);
+  const card = normalizeCard(cardRaw);
+
   if (!card) {
     view.innerHTML = `<div class="card detail">カードが見つかりません：${escapeHtml(id)}</div>`;
     return;
@@ -333,6 +373,10 @@ function renderDetail(id){
   const osTitle = (OS_META.find(m=>m.key===card.os)?.title) ?? card.os;
   const fav = loadFavorites();
   const isFav = fav.has(card.id);
+
+  const essenceBullets = splitToBullets(card.essence);
+  const pitfallsBullets = splitToBullets(card.pitfalls);
+  const strategyBullets = splitToBullets(card.strategy);
 
   view.innerHTML = `
     <div class="card detail">
@@ -351,9 +395,21 @@ function renderDetail(id){
       </div>
 
       <div class="kv"><h3>要約</h3><p>${escapeHtml(card.summary)}</p></div>
-      <div class="kv"><h3>本質</h3><p>${escapeHtml(card.essence)}</p></div>
-      <div class="kv"><h3>落とし穴</h3><p>${escapeHtml(card.pitfalls)}</p></div>
-      <div class="kv"><h3>戦略</h3><p>${escapeHtml(card.strategy)}</p></div>
+
+      <div class="kv">
+        <h3>本質</h3>
+        <ul>${essenceBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      </div>
+
+      <div class="kv">
+        <h3>落とし穴</h3>
+        <ul>${pitfallsBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      </div>
+
+      <div class="kv">
+        <h3>戦略</h3>
+        <ul>${strategyBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      </div>
 
       <div class="tags">
         ${(card.tags||[]).map(t=>`<span class="badge">#${escapeHtml(t)}</span>`).join("")}
@@ -454,7 +510,7 @@ function renderMy(){
       alert("id と title は必須です");
       return;
     }
-    const card = {
+    const card = normalizeCard({
       id,
       title,
       summary: $("#psummary").value.trim(),
@@ -463,7 +519,7 @@ function renderMy(){
       strategy: $("#pstrategy").value.trim(),
       tags: $("#ptags").value.split(",").map(s=>s.trim()).filter(Boolean),
       os: "extra"
-    };
+    });
     const cards = loadPersonalCards();
     cards.push(card);
     savePersonalCards(cards);
