@@ -1,8 +1,7 @@
 /* =========================================================
-   処世術禄 – Glass + Full Width + Right Sidebar
+   処世術禄 – Glass + Full Width + LEFT Sidebar
    ========================================================= */
 
-/* ---------- Tokens ---------- */
 :root{
   --paper0: #efe7d7;
   --paper1: #e5dcc8;
@@ -18,14 +17,12 @@
   --shadow1: 0 18px 40px rgba(0,0,0,.18);
 
   --glass: rgba(255,255,255,.32);
-
   --accent: rgba(64,220,140,1);
 
   --r-lg: 20px;
   --r-md: 16px;
 }
 
-/* ---------- Reset ---------- */
 *{ box-sizing:border-box; }
 html,body{ margin:0; padding:0; }
 img{ max-width:100%; display:block; }
@@ -56,17 +53,15 @@ a:hover{ text-decoration: underline; }
   border-bottom: 1px solid var(--line2);
   box-shadow: 0 10px 24px rgba(0,0,0,.10);
 }
-
 .header-inner{
   width: 100%;
-  margin: 0 auto;
-  padding: 10px 14px; /* 余白を詰める */
+  margin: 0;
+  padding: 10px 14px;
   display:flex;
   gap:12px;
   align-items:center;
   justify-content:space-between;
 }
-
 .brand h1{
   margin:0;
   font-size: 16px;
@@ -85,10 +80,8 @@ a:hover{ text-decoration: underline; }
 .container{
   width: 100%;
   margin: 0;
-  padding: 14px 14px 110px; /* 左右余白を最小限に */
+  padding: 14px 14px 110px;
 }
-
-/* さらに広げたい場合（大型モニタ用） */
 @media (min-width: 1200px){
   .container{ padding-left: 10px; padding-right: 10px; }
 }
@@ -121,7 +114,6 @@ a:hover{ text-decoration: underline; }
   background: rgba(64,220,140,.12);
   border-color: rgba(64,220,140,.35);
 }
-
 @media (hover:hover){
   .btn:hover{
     transform: translateY(-2px);
@@ -146,7 +138,6 @@ a:hover{ text-decoration: underline; }
   margin-bottom: 14px;
   position: relative;
 }
-
 .card::before{
   content:"";
   position:absolute;
@@ -165,23 +156,78 @@ a:hover{ text-decoration: underline; }
   pointer-events:none;
 }
 
-/* ---------- List Layout (Main + Right Sidebar) ---------- */
+/* ---------- Top: OS Select (縮小) ---------- */
+.os-select-title{
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.os-select-grid{
+  display:grid;
+  gap:10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 520px){
+  .os-select-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 980px){
+  .os-select-grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* 必要十分サイズへ */
+.os-mini{
+  padding: 10px 10px;
+  border-radius: 16px;
+  cursor:pointer;
+  min-height: 60px;          /* 小さく */
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background: rgba(255,255,255,.26);
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.os-mini h3{
+  margin:0 0 4px;
+  font-size: 12px;           /* 小さく */
+  line-height: 1.2;
+  font-weight: 800;
+  color: var(--text);
+}
+.os-mini p{
+  margin:0;
+  font-size: 11px;           /* 小さく */
+  color: var(--muted);
+  line-height: 1.25;
+  display:-webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow:hidden;
+}
+@media (hover:hover){
+  .os-mini:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow1);
+    border-color: rgba(64,220,140,.22);
+  }
+}
+
+/* ---------- List Layout (LEFT Sidebar) ---------- */
 .list-layout{
   display:grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-columns: 320px minmax(0, 1fr);  /* 左サイド */
   gap: 14px;
   align-items:start;
 }
-
-.list-main{ min-width: 0; }
-.list-side{ min-width: 0; }
+.list-main{ min-width:0; }
+.list-side{ min-width:0; }
 
 .side-card{
   position: sticky;
-  top: 74px; /* header下で止まる */
+  top: 74px;
   padding: 14px 14px;
 }
-
 .side-head{
   display:flex;
   flex-direction:column;
@@ -197,14 +243,13 @@ a:hover{ text-decoration: underline; }
   font-size: 12px;
   color: var(--muted);
 }
-
 .side-tabs{
   display:flex;
   flex-direction:column;
   gap:8px;
 }
 
-/* 右サイドのOSチップ */
+/* 左サイドのOSチップ */
 .oschip{
   width: 100%;
   text-align: left;
@@ -229,14 +274,10 @@ a:hover{ text-decoration: underline; }
   }
 }
 
-/* スマホ：右サイドを下に落とす（縦が窮屈になるため） */
+/* スマホ：サイドバーを上へ（横幅がないので） */
 @media (max-width: 920px){
-  .list-layout{
-    grid-template-columns: 1fr;
-  }
-  .side-card{
-    position: static;
-  }
+  .list-layout{ grid-template-columns: 1fr; }
+  .side-card{ position: static; }
   .side-tabs{
     flex-direction: row;
     flex-wrap: wrap;
@@ -441,7 +482,7 @@ a:hover{ text-decoration: underline; }
   color: rgba(0,0,0,.70);
 }
 
-/* ---------- Forms ---------- */
+/* Forms */
 .input, input, textarea{
   width:100%;
   border-radius: 14px;
