@@ -14,25 +14,30 @@ const LS_PERSONAL = "shoseijutsu:personalCards";
 
 // ========== ユーティリティ ==========
 const $ = (sel) => document.querySelector(sel);
-const escapeHtml = (s) => (s ?? "").replace(/[&<>"']/g, c => ({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-}[c]));
+
+const escapeHtml = (s) =>
+  String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
 
 function readJSONSafe(text){
   try { return JSON.parse(text); } catch { return null; }
 }
+
 function loadFavorites(){
   return new Set(readJSONSafe(localStorage.getItem(LS_FAV)) ?? []);
 }
 function saveFavorites(set){
   localStorage.setItem(LS_FAV, JSON.stringify([...set]));
 }
+
 function loadPersonalCards(){
   return readJSONSafe(localStorage.getItem(LS_PERSONAL)) ?? [];
 }
 function savePersonalCards(cards){
   localStorage.setItem(LS_PERSONAL, JSON.stringify(cards));
 }
+
 function parseQuery(qs){
   const out = {};
   (qs || "").replace(/^\?/, "").split("&").filter(Boolean).forEach(kv=>{
@@ -41,52 +46,31 @@ function parseQuery(qs){
   });
   return out;
 }
+
 function nav(hash){
   location.hash = hash;
 }
 
 /**
- * 文字列/配列/その他の型でも「箇条書き表示」できるように正規化する
- * - 文字列: 改行や先頭の「・」「-」を除去して配列化
- * - 配列: 要素をString化してtrim
- * - その他: String化して扱う
+ * 文字列/配列/その他を bullets に統一（内部OSの配列でも落ちない）
  */
 function splitToBullets(text){
   if (text == null) return [];
-
-  // 配列ならそのまま bullet として扱う
-  if (Array.isArray(text)) {
-    return text.map(v => String(v).trim()).filter(Boolean);
-  }
-
-  // 文字列以外は String 化
+  if (Array.isArray(text)) return text.map(v => String(v).trim()).filter(Boolean);
   if (typeof text !== "string") text = String(text);
-
   const t = text.trim();
   if (!t) return [];
-
-  const lines = t
-    .split(/\n+/)
-    .map(x => x.replace(/^\s*[・\-]\s*/,"").trim())
-    .filter(Boolean);
-
+  const lines = t.split(/\n+/).map(x => x.replace(/^\s*[・\-]\s*/,"").trim()).filter(Boolean);
   return lines.length ? lines : [t];
 }
 
 /**
- * データ揺れ吸収（内部OSの pitfall など）
- * - pitfall -> pitfalls
- * - strategy/essence が文字列でも配列でもOK（描画側で splitToBullets が吸収）
+ * データ揺れ吸収：内部OS pitfall(単数) 等
  */
 function normalizeCard(c){
   if (!c || typeof c !== "object") return c;
-
   const out = { ...c };
-
-  // 内部OSなどで pitfall(単数) が来るケースを吸収
   if (out.pitfalls == null && out.pitfall != null) out.pitfalls = out.pitfall;
-
-  // 将来の拡張用：他の揺れが出たらここで吸収
   return out;
 }
 
@@ -116,7 +100,7 @@ async function loadAll(){
   // personal を extra に混ぜる
   const mergedExtra = [
     ...(DATA.byOS.extra ?? []),
-    ...personal.map(x => normalizeCard({ ...x, os:"extra" }))
+    ...personal.map(x => normalizeCard({ ...x, os: "extra" }))
   ];
   DATA.byOS.extra = mergedExtra;
 
@@ -188,8 +172,7 @@ function renderHome(){
   });
 }
 
-
-// ========== 一覧（画像寄せ：タグボタン + カード展開。検索なし） ==========
+// ========== 一覧 ==========
 function buildTagSet(cards){
   const set = new Set();
   cards.forEach(c => (c.tags||[]).forEach(t => set.add(t)));
@@ -210,38 +193,44 @@ function renderList(osKey){
   const tags = buildTagSet(allCards);
 
   const state = {
-    tag: "",          // 空=すべて
-    expandedId: "" // Default collapsed
+    tag: "",
+    expandedId: ""
   };
 
+  // ここで「hero」を消し、右サイドバーにOSを出す
   view.innerHTML = `
-    <div class="card hero-card">
-      <div class="page-head">
-        <div>
-          <div class="page-title">${escapeHtml(meta?.title ?? "人生OS")} の処世術一覧</div>
-          <div class="page-sub">件数：<span id="countAll">${allCards.length}</span> 件</div>
+    <div class="list-layout">
+      <div class="list-main">
+        <div class="card section list-toolbar">
+          <div class="tagbar" id="tagbar">
+            <button class="tagbtn active" data-tag="">すべて</button>
+            ${tags.map(t=>`<button class="tagbtn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
+          </div>
         </div>
-        <div class="osbar" id="osbar">
-          ${OS_META.map(m => `
-            <button class="oschip ${m.key===currentOS ? "active" : ""}" data-os="${m.key}">
-              ${escapeHtml(m.title)}
-            </button>
-          `).join("")}
+
+        <div class="cards-grid" id="cards"></div>
+      </div>
+
+      <aside class="list-side">
+        <div class="card side-card">
+          <div class="side-head">
+            <div class="side-os">${escapeHtml(meta?.title ?? "人生OS")}</div>
+            <div class="side-count">件数：<span id="countAll">${allCards.length}</span> 件</div>
+          </div>
+
+          <div class="side-tabs" id="osbar">
+            ${OS_META.map(m => `
+              <button class="oschip sidechip ${m.key===currentOS ? "active" : ""}" data-os="${m.key}">
+                ${escapeHtml(m.title)}
+              </button>
+            `).join("")}
+          </div>
         </div>
-      </div>
+      </aside>
     </div>
-
-    <div class="card section" style="padding:0;">
-      <div class="tagbar" id="tagbar">
-        <button class="tagbtn active" data-tag="">すべて</button>
-        ${tags.map(t=>`<button class="tagbtn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
-      </div>
-    </div>
-
-    <div class="cards-grid" id="cards"></div>
   `;
 
-  // OS切替（ヘッダー下に配置）
+  // OS切替（右サイド）
   $("#osbar").querySelectorAll("[data-os]").forEach(b=>{
     b.onclick = ()=> nav(`#list?os=${b.getAttribute("data-os")}`);
   });
@@ -259,7 +248,7 @@ function renderList(osKey){
       const isFav = fav.has(c.id);
 
       const essenceBullets = splitToBullets(c.essence);
-      const pitfallsBullets = splitToBullets(c.pitfalls); // normalizeCardでpitfallも吸収済み
+      const pitfallsBullets = splitToBullets(c.pitfalls);
       const strategyBullets = splitToBullets(c.strategy);
 
       return `
@@ -312,7 +301,6 @@ function renderList(osKey){
         e.stopPropagation();
         const t = el.getAttribute("data-tag");
         state.tag = (state.tag === t) ? "" : t;
-        // タグボタンのactive更新
         $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
           b.classList.toggle("active", b.getAttribute("data-tag") === state.tag);
         });
@@ -320,7 +308,7 @@ function renderList(osKey){
       };
     });
 
-    // 展開（カードヘッダ部分クリック）
+    // 展開
     $("#cards").querySelectorAll("[data-toggle]").forEach(el=>{
       el.onclick = ()=>{
         const id = el.getAttribute("data-toggle");
@@ -356,20 +344,20 @@ function renderList(osKey){
   draw();
 }
 
-// ========== 詳細ページ（今回は“一覧内展開”が主役なので残すだけ） ==========
+// ========== 詳細 ==========
 function findCardById(id){
   return DATA.all.find(c => c.id === id);
 }
 function renderDetail(id){
   renderShell("list");
   const view = $("#view");
-  const cardRaw = findCardById(id);
-  const card = normalizeCard(cardRaw);
+  const card = normalizeCard(findCardById(id));
 
   if (!card) {
     view.innerHTML = `<div class="card detail">カードが見つかりません：${escapeHtml(id)}</div>`;
     return;
   }
+
   const osTitle = (OS_META.find(m=>m.key===card.os)?.title) ?? card.os;
   const fav = loadFavorites();
   const isFav = fav.has(card.id);
@@ -428,7 +416,7 @@ function renderDetail(id){
   };
 }
 
-// ========== マイページ（β） ==========
+// ========== マイページ ==========
 function renderMy(){
   renderShell("my");
   const view = $("#view");
