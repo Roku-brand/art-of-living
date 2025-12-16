@@ -197,20 +197,9 @@ function renderList(osKey){
     expandedId: ""
   };
 
-  // ここで「hero」を消し、右サイドバーにOSを出す
+  // 左サイドバー（OS） + メイン（タグ＋カード）
   view.innerHTML = `
     <div class="list-layout">
-      <div class="list-main">
-        <div class="card section list-toolbar">
-          <div class="tagbar" id="tagbar">
-            <button class="tagbtn active" data-tag="">すべて</button>
-            ${tags.map(t=>`<button class="tagbtn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
-          </div>
-        </div>
-
-        <div class="cards-grid" id="cards"></div>
-      </div>
-
       <aside class="list-side">
         <div class="card side-card">
           <div class="side-head">
@@ -227,10 +216,21 @@ function renderList(osKey){
           </div>
         </div>
       </aside>
+
+      <div class="list-main">
+        <div class="card section list-toolbar">
+          <div class="tagbar" id="tagbar">
+            <button class="tagbtn active" data-tag="">すべて</button>
+            ${tags.map(t=>`<button class="tagbtn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
+          </div>
+        </div>
+
+        <div class="cards-grid" id="cards"></div>
+      </div>
     </div>
   `;
 
-  // OS切替（右サイド）
+  // OS切替（左サイド）
   $("#osbar").querySelectorAll("[data-os]").forEach(b=>{
     b.onclick = ()=> nav(`#list?os=${b.getAttribute("data-os")}`);
   });
@@ -278,7 +278,7 @@ function renderList(osKey){
               <h4>本質・要点</h4>
               <ul>${essenceBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
 
-              <h4>やがてな落とし穴</h4>
+              <h4>やりがちな落とし穴</h4>
               <ul>${pitfallsBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
 
               <h4>二周目視点の戦略</h4>
