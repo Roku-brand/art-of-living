@@ -1,50 +1,75 @@
 /* =========================================================
-   処世術禄 – Theme CSS (Ink × Parchment × Structure)
+   処世術禄 – Glass Card UI (透明感 × 見やすさ)
    ========================================================= */
 
-/* ---------- Color Tokens ---------- */
+/* ---------- Design Tokens ---------- */
 :root{
-  --bg-main: #D8CCB6;        /* Ink Parchment Brown */
-  --bg-sub:  #CBBCA2;        /* Aged Paper */
-  --bg-card: rgba(255,255,255,0.25);
+  /* Paper / background */
+  --paper0: #efe7d7;
+  --paper1: #e5dcc8;
 
-  --ink-main: #2E261B;       /* Deep Ink */
-  --ink-sub:  #5C4A32;
+  /* Ink */
+  --text: rgba(0,0,0,.88);
+  --muted: rgba(0,0,0,.56);
+  --subtle: rgba(0,0,0,.40);
 
-  --accent:   #9C8353;       /* Muted Bronze */
-  --border:   rgba(46,38,27,0.18);
+  /* Lines / shadow */
+  --line: rgba(0,0,0,.10);
+  --line2: rgba(0,0,0,.08);
+  --shadow0: 0 12px 28px rgba(0,0,0,.14);
+  --shadow1: 0 18px 40px rgba(0,0,0,.18);
 
-  --shadow:   0 10px 30px rgba(46,38,27,0.12);
-  --radius:   14px;
+  /* Glass */
+  --glass: rgba(255,255,255,.32);
+  --glass2: rgba(255,255,255,.22);
+  --glass3: rgba(255,255,255,.14);
+
+  /* Accent (mint) */
+  --accent: rgba(64,220,140,1);
+  --accent-weak: rgba(64,220,140,.18);
+  --accent-line: rgba(64,220,140,.42);
+
+  /* Radius / layout */
+  --r-lg: 20px;
+  --r-md: 16px;
+  --r-sm: 12px;
 
   --maxw: 1100px;
 }
 
 /* ---------- Reset ---------- */
-*{ box-sizing: border-box; }
+*{ box-sizing:border-box; }
 html,body{ margin:0; padding:0; }
+img{ max-width:100%; display:block; }
+
 body{
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     "Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;
-  color: var(--ink-main);
+  color: var(--text);
+  line-height: 1.7;
+
+  /* Paper + soft light */
   background:
-    radial-gradient(1200px 700px at 20% 0%, rgba(255,255,255,.35), rgba(255,255,255,0) 60%),
-    radial-gradient(900px 600px at 90% 10%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
-    linear-gradient(180deg, var(--bg-main), var(--bg-sub));
-  line-height:1.7;
+    radial-gradient(1200px 600px at 20% -10%, rgba(255,255,255,.32), transparent 55%),
+    radial-gradient(1000px 700px at 90% 0%, rgba(255,255,255,.20), transparent 60%),
+    radial-gradient(900px 700px at 50% 110%, rgba(0,0,0,.10), transparent 55%),
+    linear-gradient(180deg, var(--paper0), var(--paper1));
 }
-a{ color: var(--ink-main); text-decoration:none; }
+
+a{ color: inherit; text-decoration:none; }
 a:hover{ text-decoration: underline; }
 
 /* ---------- Layout ---------- */
-header{
+header, .header{
   position: sticky;
   top: 0;
   z-index: 10;
-  backdrop-filter: blur(10px);
-  background: rgba(216,204,182,.78);
-  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,.28);
+  border-bottom: 1px solid var(--line2);
+  box-shadow: 0 10px 24px rgba(0,0,0,.10);
 }
+
 .header-inner{
   max-width: var(--maxw);
   margin: 0 auto;
@@ -54,39 +79,26 @@ header{
   align-items:center;
   justify-content:space-between;
 }
+
 .brand{
   display:flex;
   flex-direction:column;
   gap:2px;
 }
-.brand .title{
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: .06em;
+.brand .title,
+.brand h1{
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: .03em;
+  margin:0;
 }
-.brand .sub{
-  font-size: .78rem;
-  color: var(--ink-sub);
-}
+.brand .sub,
+.brand small{ display:none !important; }
 
-.nav{
+.nav, .header-actions{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
-}
-.nav button{
-  font-family: inherit;
-  font-size: .9rem;
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--ink-main);
-}
-.nav button.active{
-  background: rgba(255,255,255,.25);
-  border-color: rgba(46,38,27,.28);
 }
 
 main{
@@ -95,137 +107,187 @@ main{
   padding: 18px 16px 120px;
 }
 
-/* ---------- Common Blocks ---------- */
-.card{
-  background: var(--bg-card);
-  border:1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 16px 18px;
-  margin-bottom: 16px;
+.container{
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 18px 16px 120px;
 }
 
-.section{
-  margin-top: 18px;
-}
-.section-title{
-  font-size: 1rem;
-  font-weight: 700;
-  border-left: 4px solid var(--accent);
-  padding-left: 10px;
-  margin: 0 0 10px 0;
-}
-.muted{ color: var(--ink-sub); }
-hr{
-  border:none;
-  border-top:1px solid var(--border);
-  margin: 18px 0;
-}
-
-/* =========================================================
-   TOP: OS Selection Grid (4 columns × 2 rows)
-   ========================================================= */
-
-.os-grid{
-  display:grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.os-tile{
-  background: rgba(255,255,255,.22);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: 0 8px 18px rgba(46,38,27,.09);
-  padding: 12px 12px;
+/* ---------- Buttons ---------- */
+button, .btn{
+  font-family: inherit;
+  font-size: .9rem;
+  padding: 8px 12px;
+  border-radius: 999px;
   cursor: pointer;
-  transition: transform .08s ease, background .12s ease, border-color .12s ease;
-  min-height: 78px; /* 必要十分サイズ */
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap: 4px;
-}
-.os-tile:hover{
-  transform: translateY(-1px);
-  background: rgba(255,255,255,.28);
-  border-color: rgba(46,38,27,.26);
-}
-.os-tile .os-name{
-  font-weight: 800;
-  letter-spacing: .02em;
-  font-size: .98rem;
-  line-height: 1.25;
-}
-.os-tile .os-note{
-  font-size: .78rem;
-  color: var(--ink-sub);
-  line-height: 1.25;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.18);
+  color: var(--text);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease, border-color .18s ease, background-color .18s ease;
+  will-change: transform, box-shadow;
 }
 
-/* スマホは 2列に落とす（4列固定だと窮屈になるため） */
-@media (max-width: 720px){
-  .os-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .os-tile{ min-height: 74px; }
-}
-
-/* =========================================================
-   Buttons / Chips
-   ========================================================= */
-button{
-  font-family:inherit;
-  font-size:.9rem;
-  padding:8px 12px;
-  border-radius:10px;
-  cursor:pointer;
-}
-button.primary{
-  background: var(--accent);
-  color:#fff;
-  border:1px solid rgba(46,38,27,0.25);
-}
-button.ghost{
-  background:transparent;
-  border:1px solid var(--border);
-  color: var(--ink-main);
-}
-button:hover{ opacity: .92; }
-
-.tags{
-  display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;
-}
-.tag{
-  font-size:0.75rem;
-  padding:4px 8px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  color: var(--ink-sub);
+.btn.ghost{
   background: rgba(255,255,255,.12);
 }
 
-.footer{
-  position: fixed;
-  left:0; right:0; bottom:0;
-  background: rgba(216,204,182,.9);
-  border-top:1px solid var(--border);
-  padding: 10px 16px;
-  font-size:.8rem;
-  color: var(--ink-sub);
-  text-align:center;
+.btn.primary{
+  background: linear-gradient(180deg, rgba(64,220,140,.34), rgba(64,220,140,.14));
+  border-color: rgba(64,220,140,.35);
+  color: rgba(0,0,0,.86);
 }
-/* ========= OSページ（画像寄せUI） ========= */
 
-.page-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0 0 6px;
+.btn.danger{
+  background: rgba(255,80,80,.12);
+  border-color: rgba(255,80,80,.25);
+  color: rgba(0,0,0,.80);
 }
-.page-sub {
+
+.nav button,
+.header-actions .btn.ghost{
+  padding: 8px 10px;
+}
+
+.nav button.active,
+.header-actions .btn.ghost.active{
+  background: rgba(64,220,140,.12);
+  border-color: rgba(64,220,140,.35);
+}
+
+/* Hover lift (desktop) */
+@media (hover:hover){
+  button:hover, .btn:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow1);
+    filter: brightness(1.02) contrast(1.01);
+    border-color: rgba(64,220,140,.28);
+  }
+}
+button:active, .btn:active{
+  transform: translateY(0);
+  box-shadow: 0 10px 20px rgba(0,0,0,.14);
+}
+
+/* ---------- Common Card ---------- */
+.card{
+  background: var(--glass);
+  border: 1px solid var(--line2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow0);
+  backdrop-filter: blur(12px);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+/* Top accent line (subtle, like screenshot) */
+.card::before{
+  content:"";
+  position:absolute;
+  left:16px;
+  right:16px;
+  top:10px;
+  height:4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(64,220,140,0),
+    rgba(64,220,140,.45),
+    rgba(64,220,140,0)
+  );
+  opacity: .28;
+  pointer-events:none;
+}
+
+.card.section::before{ opacity:.18; }
+
+.section{ margin-top: 18px; }
+.section-title{
+  font-size: 1rem;
+  font-weight: 800;
+  border-left: 4px solid rgba(64,220,140,.55);
+  padding-left: 10px;
+  margin: 0 0 10px 0;
+}
+
+.muted{ color: var(--muted); }
+.small{ font-size: 12px; color: var(--muted); }
+
+hr{
+  border:none;
+  border-top:1px solid var(--line2);
+  margin: 18px 0;
+}
+
+/* ---------- Top: OS Select Grid ---------- */
+.os-select-title{
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.os-select-grid{
+  display:grid;
+  gap:12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 520px){
+  .os-select-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 980px){
+  .os-select-grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.os-mini{
+  padding: 12px 12px;
+  border-radius: 18px;
+  cursor:pointer;
+  min-height: 74px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background: rgba(255,255,255,.26);
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.os-mini h3{
+  margin:0 0 6px;
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 800;
+  color: var(--text);
+}
+.os-mini p{
+  margin:0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.35;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+@media (hover:hover){
+  .os-mini:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow1);
+    border-color: rgba(64,220,140,.22);
+  }
+}
+
+/* ---------- OS List header ---------- */
+.hero-card{ padding: 12px 14px; }
+.page-title{
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 6px;
+  color: var(--text);
+}
+.page-sub{
   color: var(--muted);
   font-size: 12px;
-}
-.hero-card{
-  padding:12px 14px;
 }
 .page-head{
   display:flex;
@@ -239,447 +301,316 @@ button:hover{ opacity: .92; }
     justify-content:space-between;
   }
 }
+
 .osbar{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
 }
 
-/* タグボタン列（すべて/タグ） */
+/* OS chips */
+.oschip{
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.16);
+  color: rgba(0,0,0,.72);
+  cursor:pointer;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.oschip.active{
+  background: rgba(64,220,140,.12);
+  border-color: rgba(64,220,140,.34);
+  color: rgba(0,0,0,.86);
+}
+@media (hover:hover){
+  .oschip:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow1);
+    border-color: rgba(64,220,140,.22);
+  }
+}
+
+/* ---------- Tag bar (top row buttons) ---------- */
 .tagbar{
   display:flex;
   gap:10px;
   overflow:auto;
-  padding:10px 12px;
+  padding: 10px 12px;
   scrollbar-width:none;
 }
 .tagbar::-webkit-scrollbar{ display:none; }
 
 .tagbtn{
   flex:0 0 auto;
-  padding:9px 12px;
-  border-radius:999px;
-  border:1px solid rgba(30,42,68,.75);
-  background: rgba(11,16,32,.35);
-  color: var(--muted);
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.14);
+  color: rgba(0,0,0,.66);
   cursor:pointer;
   white-space:nowrap;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
 }
 .tagbtn.active{
-  color: var(--text);
-  border-color: rgba(64,220,140,.55);
+  color: rgba(0,0,0,.86);
+  border-color: rgba(64,220,140,.38);
   background: rgba(64,220,140,.12);
 }
+@media (hover:hover){
+  .tagbtn:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow1);
+    border-color: rgba(64,220,140,.22);
+  }
+}
 
-/* カードグリッド（画像の2カラム感） */
+/* ---------- Cards grid (2 columns like screenshot) ---------- */
 .cards-grid{
   display:grid;
   grid-template-columns: 1fr;
-  gap:14px;
+  gap: 14px;
 }
 @media (min-width: 920px){
   .cards-grid{ grid-template-columns: 1fr 1fr; }
 }
 
-/* 処世術カード（画像寄せ） */
+/* ---------- Shoseijutsu Card (scard) ---------- */
 .scard{
-  padding:14px;
+  background: rgba(255,255,255,.38);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 22px;
+  box-shadow: 0 14px 32px rgba(0,0,0,.14);
+  backdrop-filter: blur(12px);
+  padding: 16px 18px;
+  margin: 0;
+  position: relative;
 }
+
+.scard::before{
+  content:"";
+  position:absolute;
+  left:18px;
+  right:18px;
+  top:12px;
+  height:4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(64,220,140,0),
+    rgba(64,220,140,.52),
+    rgba(64,220,140,0)
+  );
+  opacity: .34;
+  pointer-events:none;
+}
+
 .scard-top{
   display:flex;
-  gap:12px;
+  gap:14px;
   align-items:flex-start;
 }
+
+.scard-click{ cursor:pointer; }
+
 .scard-icon{
-  width:28px;
-  height:28px;
-  border-radius:10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 12px;
   background: rgba(64,220,140,.12);
-  border:1px solid rgba(64,220,140,.35);
+  border: 1px solid rgba(64,220,140,.30);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:14px;
+  font-size: 14px;
+  flex: 0 0 auto;
 }
+
 .scard-head{
-  flex:1;
-  min-width:0;
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
 }
+
 .scard-title{
   margin:0 0 6px;
-  font-size:16px;
-  line-height:1.35;
-  font-weight:700;
+  font-size: 16px;
+  line-height: 1.35;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: .01em;
 }
+
 .scard-summary{
   margin:0;
-  color: var(--ink);
-  font-size:13px;
-  line-height:1.6;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
 }
+
 .scard-meta{
-  margin-top:10px;
+  margin-top: 10px;
   display:flex;
   gap:8px;
   align-items:center;
   flex-wrap:wrap;
-  color: var(--muted);
-  font-size:12px;
-}
-.scard-id{
-  padding:3px 8px;
-  border-radius:999px;
-  border:1px solid rgba(30,42,68,.75);
-  background: rgba(11,16,32,.35);
+  color: var(--subtle);
+  font-size: 11px;
 }
 
-/* 右側のお気に入り */
+.scard-id{
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.10);
+  background: rgba(255,255,255,.14);
+  color: rgba(0,0,0,.50);
+}
+
+/* Right side (favorite) */
 .scard-side{
   display:flex;
   flex-direction:column;
   gap:8px;
   align-items:flex-end;
 }
+
 .favmini{
   display:flex;
   align-items:center;
   gap:6px;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid rgba(30,42,68,.75);
-  background: rgba(11,16,32,.35);
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.10);
+  background: rgba(255,255,255,.14);
   cursor:pointer;
   user-select:none;
-}
-.favmini .count{
-  color: var(--muted);
-  font-size:12px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
 }
 
-/* タグチップ（カード内） */
+.favmini .count{
+  color: rgba(0,0,0,.45);
+  font-size: 12px;
+}
+
+/* Tags inside card */
 .scard-tags{
-  margin-top:10px;
+  margin-top: 12px;
   display:flex;
   gap:8px;
   flex-wrap:wrap;
 }
+
 .tagchip{
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid rgba(64,220,140,.35);
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(64,220,140,.26);
   background: rgba(64,220,140,.10);
-  color: var(--ink);
+  color: rgba(0,0,0,.70);
   cursor:pointer;
-  font-size:12px;
+  font-size: 12px;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+@media (hover:hover){
+  .tagchip:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow1);
+    border-color: rgba(64,220,140,.42);
+  }
 }
 
-/* 展開パネル（画像の斜線/板っぽさを近似） */
+/* Expand panel: separate plate (clear readability) */
 .scard-expand{
-  margin-top:12px;
-  padding:12px 12px;
-  border-radius:14px;
-  border:1px solid rgba(30,42,68,.75);
-  background:
-    repeating-linear-gradient(
-      135deg,
-      rgba(255,255,255,.03),
-      rgba(255,255,255,.03) 8px,
-      rgba(255,255,255,.00) 8px,
-      rgba(255,255,255,.00) 16px
-    ),
-    rgba(11,16,32,.35);
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.60);
 }
+
 .scard-expand h4{
-  margin:0 0 6px;
-  font-size:13px;
-  color: var(--ink);
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(0,0,0,.78);
 }
+
 .scard-expand ul{
-  margin:0 0 10px 18px;
-  color: var(--ink);
-  font-size:13px;
-  line-height:1.7;
+  margin: 0 0 12px 18px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(0,0,0,.70);
 }
+
 .scard-expand p{
-  margin:0 0 10px;
-  color: var(--ink);
-  font-size:13px;
-  line-height:1.7;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(0,0,0,.70);
 }
 
-/* カード全体クリックで展開できるように */
-.scard-click{
-  cursor:pointer;
+/* ---------- Forms (My page) ---------- */
+.input, input, textarea{
+  width:100%;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,.10);
+  background: rgba(255,255,255,.22);
+  padding: 10px 12px;
+  font-family: inherit;
+  color: var(--text);
+  outline: none;
+  box-shadow: 0 10px 22px rgba(0,0,0,.08);
 }
-/* ===== Top: OSを選択（4×2グリッド） ===== */
-
-.os-select-title{
-  font-size:14px;
-  color: var(--muted);
-  margin-bottom:10px;
-}
-
-/* 4列（PC） / 2～3列（スマホ） */
-.os-select-grid{
-  display:grid;
-  gap:12px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+textarea{
+  min-height: 84px;
+  resize: vertical;
 }
 
-@media (min-width: 520px){
-  .os-select-grid{
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 980px){
-  .os-select-grid{
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* “必要十分”の小さめカード */
-.os-mini{
-  padding:12px 12px;
-  border-radius:16px;
-  cursor:pointer;
-  min-height:74px; /* でかくしすぎない */
+/* ---------- Utility ---------- */
+.row{
   display:flex;
-  flex-direction:column;
-  justify-content:center;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.grid{ display:grid; gap:10px; }
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.10);
+  background: rgba(255,255,255,.14);
+  color: rgba(0,0,0,.60);
+  font-size: 12px;
+}
+.badge.id{
+  border-color: rgba(64,220,140,.25);
+  background: rgba(64,220,140,.10);
 }
 
-.os-mini h3{
-  margin:0 0 6px;
-  font-size:13px;
-  line-height:1.25;
-  font-weight:700;
+/* Focus visibility */
+button:focus-visible, .btn:focus-visible,
+.tagbtn:focus-visible, .oschip:focus-visible, .tagchip:focus-visible,
+input:focus-visible, textarea:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(64,220,140,.22), 0 12px 28px rgba(0,0,0,.12);
+  border-color: rgba(64,220,140,.38);
 }
 
-.os-mini p{
-  margin:0;
-  font-size:12px;
-  color: var(--muted);
-  line-height:1.35;
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-}
-/* 下タブを完全に消す */
+/* Bottom nav off (as requested earlier) */
 .bottom-nav { display: none !important; }
 
-/* ヘッダー縮小＆サブタイトル削除前提 */
-.header{ padding: 10px 0; }
-.header-inner{ align-items:center; gap:10px; }
-.brand h1{ font-size:16px; margin:0; }
-.brand small{ display:none !important; }
-
-/* ヘッダーボタン3つを横並びで整える */
-.header-actions{
-  display:flex;
-  gap:8px;
-}
-.header-actions .btn.ghost{
-  padding:8px 10px;
-  border-radius:999px;
-}
-/* =========================
-   Graphic overhaul (quiet, structured)
-   ========================= */
-
-/* 背景を“紙×宇宙”の中間に：ノイズ + グラデ + ビネット */
-:root{
-  --paper0: #e9e0cf;
-  --paper1: #e2d8c5;
-  --ink: rgba(12,14,20,.92);
-  --line: rgba(20,24,36,.18);
-
-  --glass: rgba(255,255,255,.22);
-  --glass2: rgba(255,255,255,.12);
-  --shadow0: 0 10px 30px rgba(0,0,0,.18);
-  --shadow1: 0 18px 45px rgba(0,0,0,.22);
-  --ring: 0 0 0 1px rgba(0,0,0,.18) inset, 0 0 0 1px rgba(255,255,255,.22);
-  --liftY: translateY(-2px);
-}
-
-/* 既存のダークトーンを“質感”に寄せる：背景レイヤ追加 */
-body{
-  background:
-    radial-gradient(1200px 600px at 20% -10%, rgba(255,255,255,.30), transparent 55%),
-    radial-gradient(1000px 700px at 90% 0%, rgba(255,255,255,.18), transparent 60%),
-    radial-gradient(900px 700px at 50% 110%, rgba(0,0,0,.10), transparent 55%),
-    linear-gradient(180deg, var(--paper0), var(--paper1));
-  color: var(--ink);
-}
-
-/* ページの「帯」感：ヘッダーをグラフィックに */
-.header{
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.12));
-  border-bottom: 1px solid rgba(0,0,0,.08);
-  box-shadow: 0 10px 24px rgba(0,0,0,.10);
-  backdrop-filter: blur(10px);
-}
-.brand h1{
-  letter-spacing: .03em;
-}
-
-/* カード全般を“パネル化” */
-.card{
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.34), rgba(255,255,255,.14));
-  border: 1px solid rgba(0,0,0,.10);
-  box-shadow: var(--shadow0);
-  backdrop-filter: blur(10px);
-  position: relative;
-}
-
-/* パネル上部の細いアクセントライン（画像の緑ライン的） */
-.card::before{
-  content:"";
-  position:absolute;
-  left:12px; right:12px; top:10px;
-  height:6px;
-  border-radius: 99px;
-  background: linear-gradient(90deg, rgba(64,220,140,.0), rgba(64,220,140,.55), rgba(64,220,140,.0));
-  opacity:.35;
-  pointer-events:none;
-}
-
-/* セクションカードはラインを薄く */
-.card.section::before{ opacity:.18; }
-
-/* クリック可能要素は共通で“浮かぶ” */
-.btn, .tagbtn, .oschip, .tagchip, .os-mini, .scard, .favmini{
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    filter .18s ease,
-    border-color .18s ease,
-    background-color .18s ease;
-  will-change: transform, box-shadow;
-}
-
-/* ホバーで浮かび上がる（PC） */
-@media (hover:hover){
-  .btn:hover, .tagbtn:hover, .oschip:hover, .tagchip:hover, .os-mini:hover, .favmini:hover{
-    transform: var(--liftY);
-    box-shadow: var(--shadow1);
-    filter: brightness(1.03) contrast(1.02);
-    border-color: rgba(64,220,140,.35);
-  }
-
-  /* カードも少し持ち上げる（やりすぎない） */
-  .scard:hover{
-    transform: translateY(-1px);
-    box-shadow: 0 16px 38px rgba(0,0,0,.20);
-    border-color: rgba(0,0,0,.12);
-  }
-}
-
-/* タップ端末は押下時に浮く */
-.btn:active, .tagbtn:active, .oschip:active, .tagchip:active, .os-mini:active, .favmini:active{
-  transform: translateY(0);
-  box-shadow: 0 10px 22px rgba(0,0,0,.16);
-  filter: brightness(.99);
-}
-
-/* ボタンの“グラフィック”統一（丸・枠・ガラス） */
-.btn{
-  border: 1px solid rgba(0,0,0,.14);
-  background: rgba(255,255,255,.18);
-  color: var(--ink);
-  box-shadow: 0 10px 24px rgba(0,0,0,.14);
-}
-.btn.primary{
-  background: linear-gradient(180deg, rgba(64,220,140,.38), rgba(64,220,140,.18));
-  border-color: rgba(64,220,140,.35);
-  color: rgba(0,0,0,.85);
-}
-.btn.ghost{
-  background: rgba(255,255,255,.12);
-}
-
-/* タグ・OSチップを“ラベル感”に */
-.tagbtn, .oschip{
-  background: rgba(255,255,255,.14);
-  border: 1px solid rgba(0,0,0,.12);
-  color: rgba(0,0,0,.72);
-}
-.tagbtn.active, .oschip.active{
-  background: linear-gradient(180deg, rgba(64,220,140,.30), rgba(64,220,140,.14));
-  border-color: rgba(64,220,140,.40);
-  color: rgba(0,0,0,.86);
-}
-
-/* カード内タグチップ */
-.tagchip{
-  background: rgba(255,255,255,.14);
-  border: 1px solid rgba(64,220,140,.28);
-  color: rgba(0,0,0,.74);
-}
-.tagchip:hover{
-  border-color: rgba(64,220,140,.45);
-}
-
-/* “該当なし”などのメッセージカードもパネル化 */
-.empty, .item{
-  background: rgba(255,255,255,.16);
-  border: 1px solid rgba(0,0,0,.10);
-}
-
-/* scardの中身（文字）を読みやすく */
-.scard-title{ color: rgba(0,0,0,.88); }
-.scard-summary{ color: rgba(0,0,0,.62); }
-
-/* 展開パネルを“プレート”に（斜線を上品に） */
-.scard-expand{
-  border: 1px solid rgba(0,0,0,.10);
-  background:
-    repeating-linear-gradient(
-      135deg,
-      rgba(0,0,0,.03),
-      rgba(0,0,0,.03) 9px,
-      rgba(255,255,255,0) 9px,
-      rgba(255,255,255,0) 18px
-    ),
-    rgba(255,255,255,.10);
-}
-
-/* フォーカス（キーボード）でも浮き上がる */
-.btn:focus-visible, .tagbtn:focus-visible, .oschip:focus-visible, .tagchip:focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(64,220,140,.25), var(--shadow0);
-  border-color: rgba(64,220,140,.45);
-}
-/* === emergency visibility patch === */
-.cards, .card-grid, #cards, #cardGrid{
-  display: grid !important;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-
-@media (min-width: 980px){
-  .cards, .card-grid, #cards, #cardGrid{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.scard{
-  display:block !important;
-  min-height: 120px;
-  padding: 14px;
-  background: rgba(255,255,255,.25) !important;
-  border: 1px solid rgba(0,0,0,.12) !important;
-  box-shadow: 0 10px 24px rgba(0,0,0,.14) !important;
-  color: rgba(0,0,0,.88) !important;
-  position: relative;
-  z-index: 1;
-}
-
-/* card::before が覆う可能性を殺す */
-.card::before{
-  pointer-events:none !important;
-  z-index: 0 !important;
+/* Footer (if exists) */
+.footer{
+  position: fixed;
+  left:0; right:0; bottom:0;
+  background: rgba(255,255,255,.28);
+  border-top: 1px solid rgba(0,0,0,.08);
+  backdrop-filter: blur(12px);
+  padding: 10px 16px;
+  font-size: .8rem;
+  color: var(--muted);
+  text-align:center;
 }
