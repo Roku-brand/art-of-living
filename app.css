@@ -650,4 +650,153 @@ input:focus-visible, textarea:focus-visible{
     grid-template-columns: 1fr;
   }
 }
+/* ===== Compact Sidebar (処世術OS) ===== */
+:root{
+  --sb-accent: #0b8f65;
+  --sb-ink: #2E261B;
+  --sb-border: rgba(46,38,27,0.16);
+  --sb-panel: rgba(255,255,255,0.62);
+  --sb-panel-hover: rgba(255,255,255,0.72);
+  --sb-shadow: 0 16px 40px rgba(46,38,27,0.12);
+  --sb-shadow-soft: 0 6px 14px rgba(46,38,27,0.08);
+  --sb-radius-xl: 20px;
+  --sb-radius-lg: 16px;
+}
+
+/* サイドバー外枠（コンパクトカード） */
+.sidebarCompact{
+  width: 100%;
+  max-width: 320px;
+  border-radius: var(--sb-radius-xl);
+  padding: 14px;
+  border: 1px solid rgba(11,143,101,0.22);
+  background: linear-gradient(180deg, rgba(11,143,101,0.14), rgba(255,255,255,0.18));
+  box-shadow: var(--sb-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* 見出し */
+.sidebarCompactTitle{
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: rgba(11,143,101,0.95);
+  margin: 2px 0 10px 4px;
+  font-size: 16px;
+}
+
+/* リスト */
+.sidebarCompactList{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* アイテム */
+.sidebarCompactItem{
+  width: 100%;
+  border: 1px solid var(--sb-border);
+  background: var(--sb-panel);
+  border-radius: var(--sb-radius-lg);
+  padding: 12px 14px;
+  cursor: pointer;
+  box-shadow: var(--sb-shadow-soft);
+  transition: transform .08s ease, background .15s ease, border-color .15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  user-select: none;
+}
+
+.sidebarCompactItem:hover{
+  transform: translateY(-1px);
+  background: var(--sb-panel-hover);
+  border-color: rgba(11,143,101,0.22);
+}
+
+.sidebarCompactLeft{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.sidebarCompactMain{
+  font-weight: 800;
+  font-size: 14.5px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--sb-ink);
+}
+
+.sidebarCompactSub{
+  font-weight: 700;
+  font-size: 12.5px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(46,38,27,0.70);
+}
+
+/* 選択中（濃い緑） */
+.sidebarCompactItem.isActive{
+  background: linear-gradient(180deg, rgba(11,143,101,0.98), rgba(11,143,101,0.92));
+  border-color: rgba(11,143,101,0.70);
+  box-shadow: 0 10px 22px rgba(11,143,101,0.22), 0 10px 26px rgba(46,38,27,0.10);
+}
+
+.sidebarCompactItem.isActive .sidebarCompactMain,
+.sidebarCompactItem.isActive .sidebarCompactSub{
+  color: rgba(255,255,255,0.96);
+}
+
+/* フッター（検索） */
+.sidebarCompactFooter{
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(11,143,101,0.18);
+}
+
+.sidebarCompactSearch{
+  border: 1px solid rgba(46,38,27,0.14);
+  background: var(--sb-panel);
+  border-radius: var(--sb-radius-lg);
+  padding: 12px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--sb-shadow-soft);
+  transition: transform .08s ease, background .15s ease, border-color .15s ease;
+}
+
+.sidebarCompactSearch:hover{
+  transform: translateY(-1px);
+  background: var(--sb-panel-hover);
+  border-color: rgba(11,143,101,0.22);
+}
+
+.sidebarCompactDot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.95), rgba(74,137,255,0.9));
+  box-shadow: 0 4px 10px rgba(74,137,255,0.25);
+  flex: 0 0 auto;
+}
+
+.sidebarCompactSearchText{
+  font-weight: 800;
+  font-size: 13.5px;
+  color: rgba(46,38,27,0.85);
+}
+
+/* スマホ時：横幅いっぱいにして見切れ防止 */
+@media (max-width: 980px){
+  .sidebarCompact{ max-width: 100%; }
+}
 
