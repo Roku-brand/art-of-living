@@ -207,7 +207,7 @@ function renderCompactSidebar(currentOS){
     { key: "social", type: "os" },
     { key: "action", type: "os" },
     { key: "future", type: "os" },
-    { key: "life", type: "os" },   // 必要なら下へ（画像は1〜5中心なので最後尾）
+    { key: "life", type: "os" },
     { key: "extra", type: "os" }
   ];
 
@@ -318,7 +318,7 @@ function renderList(osKey){
           <div class="scard-num">${escapeHtml(c.id)}</div>
 
           <div class="scard-top scard-click" data-toggle="${escapeHtml(c.id)}">
-            <div class="scard-icon">🤝</div>
+            <div class="scard-icon">🧠</div>
 
             <div class="scard-head">
               <h3 class="scard-title">${escapeHtml(c.title)}</h3>
