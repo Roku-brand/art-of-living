@@ -1,5 +1,8 @@
 /* =========================================================
-   処世術禄 – Mint Glass UI (No Brown / Compact Cards / OS Colors)
+   処世術禄 – Mint Glass UI
+   - 2次フィルター：OS内タブ（tab）
+   - タグ：検索（探索ツール）
+   - トップOS選択：カード枠を撤廃（軽いセレクタ）
    ========================================================= */
 
 :root{
@@ -49,7 +52,6 @@ body{
   color: var(--ink);
   line-height: 1.65;
 
-  /* Mint background */
   background:
     radial-gradient(1400px 900px at 10% -10%, rgba(34,197,94,.18), transparent 55%),
     radial-gradient(1200px 900px at 90% 10%, rgba(59,130,246,.18), transparent 60%),
@@ -153,11 +155,12 @@ a:hover{ text-decoration: underline; }
   margin-bottom: 14px;
 }
 
-/* ---------- Top: OS Select (compact 4x2 on desktop) ---------- */
+/* ---------- Top: OS Select (NO CARD / NO FRAME) ---------- */
 .os-select-title{
   font-size: 12px;
   color: var(--muted);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  font-weight: 900;
 }
 .os-select-grid{
   display:grid;
@@ -170,42 +173,52 @@ a:hover{ text-decoration: underline; }
 @media (min-width: 980px){
   .os-select-grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
+
+/* 重要：OS選択は「カード」ではなく「枠のないセレクタ」 */
 .os-mini{
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  text-align: left;
+
+  background: transparent;
+  border: none;
+  box-shadow: none;
+
   padding: 10px 10px;
-  border-radius: 16px;
-  cursor:pointer;
-  min-height: 60px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  background: rgba(255,255,255,.40);
-  border: 1px solid rgba(10,18,20,.08);
-  box-shadow: 0 12px 28px rgba(0,0,0,.10);
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  border-radius: 14px;
+
+  cursor: pointer;
+  transition: background-color .16s ease, transform .16s ease;
 }
-.os-mini h3{
-  margin:0 0 4px;
-  font-size: 12px;
-  line-height: 1.2;
+.os-mini:hover{
+  background: rgba(255,255,255,.22);
+  transform: translateY(-1px);
+}
+.os-mini:active{
+  transform: translateY(0);
+}
+.os-mini:focus-visible{
+  outline: none;
+  background: rgba(11,143,101,.10);
+  box-shadow: 0 0 0 3px rgba(11,143,101,.18);
+}
+
+.os-mini-title{
+  font-size: 13px;
   font-weight: 900;
-  color: var(--ink);
+  line-height: 1.25;
+  color: rgba(8,14,16,.92);
 }
-.os-mini p{
-  margin:0;
+.os-mini-desc{
+  margin-top: 4px;
   font-size: 11px;
   color: var(--muted);
-  line-height: 1.25;
+  line-height: 1.3;
   display:-webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow:hidden;
-}
-@media (hover:hover){
-  .os-mini:hover{
-    transform: translateY(-2px);
-    box-shadow: var(--shadow1);
-    border-color: rgba(11,143,101,.18);
-  }
 }
 
 /* ---------- List Layout (LEFT Sidebar) ---------- */
@@ -339,7 +352,7 @@ a:hover{ text-decoration: underline; }
   color: rgba(8,14,16,.82);
 }
 
-/* ---------- List Head / Tagbar (smaller) ---------- */
+/* ---------- List Head ---------- */
 .list-headline{
   padding: 12px 14px;
   display:flex;
@@ -357,12 +370,13 @@ a:hover{ text-decoration: underline; }
   font-size: 12px;
   color: var(--muted);
 }
-
-
-/* ---------- 2nd Filter Tabs (OS内分類) ---------- */
-.tabbar-wrap{
-  padding: 10px 12px;
+.count-sep{
+  margin: 0 6px;
+  opacity: .5;
 }
+
+/* ---------- 2nd Filter Tabs (OS内タブ) ---------- */
+.tabbar-wrap{ padding: 10px 12px; }
 .tabbar-label{
   font-size: 12px;
   color: var(--muted);
@@ -422,20 +436,12 @@ a:hover{ text-decoration: underline; }
 }
 
 /* ---------- Search Tagbar label ---------- */
-.tagbar-wrap{
-  padding: 10px 12px;
-}
+.tagbar-wrap{ padding: 10px 12px; }
 .tagbar-label{
   font-size: 12px;
   color: var(--muted);
   font-weight: 900;
   margin: 0 0 8px 2px;
-}
-
-/* headline count separator */
-.count-sep{
-  margin: 0 6px;
-  opacity: .5;
 }
 
 .tagbar{
@@ -500,7 +506,7 @@ a:hover{ text-decoration: underline; }
   position:absolute;
   left:14px;
   right:14px;
-  top:16px; /* ★ナンバリングと被りにくく調整 */
+  top:16px;
   height:6px;
   border-radius: 999px;
   background: linear-gradient(90deg, rgba(0,0,0,0), var(--os-line), rgba(0,0,0,0));
@@ -517,7 +523,7 @@ a:hover{ text-decoration: underline; }
 .scard.os-future{ --os-line: var(--os-future); }
 .scard.os-extra{ --os-line: var(--os-extra); }
 
-/* numbering (id) top-left (FIX: more top-left, square, darker text) */
+/* numbering top-left */
 .scard-num{
   position:absolute;
   left: 10px;
@@ -527,12 +533,12 @@ a:hover{ text-decoration: underline; }
   font-weight: 900;
   letter-spacing: 0.01em;
 
-  color: rgba(8,14,16,.88);          /* ★濃い文字 */
+  color: rgba(8,14,16,.88);
   background: rgba(255,255,255,.92);
   border: 1px solid rgba(10,18,20,.14);
 
   padding: 4px 8px;
-  border-radius: 8px;                 /* ★四角寄り */
+  border-radius: 8px;
   box-shadow: 0 8px 18px rgba(0,0,0,.10);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -543,7 +549,7 @@ a:hover{ text-decoration: underline; }
   display:flex;
   gap:12px;
   align-items:flex-start;
-  padding-top: 18px; /* ★番号バッジぶん確保（最小限） */
+  padding-top: 18px;
 }
 .scard-click{ cursor:pointer; }
 
@@ -561,7 +567,7 @@ a:hover{ text-decoration: underline; }
   box-shadow: 0 10px 18px rgba(0,0,0,.10);
 }
 
-.scard-head{ flex:1; min-width:0; padding-top:0; }
+.scard-head{ flex:1; min-width:0; }
 
 .scard-title{
   margin:0 0 6px;
@@ -606,7 +612,7 @@ a:hover{ text-decoration: underline; }
   font-size: 12px;
 }
 
-/* tags smaller + OS color */
+/* tags */
 .scard-tags{
   margin-top: 10px;
   display:flex;
@@ -687,7 +693,7 @@ textarea{ min-height: 84px; resize: vertical; }
 }
 
 /* Focus */
-.btn:focus-visible, .tagbtn:focus-visible, .tagchip:focus-visible,
+.btn:focus-visible, .tabbtn:focus-visible, .tagbtn:focus-visible, .tagchip:focus-visible,
 input:focus-visible, textarea:focus-visible{
   outline: none;
   box-shadow: 0 0 0 3px rgba(11,143,101,.20), 0 14px 34px rgba(0,0,0,.12);
