@@ -378,10 +378,8 @@ function renderList(osKey){
 
       return `
         <div class="scard ${cls}">
-          <div class="scard-num">${escapeHtml(c.id)}</div>
-
           <div class="scard-top scard-click" data-toggle="${escapeHtml(c.id)}">
-            <div class="scard-icon">🧠</div>
+            <div class="scard-icon scard-icon-id">${escapeHtml(c.id)}</div>
 
             <div class="scard-head">
               <h3 class="scard-title">${escapeHtml(c.title)}</h3>
@@ -559,10 +557,8 @@ function renderSearch(initial = {}){
 
       return `
         <div class="scard ${cls}">
-          <div class="scard-num">${escapeHtml(c.id)}</div>
-
           <div class="scard-top scard-click" data-toggle="${escapeHtml(c.id)}">
-            <div class="scard-icon">🔎</div>
+            <div class="scard-icon scard-icon-id">${escapeHtml(c.id)}</div>
 
             <div class="scard-head">
               <h3 class="scard-title">${escapeHtml(c.title)}</h3>
