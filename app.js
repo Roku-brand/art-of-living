@@ -70,7 +70,18 @@ function splitToBullets(text){
 function normalizeCard(c){
   if (!c || typeof c !== "object") return c;
   const out = { ...c };
+
+  // data wobble absorption
   if (out.pitfalls == null && out.pitfall != null) out.pitfalls = out.pitfall;
+
+  // 「タブ（OS内分類）」をデータとして持てるようにする（任意）
+  // 互換：category / group なども吸収
+  if (out.tab == null && out.category != null) out.tab = out.category;
+  if (out.tab == null && out.group != null) out.tab = out.group;
+
+  // tab は文字列化して空白トリム（未設定は空文字扱い）
+  out.tab = String(out.tab ?? "").trim();
+
   return out;
 }
 
@@ -188,6 +199,42 @@ function sortById(cards){
   return [...cards].sort((a,b)=> String(a.id).localeCompare(String(b.id)));
 }
 
+function buildTabStats(cards, maxTabs = 7){
+  // cards[].tab を集計し、最大 maxTabs 個まで（＋必要なら「その他」）
+  const counts = new Map();
+  cards.forEach(c=>{
+    const k = String(c.tab || "").trim() || "未分類";
+    counts.set(k, (counts.get(k) || 0) + 1);
+  });
+
+  const sorted = [...counts.entries()].sort((a,b)=>{
+    if (b[1] !== a[1]) return b[1] - a[1];
+    return String(a[0]).localeCompare(String(b[0]), "ja");
+  });
+
+  // maxTabs を超える場合は「その他」に寄せる
+  let main = sorted;
+  let hasOther = false;
+
+  if (sorted.length > maxTabs){
+    const keep = maxTabs - 1; // 「その他」枠を確保
+    main = sorted.slice(0, Math.max(0, keep));
+    hasOther = true;
+  }
+
+  const shown = new Set(main.map(([k])=>k));
+  const otherCount = hasOther
+    ? sorted.filter(([k])=>!shown.has(k)).reduce((acc, [,n])=>acc+n, 0)
+    : 0;
+
+  const tabs = [
+    ...main.map(([k,n])=>({ key: k, label: k, count: n })),
+    ...(hasOther ? [{ key: "__other__", label: "その他", count: otherCount }] : [])
+  ];
+
+  return { tabs, shownKeys: shown, totalTabs: sorted.length };
+}
+
 function osLabelParts(osKey){
   if (osKey === "life") return { main: "人生OS", sub: "" };
   if (osKey === "internal") return { main: "1. 心の扱い方", sub: "内部OS" };
@@ -256,9 +303,12 @@ function renderList(osKey){
   const meta = OS_META.find(m=>m.key===currentOS);
 
   const allCards = sortById(DATA.byOS[currentOS] ?? []);
-  const tags = buildTagSet(allCards);
 
-  const state = { tag: "", expandedId: "" };
+  // ★タブ（OS内分類 / 2次フィルター）
+  const tabStats = buildTabStats(allCards, 7);
+  const tabs = tabStats.tabs;
+
+  const state = { tab: "", expandedId: "" };
 
   view.innerHTML = `
     <div class="list-layout">
@@ -270,14 +320,26 @@ function renderList(osKey){
         <div class="card section" style="padding:0;">
           <div class="list-headline">
             <div class="title">${escapeHtml(meta?.title ?? "人生OS")}</div>
-            <div class="count">件数：<span id="countAll">${allCards.length}</span> 件</div>
+            <div class="count">
+              表示：<span id="countShown">0</span> 件
+              <span class="count-sep">/</span>
+              全<span id="countAll">${allCards.length}</span> 件
+            </div>
           </div>
         </div>
 
         <div class="card section" style="padding:0;">
-          <div class="tagbar" id="tagbar">
-            <button class="tagbtn active" data-tag="">すべて</button>
-            ${tags.map(t=>`<button class="tagbtn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
+          <div class="tabbar-wrap">
+            <div class="tabbar-label">分類（OS内タブ）</div>
+            <div class="tabbar" id="tabbar">
+              <button class="tabbtn active" data-tab="">すべて</button>
+              ${tabs.map(t=>`
+                <button class="tabbtn" data-tab="${escapeHtml(t.key)}">
+                  ${escapeHtml(t.label)}
+                  <span class="tabcount">${t.count}</span>
+                </button>
+              `).join("")}
+            </div>
           </div>
         </div>
 
@@ -295,11 +357,21 @@ function renderList(osKey){
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); nav("#search"); }
   };
 
+  const isInOther = (c)=>{
+    const k = String(c.tab || "").trim() || "未分類";
+    return !tabStats.shownKeys.has(k);
+  };
+
   const draw = ()=>{
     let cards = allCards;
-    if (state.tag) cards = cards.filter(c => (c.tags||[]).includes(state.tag));
 
-    $("#countAll").textContent = String(cards.length);
+    // ★タブフィルター（OS内分類）
+    if (state.tab){
+      if (state.tab === "__other__") cards = cards.filter(isInOther);
+      else cards = cards.filter(c => (String(c.tab || "").trim() || "未分類") === state.tab);
+    }
+
+    $("#countShown").textContent = String(cards.length);
 
     const fav = loadFavorites();
 
@@ -355,16 +427,12 @@ function renderList(osKey){
       `;
     }).join("") || `<div class="card" style="padding:14px; color:var(--muted);">該当するカードがありません。</div>`;
 
-    // tag chips
+    // tag chips → 検索（タグ探索）へ送る（OS内フィルタにはしない）
     $("#cards").querySelectorAll("[data-tag]").forEach(el=>{
       el.onclick = (e)=>{
         e.stopPropagation();
         const t = el.getAttribute("data-tag");
-        state.tag = (state.tag === t) ? "" : t;
-        $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
-          b.classList.toggle("active", b.getAttribute("data-tag") === state.tag);
-        });
-        draw();
+        nav(`#search?tag=${encodeURIComponent(t)}`);
       };
     });
 
@@ -390,13 +458,15 @@ function renderList(osKey){
     });
   };
 
-  // tag buttons
-  $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
+  // tab buttons
+  $("#tabbar").querySelectorAll("[data-tab]").forEach(b=>{
     b.onclick = ()=>{
-      state.tag = b.getAttribute("data-tag");
-      $("#tagbar").querySelectorAll("[data-tag]").forEach(x=>{
+      state.tab = b.getAttribute("data-tab");
+      $("#tabbar").querySelectorAll("[data-tab]").forEach(x=>{
         x.classList.toggle("active", x === b);
       });
+      // タブを変えたら展開は閉じる（操作軽量化）
+      state.expandedId = "";
       draw();
     };
   });
@@ -405,11 +475,16 @@ function renderList(osKey){
 }
 
 // ========== OS横断検索 ==========
-function renderSearch(){
+function renderSearch(initial = {}){
   renderShell("list");
   const view = $("#view");
 
   const state = { q: "", tag: "", expandedId: "" };
+
+  // 初期状態（URLクエリから）
+  if (initial.q) state.q = String(initial.q).trim();
+  if (initial.tag) state.tag = String(initial.tag).trim();
+
   const allCards = sortById(DATA.all ?? []);
   const tags = buildTagSet(allCards);
 
@@ -430,9 +505,12 @@ function renderSearch(){
         </div>
 
         <div class="card section" style="padding:0;">
-          <div class="tagbar" id="tagbar">
-            <button class="tagbtn active" data-tag="">すべて</button>
-            ${tags.map(t=>`<button class="tagbtn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
+          <div class="tagbar-wrap">
+            <div class="tagbar-label">タグ（探索ツール）</div>
+            <div class="tagbar" id="tagbar">
+              <button class="tagbtn active" data-tag="">すべて</button>
+              ${tags.map(t=>`<button class="tagbtn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
+            </div>
           </div>
         </div>
 
@@ -524,14 +602,13 @@ function renderSearch(){
       `;
     }).join("") || `<div class="card" style="padding:14px; color:var(--muted);">該当するカードがありません。</div>`;
 
+    // tag chips → 検索内のタグフィルターとして動かす
     $("#cards").querySelectorAll("[data-tag]").forEach(el=>{
       el.onclick = (e)=>{
         e.stopPropagation();
         const t = el.getAttribute("data-tag");
         state.tag = (state.tag === t) ? "" : t;
-        $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
-          b.classList.toggle("active", b.getAttribute("data-tag") === state.tag);
-        });
+        syncTagbar();
         draw();
       };
     });
@@ -556,22 +633,34 @@ function renderSearch(){
     });
   };
 
+  const syncTagbar = ()=>{
+    $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
+      b.classList.toggle("active", b.getAttribute("data-tag") === state.tag);
+    });
+    // 「すべて」ボタンのactive
+    const allBtn = $("#tagbar").querySelector('[data-tag=""]');
+    if (allBtn) allBtn.classList.toggle("active", state.tag === "");
+  };
+
+  // tag buttons
   $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
     b.onclick = ()=>{
       state.tag = b.getAttribute("data-tag");
-      $("#tagbar").querySelectorAll("[data-tag]").forEach(x=>{
-        x.classList.toggle("active", x === b);
-      });
+      state.expandedId = "";
+      syncTagbar();
       draw();
     };
   });
 
   const qEl = $("#q");
+  qEl.value = state.q;
   qEl.addEventListener("input", ()=>{
     state.q = qEl.value.trim();
     draw();
   });
 
+  // 初期タグ反映
+  syncTagbar();
   draw();
 }
 
@@ -766,7 +855,10 @@ async function boot(){
       return renderList(os);
     }
 
-    if (hash.startsWith("#search")) return renderSearch();
+    if (hash.startsWith("#search")) {
+      const q = parseQuery(hash.split("?")[1] || "");
+      return renderSearch({ q: q.q || "", tag: q.tag || "" });
+    }
 
     if (hash.startsWith("#detail")) {
       const q = parseQuery(hash.split("?")[1] || "");
