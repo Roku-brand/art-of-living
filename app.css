@@ -21,6 +21,17 @@
 
   --r-lg: 20px;
   --r-md: 16px;
+
+  /* compact sidebar */
+  --sb-accent: #0b8f65;
+  --sb-ink: #2E261B;
+  --sb-border: rgba(46,38,27,0.16);
+  --sb-panel: rgba(255,255,255,0.62);
+  --sb-panel-hover: rgba(255,255,255,0.72);
+  --sb-shadow: 0 16px 40px rgba(46,38,27,0.12);
+  --sb-shadow-soft: 0 6px 14px rgba(46,38,27,0.08);
+  --sb-radius-xl: 20px;
+  --sb-radius-lg: 16px;
 }
 
 *{ box-sizing:border-box; }
@@ -179,7 +190,7 @@ a:hover{ text-decoration: underline; }
   padding: 10px 10px;
   border-radius: 16px;
   cursor:pointer;
-  min-height: 60px;          /* 小さく */
+  min-height: 60px;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -190,14 +201,14 @@ a:hover{ text-decoration: underline; }
 }
 .os-mini h3{
   margin:0 0 4px;
-  font-size: 12px;           /* 小さく */
+  font-size: 12px;
   line-height: 1.2;
   font-weight: 800;
   color: var(--text);
 }
 .os-mini p{
   margin:0;
-  font-size: 11px;           /* 小さく */
+  font-size: 11px;
   color: var(--muted);
   line-height: 1.25;
   display:-webkit-box;
@@ -216,80 +227,167 @@ a:hover{ text-decoration: underline; }
 /* ---------- List Layout (LEFT Sidebar) ---------- */
 .list-layout{
   display:grid;
-  grid-template-columns: 320px minmax(0, 1fr);  /* 左サイド */
+  grid-template-columns: 320px minmax(0, 1fr);
   gap: 14px;
   align-items:start;
 }
 .list-main{ min-width:0; }
 .list-side{ min-width:0; }
 
-.side-card{
+/* スマホ：サイドバーを上へ */
+@media (max-width: 920px){
+  .list-layout{ grid-template-columns: 1fr; }
+  .list-side{ position: static; }
+}
+
+/* ---------- Compact Sidebar (new) ---------- */
+.list-side{
   position: sticky;
   top: 74px;
-  padding: 14px 14px;
+  align-self: start;
 }
-.side-head{
+
+.sidebarCompact{
+  width: 100%;
+  max-width: 320px;
+  border-radius: var(--sb-radius-xl);
+  padding: 14px;
+  border: 1px solid rgba(11,143,101,0.22);
+  background: linear-gradient(180deg, rgba(11,143,101,0.14), rgba(255,255,255,0.18));
+  box-shadow: var(--sb-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+@media (max-width: 920px){
+  .sidebarCompact{ max-width: 100%; }
+}
+
+.sidebarCompactTitle{
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: rgba(11,143,101,0.95);
+  margin: 2px 0 10px 4px;
+  font-size: 16px;
+}
+
+.sidebarCompactList{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebarCompactItem{
+  width: 100%;
+  border: 1px solid var(--sb-border);
+  background: var(--sb-panel);
+  border-radius: var(--sb-radius-lg);
+  padding: 12px 14px;
+  cursor: pointer;
+  box-shadow: var(--sb-shadow-soft);
+  transition: transform .08s ease, background .15s ease, border-color .15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  user-select: none;
+}
+.sidebarCompactItem:hover{
+  transform: translateY(-1px);
+  background: var(--sb-panel-hover);
+  border-color: rgba(11,143,101,0.22);
+}
+.sidebarCompactLeft{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.sidebarCompactMain{
+  font-weight: 800;
+  font-size: 14.5px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--sb-ink);
+}
+.sidebarCompactSub{
+  font-weight: 700;
+  font-size: 12.5px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(46,38,27,0.70);
+}
+.sidebarCompactItem.isActive{
+  background: linear-gradient(180deg, rgba(11,143,101,0.98), rgba(11,143,101,0.92));
+  border-color: rgba(11,143,101,0.70);
+  box-shadow: 0 10px 22px rgba(11,143,101,0.22), 0 10px 26px rgba(46,38,27,0.10);
+}
+.sidebarCompactItem.isActive .sidebarCompactMain,
+.sidebarCompactItem.isActive .sidebarCompactSub{
+  color: rgba(255,255,255,0.96);
+}
+
+.sidebarCompactFooter{
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(11,143,101,0.18);
+}
+
+.sidebarCompactSearch{
+  border: 1px solid rgba(46,38,27,0.14);
+  background: var(--sb-panel);
+  border-radius: var(--sb-radius-lg);
+  padding: 12px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--sb-shadow-soft);
+  transition: transform .08s ease, background .15s ease, border-color .15s ease;
+}
+.sidebarCompactSearch:hover{
+  transform: translateY(-1px);
+  background: var(--sb-panel-hover);
+  border-color: rgba(11,143,101,0.22);
+}
+.sidebarCompactDot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.95), rgba(74,137,255,0.9));
+  box-shadow: 0 4px 10px rgba(74,137,255,0.25);
+  flex: 0 0 auto;
+}
+.sidebarCompactSearchText{
+  font-weight: 800;
+  font-size: 13.5px;
+  color: rgba(46,38,27,0.85);
+}
+
+/* ---------- List Toolbar / Tagbar ---------- */
+.list-toolbar{ padding: 0; }
+
+.list-headline{
+  padding: 12px 14px;
   display:flex;
-  flex-direction:column;
-  gap:4px;
-  margin-bottom: 10px;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
 }
-.side-os{
+.list-headline .title{
   font-weight: 900;
   font-size: 14px;
-  color: rgba(0,0,0,.86);
+  color: rgba(0,0,0,.84);
 }
-.side-count{
+.list-headline .count{
   font-size: 12px;
   color: var(--muted);
 }
-.side-tabs{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
 
-/* 左サイドのOSチップ */
-.oschip{
-  width: 100%;
-  text-align: left;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.14);
-  color: rgba(0,0,0,.72);
-  cursor:pointer;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
-}
-.oschip.active{
-  background: rgba(64,220,140,.12);
-  border-color: rgba(64,220,140,.34);
-  color: rgba(0,0,0,.86);
-}
-@media (hover:hover){
-  .oschip:hover{
-    transform: translateY(-2px);
-    box-shadow: var(--shadow1);
-    border-color: rgba(64,220,140,.22);
-  }
-}
-
-/* スマホ：サイドバーを上へ（横幅がないので） */
-@media (max-width: 920px){
-  .list-layout{ grid-template-columns: 1fr; }
-  .side-card{ position: static; }
-  .side-tabs{
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-  .oschip{
-    width: auto;
-    min-width: 140px;
-  }
-}
-
-/* ---------- Tagbar ---------- */
-.list-toolbar{ padding: 0; }
 .tagbar{
   display:flex;
   gap:10px;
@@ -515,288 +613,8 @@ textarea{ min-height: 84px; resize: vertical; }
 }
 
 /* Focus */
-.btn:focus-visible, .tagbtn:focus-visible, .oschip:focus-visible, .tagchip:focus-visible,
+.btn:focus-visible, .tagbtn:focus-visible, .tagchip:focus-visible,
 input:focus-visible, textarea:focus-visible{
   outline: none;
   box-shadow: 0 0 0 3px rgba(64,220,140,.22), 0 12px 28px rgba(0,0,0,.12);
-  border-color: rgba(64,220,140,.38);
-}
-
-/* 下タブは非表示 */
-.bottom-nav{ display:none !important; }
-/* =========================================================
-   (Override) Sidebar: 必要十分サイズ + 崩れにくい
-   ========================================================= */
-
-/* サイドバー幅（PCでコンパクトに） */
-:root{
-  --sidebar-w: 270px;      /* 必要十分 */
-  --sidebar-w-wide: 300px; /* 余裕がある時だけ */
-  --layout-gap: 16px;
-}
-
-/* ここは “あなたのサイドバー要素” に当たるセレクタに合わせてください
-   例: .sidebar / .side / #sidebar など
-   まずは下の3つを全部置いてOK（合致したものが効きます） */
-.sidebar,
-#sidebar,
-.side-panel{
-  width: var(--sidebar-w);
-  flex: 0 0 var(--sidebar-w);
-  min-width: var(--sidebar-w);
-}
-
-/* 画面が広い時だけ少し広げる（必要なら） */
-@media (min-width: 1200px){
-  .sidebar,
-  #sidebar,
-  .side-panel{
-    width: var(--sidebar-w-wide);
-    flex-basis: var(--sidebar-w-wide);
-    min-width: var(--sidebar-w-wide);
-  }
-}
-
-/* メインとサイドの間隔（“広がりすぎ”防止） */
-.layout,
-.page-layout,
-.main-layout{
-  gap: var(--layout-gap);
-}
-
-/* スマホ/タブレットではサイドバーを下に落とす（崩れ回避） */
-@media (max-width: 980px){
-  .layout,
-  .page-layout,
-  .main-layout{
-    flex-direction: column;
-  }
-
-  .sidebar,
-  #sidebar,
-  .side-panel{
-    width: 100%;
-    flex: 0 0 auto;
-    min-width: 0;
-  }
-}
-
-/* サイドバー内のチップを “必要十分” に */
-.sidebar .chip,
-#sidebar .chip,
-.side-panel .chip{
-  padding: 7px 10px;
-  font-size: 12px;
-  border-radius: 999px;
-}
-
-/* =========================================================
-   (Override) Top: 「OSを選択」カードを必要十分サイズ & 4列×2行
-   ========================================================= */
-
-/* OSカードの親（gridコンテナ）のセレクタを吸収
-   例: .os-grid / .osSelectGrid / #osGrid など */
-.os-grid,
-#osGrid,
-.os-select-grid{
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)); /* PC: 1行4つ */
-  gap: 14px;
-}
-
-/* OSカード本体のセレクタを吸収
-   例: .os-card / .osCard / .os-item-card など */
-.os-card,
-.osCard,
-.os-select-card{
-  padding: 14px 14px 12px;
-  border-radius: 16px;
-  min-height: 92px; /* 必要十分 */
-}
-
-/* タイトルと説明の見え方（詰める） */
-.os-card h3,
-.osCard h3,
-.os-select-card h3{
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.15;
-}
-
-.os-card p,
-.osCard p,
-.os-select-card p{
-  margin: 6px 0 0;
-  font-size: 12px;
-  line-height: 1.35;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;         /* 2行まで */
-  -webkit-box-orient: vertical;
-}
-
-/* スマホ最適化：幅に応じて 2列→1列 */
-@media (max-width: 820px){
-  .os-grid,
-  #osGrid,
-  .os-select-grid{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (max-width: 460px){
-  .os-grid,
-  #osGrid,
-  .os-select-grid{
-    grid-template-columns: 1fr;
-  }
-}
-/* ===== Compact Sidebar (処世術OS) ===== */
-:root{
-  --sb-accent: #0b8f65;
-  --sb-ink: #2E261B;
-  --sb-border: rgba(46,38,27,0.16);
-  --sb-panel: rgba(255,255,255,0.62);
-  --sb-panel-hover: rgba(255,255,255,0.72);
-  --sb-shadow: 0 16px 40px rgba(46,38,27,0.12);
-  --sb-shadow-soft: 0 6px 14px rgba(46,38,27,0.08);
-  --sb-radius-xl: 20px;
-  --sb-radius-lg: 16px;
-}
-
-/* サイドバー外枠（コンパクトカード） */
-.sidebarCompact{
-  width: 100%;
-  max-width: 320px;
-  border-radius: var(--sb-radius-xl);
-  padding: 14px;
-  border: 1px solid rgba(11,143,101,0.22);
-  background: linear-gradient(180deg, rgba(11,143,101,0.14), rgba(255,255,255,0.18));
-  box-shadow: var(--sb-shadow);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* 見出し */
-.sidebarCompactTitle{
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  color: rgba(11,143,101,0.95);
-  margin: 2px 0 10px 4px;
-  font-size: 16px;
-}
-
-/* リスト */
-.sidebarCompactList{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* アイテム */
-.sidebarCompactItem{
-  width: 100%;
-  border: 1px solid var(--sb-border);
-  background: var(--sb-panel);
-  border-radius: var(--sb-radius-lg);
-  padding: 12px 14px;
-  cursor: pointer;
-  box-shadow: var(--sb-shadow-soft);
-  transition: transform .08s ease, background .15s ease, border-color .15s ease;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  user-select: none;
-}
-
-.sidebarCompactItem:hover{
-  transform: translateY(-1px);
-  background: var(--sb-panel-hover);
-  border-color: rgba(11,143,101,0.22);
-}
-
-.sidebarCompactLeft{
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-}
-
-.sidebarCompactMain{
-  font-weight: 800;
-  font-size: 14.5px;
-  line-height: 1.15;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--sb-ink);
-}
-
-.sidebarCompactSub{
-  font-weight: 700;
-  font-size: 12.5px;
-  line-height: 1.15;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: rgba(46,38,27,0.70);
-}
-
-/* 選択中（濃い緑） */
-.sidebarCompactItem.isActive{
-  background: linear-gradient(180deg, rgba(11,143,101,0.98), rgba(11,143,101,0.92));
-  border-color: rgba(11,143,101,0.70);
-  box-shadow: 0 10px 22px rgba(11,143,101,0.22), 0 10px 26px rgba(46,38,27,0.10);
-}
-
-.sidebarCompactItem.isActive .sidebarCompactMain,
-.sidebarCompactItem.isActive .sidebarCompactSub{
-  color: rgba(255,255,255,0.96);
-}
-
-/* フッター（検索） */
-.sidebarCompactFooter{
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(11,143,101,0.18);
-}
-
-.sidebarCompactSearch{
-  border: 1px solid rgba(46,38,27,0.14);
-  background: var(--sb-panel);
-  border-radius: var(--sb-radius-lg);
-  padding: 12px 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: var(--sb-shadow-soft);
-  transition: transform .08s ease, background .15s ease, border-color .15s ease;
-}
-
-.sidebarCompactSearch:hover{
-  transform: translateY(-1px);
-  background: var(--sb-panel-hover);
-  border-color: rgba(11,143,101,0.22);
-}
-
-.sidebarCompactDot{
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.95), rgba(74,137,255,0.9));
-  box-shadow: 0 4px 10px rgba(74,137,255,0.25);
-  flex: 0 0 auto;
-}
-
-.sidebarCompactSearchText{
-  font-weight: 800;
-  font-size: 13.5px;
-  color: rgba(46,38,27,0.85);
-}
-
-/* スマホ時：横幅いっぱいにして見切れ防止 */
-@media (max-width: 980px){
-  .sidebarCompact{ max-width: 100%; }
-}
-
+  border-color: rgba(64,22
