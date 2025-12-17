@@ -52,7 +52,7 @@ function nav(hash){
 }
 
 /**
- * 文字列/配列/その他を bullets に統一（内部OSの配列でも落ちない）
+ * 文字列/配列/その他を bullets に統一
  */
 function splitToBullets(text){
   if (text == null) return [];
@@ -182,6 +182,67 @@ function sortById(cards){
   return [...cards].sort((a,b)=> String(a.id).localeCompare(String(b.id)));
 }
 
+function osLabelParts(osKey){
+  // 画像の雰囲気に寄せた短い表示（主ラベル/副ラベル）
+  if (osKey === "life") return { main: "人生OS", sub: "" };
+  if (osKey === "internal") return { main: "1. 心の扱い方", sub: "内部OS" };
+  if (osKey === "relation") return { main: "2. 人との関わり方", sub: "対人OS" };
+  if (osKey === "social") return { main: "3. 社会での立ち回り", sub: "社会OS" };
+  if (osKey === "action") return { main: "4. 行動・習慣の技術", sub: "行動OS" };
+  if (osKey === "future") return { main: "5. キャッチアップの極意", sub: "未来OS" };
+  if (osKey === "extra") return { main: "追加OS（仮）", sub: "" };
+  return { main: osKey, sub: "" };
+}
+
+function renderCompactSidebar(currentOS){
+  const items = [
+    { key: "top", type: "nav", main: "≪トップ≫", sub: "", to: "#home" },
+    { key: "life", type: "os" },
+    { key: "internal", type: "os" },
+    { key: "relation", type: "os" },
+    { key: "social", type: "os" },
+    { key: "action", type: "os" },
+    { key: "future", type: "os" },
+    { key: "extra", type: "os" }
+  ];
+
+  return `
+    <div class="sidebarCompact">
+      <div class="sidebarCompactTitle">処世術OS</div>
+
+      <div class="sidebarCompactList" id="osbar">
+        ${items.map(it=>{
+          if (it.type === "nav"){
+            return `
+              <div class="sidebarCompactItem ${currentOS==="top" ? "isActive" : ""}" data-nav="${escapeHtml(it.to)}">
+                <div class="sidebarCompactLeft">
+                  <div class="sidebarCompactMain">${escapeHtml(it.main)}</div>
+                </div>
+              </div>
+            `;
+          }
+          const p = osLabelParts(it.key);
+          return `
+            <div class="sidebarCompactItem ${it.key===currentOS ? "isActive" : ""}" data-os="${escapeHtml(it.key)}">
+              <div class="sidebarCompactLeft">
+                <div class="sidebarCompactMain">${escapeHtml(p.main)}</div>
+                ${p.sub ? `<div class="sidebarCompactSub">${escapeHtml(p.sub)}</div>` : ``}
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+
+      <div class="sidebarCompactFooter">
+        <div class="sidebarCompactSearch" id="goSearch" role="button" tabindex="0">
+          <span class="sidebarCompactDot" aria-hidden="true"></span>
+          <span class="sidebarCompactSearchText">検索（OS横断）</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function renderList(osKey){
   renderShell("list");
   const view = $("#view");
@@ -197,27 +258,21 @@ function renderList(osKey){
     expandedId: ""
   };
 
-  // 左サイドバー（OS） + メイン（タグ＋カード）
+  // 左サイドバー（コンパクト） + メイン（ヘッダ＋タグ＋カード）
   view.innerHTML = `
     <div class="list-layout">
       <aside class="list-side">
-        <div class="card side-card">
-          <div class="side-head">
-            <div class="side-os">${escapeHtml(meta?.title ?? "人生OS")}</div>
-            <div class="side-count">件数：<span id="countAll">${allCards.length}</span> 件</div>
-          </div>
-
-          <div class="side-tabs" id="osbar">
-            ${OS_META.map(m => `
-              <button class="oschip sidechip ${m.key===currentOS ? "active" : ""}" data-os="${m.key}">
-                ${escapeHtml(m.title)}
-              </button>
-            `).join("")}
-          </div>
-        </div>
+        ${renderCompactSidebar(currentOS)}
       </aside>
 
       <div class="list-main">
+        <div class="card section" style="padding:0;">
+          <div class="list-headline">
+            <div class="title">${escapeHtml(meta?.title ?? "人生OS")}</div>
+            <div class="count">件数：<span id="countAll">${allCards.length}</span> 件</div>
+          </div>
+        </div>
+
         <div class="card section list-toolbar">
           <div class="tagbar" id="tagbar">
             <button class="tagbtn active" data-tag="">すべて</button>
@@ -230,10 +285,24 @@ function renderList(osKey){
     </div>
   `;
 
-  // OS切替（左サイド）
-  $("#osbar").querySelectorAll("[data-os]").forEach(b=>{
-    b.onclick = ()=> nav(`#list?os=${b.getAttribute("data-os")}`);
+  // サイドバー：トップ
+  $("#osbar").querySelectorAll("[data-nav]").forEach(el=>{
+    el.onclick = ()=> nav(el.getAttribute("data-nav"));
   });
+
+  // サイドバー：OS切替
+  $("#osbar").querySelectorAll("[data-os]").forEach(el=>{
+    el.onclick = ()=> nav(`#list?os=${el.getAttribute("data-os")}`);
+  });
+
+  // サイドバー：検索（OS横断）
+  $("#goSearch").onclick = ()=> nav("#search");
+  $("#goSearch").onkeydown = (e)=>{
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      nav("#search");
+    }
+  };
 
   const draw = ()=>{
     let cards = allCards;
@@ -344,6 +413,198 @@ function renderList(osKey){
   draw();
 }
 
+// ========== OS横断検索 ==========
+function renderSearch(){
+  renderShell("list");
+  const view = $("#view");
+
+  const state = {
+    q: "",
+    tag: "",
+    expandedId: ""
+  };
+
+  const allCards = sortById(DATA.all ?? []);
+  const tags = buildTagSet(allCards);
+
+  view.innerHTML = `
+    <div class="list-layout">
+      <aside class="list-side">
+        ${renderCompactSidebar("search")}
+      </aside>
+
+      <div class="list-main">
+        <div class="card section" style="padding:14px;">
+          <div style="font-weight:900; font-size:14px;">検索（OS横断）</div>
+          <div style="color:var(--muted); font-size:12px; margin-top:4px;">タイトル・要約・本質・戦略・タグを対象に検索</div>
+
+          <div style="display:grid; gap:10px; margin-top:10px;">
+            <input class="input" id="q" placeholder="例：不安、交渉、習慣、AI など" />
+          </div>
+        </div>
+
+        <div class="card section list-toolbar">
+          <div class="tagbar" id="tagbar">
+            <button class="tagbtn active" data-tag="">すべて</button>
+            ${tags.map(t=>`<button class="tagbtn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
+          </div>
+        </div>
+
+        <div class="card section" style="padding:0;">
+          <div class="list-headline">
+            <div class="title">検索結果</div>
+            <div class="count">件数：<span id="countAll">0</span> 件</div>
+          </div>
+        </div>
+
+        <div class="cards-grid" id="cards"></div>
+      </div>
+    </div>
+  `;
+
+  // サイドバー：トップ
+  $("#osbar").querySelectorAll("[data-nav]").forEach(el=>{
+    el.onclick = ()=> nav(el.getAttribute("data-nav"));
+  });
+  // サイドバー：OS切替
+  $("#osbar").querySelectorAll("[data-os]").forEach(el=>{
+    el.onclick = ()=> nav(`#list?os=${el.getAttribute("data-os")}`);
+  });
+  // サイドバー：検索（現在地）
+  $("#goSearch").onclick = ()=> nav("#search");
+
+  const matchText = (c, q)=>{
+    if (!q) return true;
+    const s = q.toLowerCase();
+    const hay = [
+      c.title, c.summary,
+      ...(splitToBullets(c.essence)),
+      ...(splitToBullets(c.pitfalls)),
+      ...(splitToBullets(c.strategy)),
+      ...((c.tags||[]).map(String))
+    ].join(" ").toLowerCase();
+    return hay.includes(s);
+  };
+
+  const draw = ()=>{
+    let cards = allCards.filter(c => matchText(c, state.q));
+    if (state.tag) cards = cards.filter(c => (c.tags||[]).includes(state.tag));
+
+    $("#countAll").textContent = String(cards.length);
+
+    const fav = loadFavorites();
+
+    $("#cards").innerHTML = cards.map(c=>{
+      const isOpen = c.id === state.expandedId;
+      const isFav = fav.has(c.id);
+      const osTitle = (OS_META.find(m=>m.key===c.os)?.title) ?? c.os;
+
+      const essenceBullets = splitToBullets(c.essence);
+      const pitfallsBullets = splitToBullets(c.pitfalls);
+      const strategyBullets = splitToBullets(c.strategy);
+
+      return `
+        <div class="card scard">
+          <div class="scard-top scard-click" data-toggle="${escapeHtml(c.id)}">
+            <div class="scard-icon">🧠</div>
+
+            <div class="scard-head">
+              <h3 class="scard-title">${escapeHtml(c.title)}</h3>
+              <p class="scard-summary">${escapeHtml(c.summary)}</p>
+
+              <div class="scard-meta">
+                <span class="scard-id">${escapeHtml(c.id)}</span>
+                <span class="scard-id">${escapeHtml(osTitle)}</span>
+              </div>
+            </div>
+
+            <div class="scard-side">
+              <div class="favmini" data-fav="${escapeHtml(c.id)}" title="お気に入り">
+                <span>${isFav ? "★" : "☆"}</span>
+                <span class="count">0</span>
+              </div>
+            </div>
+          </div>
+
+          ${isOpen ? `
+            <div class="scard-expand">
+              <h4>本質・要点</h4>
+              <ul>${essenceBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+
+              <h4>やりがちな落とし穴</h4>
+              <ul>${pitfallsBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+
+              <h4>二周目視点の戦略</h4>
+              <ul>${strategyBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+            </div>
+          ` : ``}
+
+          <div class="scard-tags">
+            ${(c.tags||[]).map(t=>`
+              <span class="tagchip" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</span>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }).join("") || `<div class="card" style="padding:14px; color:var(--muted);">該当するカードがありません。</div>`;
+
+    // タグチップ
+    $("#cards").querySelectorAll("[data-tag]").forEach(el=>{
+      el.onclick = (e)=>{
+        e.stopPropagation();
+        const t = el.getAttribute("data-tag");
+        state.tag = (state.tag === t) ? "" : t;
+        $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
+          b.classList.toggle("active", b.getAttribute("data-tag") === state.tag);
+        });
+        draw();
+      };
+    });
+
+    // 展開
+    $("#cards").querySelectorAll("[data-toggle]").forEach(el=>{
+      el.onclick = ()=>{
+        const id = el.getAttribute("data-toggle");
+        state.expandedId = (state.expandedId === id) ? "" : id;
+        draw();
+      };
+    });
+
+    // お気に入り
+    $("#cards").querySelectorAll("[data-fav]").forEach(el=>{
+      el.onclick = (e)=>{
+        e.stopPropagation();
+        const id = el.getAttribute("data-fav");
+        const set = loadFavorites();
+        if (set.has(id)) set.delete(id); else set.add(id);
+        saveFavorites(set);
+        draw();
+      };
+    });
+  };
+
+  // 上部タグボタン
+  $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
+    b.onclick = ()=>{
+      state.tag = b.getAttribute("data-tag");
+      $("#tagbar").querySelectorAll("[data-tag]").forEach(x=>{
+        x.classList.toggle("active", x === b);
+      });
+      draw();
+    };
+  });
+
+  // クエリ入力
+  const qEl = $("#q");
+  qEl.addEventListener("input", ()=>{
+    state.q = qEl.value.trim();
+    draw();
+  });
+
+  // 初期描画
+  draw();
+}
+
 // ========== 詳細 ==========
 function findCardById(id){
   return DATA.all.find(c => c.id === id);
@@ -410,7 +671,7 @@ function renderDetail(id){
   $("#backToList").onclick = ()=> nav(`#list?os=${encodeURIComponent(card.os || "life")}`);
   $("#favBtn").onclick = ()=>{
     const set = loadFavorites();
-    if (set.has(card.id)) set.delete(card.id); else set.add(card.id);
+    if (set.has(card.id)) set.delete(id); else set.add(card.id);
     saveFavorites(set);
     renderDetail(card.id);
   };
@@ -533,6 +794,8 @@ async function boot(){
       const os = q.os || "life";
       return renderList(os);
     }
+
+    if (hash.startsWith("#search")) return renderSearch();
 
     if (hash.startsWith("#detail")) {
       const q = parseQuery(hash.split("?")[1] || "");
