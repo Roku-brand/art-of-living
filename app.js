@@ -71,15 +71,11 @@ function normalizeCard(c){
   if (!c || typeof c !== "object") return c;
   const out = { ...c };
 
-  // data wobble absorption
   if (out.pitfalls == null && out.pitfall != null) out.pitfalls = out.pitfall;
 
-  // 「タブ（OS内分類）」をデータとして持てるようにする（任意）
-  // 互換：category / group なども吸収
+  // OS内タブ（分類）互換：category/group → tab
   if (out.tab == null && out.category != null) out.tab = out.category;
   if (out.tab == null && out.group != null) out.tab = out.group;
-
-  // tab は文字列化して空白トリム（未設定は空文字扱い）
   out.tab = String(out.tab ?? "").trim();
 
   return out;
@@ -174,10 +170,10 @@ function renderHome(){
       <div class="os-select-title">OSを選択</div>
       <div class="os-select-grid">
         ${OS_META.map(m => `
-          <div class="card os-mini" data-os="${m.key}">
-            <h3>${escapeHtml(m.title)}</h3>
-            <p>${escapeHtml(m.desc)}</p>
-          </div>
+          <button class="os-mini" data-os="${escapeHtml(m.key)}" type="button">
+            <div class="os-mini-title">${escapeHtml(m.title)}</div>
+            <div class="os-mini-desc">${escapeHtml(m.desc)}</div>
+          </button>
         `).join("")}
       </div>
     </div>
@@ -199,8 +195,10 @@ function sortById(cards){
   return [...cards].sort((a,b)=> String(a.id).localeCompare(String(b.id)));
 }
 
+/**
+ * OS内タブ（分類）を最大 maxTabs 個まで（＋必要なら「その他」）に整形
+ */
 function buildTabStats(cards, maxTabs = 7){
-  // cards[].tab を集計し、最大 maxTabs 個まで（＋必要なら「その他」）
   const counts = new Map();
   cards.forEach(c=>{
     const k = String(c.tab || "").trim() || "未分類";
@@ -212,19 +210,18 @@ function buildTabStats(cards, maxTabs = 7){
     return String(a[0]).localeCompare(String(b[0]), "ja");
   });
 
-  // maxTabs を超える場合は「その他」に寄せる
   let main = sorted;
   let hasOther = false;
 
   if (sorted.length > maxTabs){
-    const keep = maxTabs - 1; // 「その他」枠を確保
+    const keep = maxTabs - 1; // 「その他」枠
     main = sorted.slice(0, Math.max(0, keep));
     hasOther = true;
   }
 
-  const shown = new Set(main.map(([k])=>k));
+  const shownKeys = new Set(main.map(([k])=>k));
   const otherCount = hasOther
-    ? sorted.filter(([k])=>!shown.has(k)).reduce((acc, [,n])=>acc+n, 0)
+    ? sorted.filter(([k])=>!shownKeys.has(k)).reduce((acc, [,n])=>acc+n, 0)
     : 0;
 
   const tabs = [
@@ -232,7 +229,7 @@ function buildTabStats(cards, maxTabs = 7){
     ...(hasOther ? [{ key: "__other__", label: "その他", count: otherCount }] : [])
   ];
 
-  return { tabs, shownKeys: shown, totalTabs: sorted.length };
+  return { tabs, shownKeys };
 }
 
 function osLabelParts(osKey){
@@ -246,16 +243,20 @@ function osLabelParts(osKey){
   return { main: osKey, sub: "" };
 }
 
+/**
+ * サイドバー（OS切替）
+ * - 「トップ」は不要 → 削除
+ * - 並び順は人生OSを最上段に固定
+ */
 function renderCompactSidebar(currentOS){
   const items = [
-    { key: "top", type: "nav", main: "≪トップ≫", sub: "", to: "#home" },
-    { key: "internal", type: "os" },
-    { key: "relation", type: "os" },
-    { key: "social", type: "os" },
-    { key: "action", type: "os" },
-    { key: "future", type: "os" },
-    { key: "life", type: "os" },
-    { key: "extra", type: "os" }
+    "life",
+    "internal",
+    "relation",
+    "social",
+    "action",
+    "future",
+    "extra"
   ];
 
   return `
@@ -263,19 +264,10 @@ function renderCompactSidebar(currentOS){
       <div class="sidebarCompactTitle">処世術OS</div>
 
       <div class="sidebarCompactList" id="osbar">
-        ${items.map(it=>{
-          if (it.type === "nav"){
-            return `
-              <div class="sidebarCompactItem ${currentOS==="top" ? "isActive" : ""}" data-nav="${escapeHtml(it.to)}">
-                <div class="sidebarCompactLeft">
-                  <div class="sidebarCompactMain">${escapeHtml(it.main)}</div>
-                </div>
-              </div>
-            `;
-          }
-          const p = osLabelParts(it.key);
+        ${items.map(key=>{
+          const p = osLabelParts(key);
           return `
-            <div class="sidebarCompactItem ${it.key===currentOS ? "isActive" : ""}" data-os="${escapeHtml(it.key)}">
+            <div class="sidebarCompactItem ${key===currentOS ? "isActive" : ""}" data-os="${escapeHtml(key)}">
               <div class="sidebarCompactLeft">
                 <div class="sidebarCompactMain">${escapeHtml(p.main)}</div>
                 ${p.sub ? `<div class="sidebarCompactSub">${escapeHtml(p.sub)}</div>` : ``}
@@ -304,7 +296,7 @@ function renderList(osKey){
 
   const allCards = sortById(DATA.byOS[currentOS] ?? []);
 
-  // ★タブ（OS内分類 / 2次フィルター）
+  // 2次フィルター：OS内タブ（card.tab）
   const tabStats = buildTabStats(allCards, 7);
   const tabs = tabStats.tabs;
 
@@ -349,7 +341,6 @@ function renderList(osKey){
   `;
 
   // sidebar wiring
-  $("#osbar").querySelectorAll("[data-nav]").forEach(el=> el.onclick = ()=> nav(el.getAttribute("data-nav")));
   $("#osbar").querySelectorAll("[data-os]").forEach(el=> el.onclick = ()=> nav(`#list?os=${el.getAttribute("data-os")}`));
 
   $("#goSearch").onclick = ()=> nav("#search");
@@ -365,7 +356,7 @@ function renderList(osKey){
   const draw = ()=>{
     let cards = allCards;
 
-    // ★タブフィルター（OS内分類）
+    // tab filter
     if (state.tab){
       if (state.tab === "__other__") cards = cards.filter(isInOther);
       else cards = cards.filter(c => (String(c.tab || "").trim() || "未分類") === state.tab);
@@ -427,7 +418,7 @@ function renderList(osKey){
       `;
     }).join("") || `<div class="card" style="padding:14px; color:var(--muted);">該当するカードがありません。</div>`;
 
-    // tag chips → 検索（タグ探索）へ送る（OS内フィルタにはしない）
+    // tag chips → 検索へ（探索導線）
     $("#cards").querySelectorAll("[data-tag]").forEach(el=>{
       el.onclick = (e)=>{
         e.stopPropagation();
@@ -465,7 +456,6 @@ function renderList(osKey){
       $("#tabbar").querySelectorAll("[data-tab]").forEach(x=>{
         x.classList.toggle("active", x === b);
       });
-      // タブを変えたら展開は閉じる（操作軽量化）
       state.expandedId = "";
       draw();
     };
@@ -481,7 +471,6 @@ function renderSearch(initial = {}){
 
   const state = { q: "", tag: "", expandedId: "" };
 
-  // 初期状態（URLクエリから）
   if (initial.q) state.q = String(initial.q).trim();
   if (initial.tag) state.tag = String(initial.tag).trim();
 
@@ -526,7 +515,7 @@ function renderSearch(initial = {}){
     </div>
   `;
 
-  $("#osbar").querySelectorAll("[data-nav]").forEach(el=> el.onclick = ()=> nav(el.getAttribute("data-nav")));
+  // sidebar wiring
   $("#osbar").querySelectorAll("[data-os]").forEach(el=> el.onclick = ()=> nav(`#list?os=${el.getAttribute("data-os")}`));
   $("#goSearch").onclick = ()=> nav("#search");
 
@@ -541,6 +530,14 @@ function renderSearch(initial = {}){
       ...((c.tags||[]).map(String))
     ].join(" ").toLowerCase();
     return hay.includes(s);
+  };
+
+  const syncTagbar = ()=>{
+    $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
+      b.classList.toggle("active", b.getAttribute("data-tag") === state.tag);
+    });
+    const allBtn = $("#tagbar").querySelector('[data-tag=""]');
+    if (allBtn) allBtn.classList.toggle("active", state.tag === "");
   };
 
   const draw = ()=>{
@@ -602,7 +599,7 @@ function renderSearch(initial = {}){
       `;
     }).join("") || `<div class="card" style="padding:14px; color:var(--muted);">該当するカードがありません。</div>`;
 
-    // tag chips → 検索内のタグフィルターとして動かす
+    // tag chips → 検索内タグフィルタとして動作
     $("#cards").querySelectorAll("[data-tag]").forEach(el=>{
       el.onclick = (e)=>{
         e.stopPropagation();
@@ -633,15 +630,6 @@ function renderSearch(initial = {}){
     });
   };
 
-  const syncTagbar = ()=>{
-    $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
-      b.classList.toggle("active", b.getAttribute("data-tag") === state.tag);
-    });
-    // 「すべて」ボタンのactive
-    const allBtn = $("#tagbar").querySelector('[data-tag=""]');
-    if (allBtn) allBtn.classList.toggle("active", state.tag === "");
-  };
-
   // tag buttons
   $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
     b.onclick = ()=>{
@@ -659,7 +647,6 @@ function renderSearch(initial = {}){
     draw();
   });
 
-  // 初期タグ反映
   syncTagbar();
   draw();
 }
@@ -737,7 +724,7 @@ function renderDetail(id){
   };
 }
 
-// ========== マイページ（既存踏襲） ==========
+// ========== マイページ ==========
 function renderMy(){
   renderShell("my");
   const view = $("#view");
