@@ -49,7 +49,7 @@ body{
   color: var(--ink);
   line-height: 1.65;
 
-  /* Mint background like your screenshot */
+  /* Mint background */
   background:
     radial-gradient(1400px 900px at 10% -10%, rgba(34,197,94,.18), transparent 55%),
     radial-gradient(1200px 900px at 90% 10%, rgba(59,130,246,.18), transparent 60%),
@@ -255,7 +255,7 @@ a:hover{ text-decoration: underline; }
   border: 1px solid rgba(10,18,20,.10);
   background: var(--sb-panel);
   border-radius: var(--r-lg);
-  padding: 10px 12px; /* slightly smaller */
+  padding: 10px 12px;
   cursor: pointer;
   box-shadow: var(--sb-shadow-soft);
   transition: transform .08s ease, background .15s ease, border-color .15s ease;
@@ -369,14 +369,14 @@ a:hover{ text-decoration: underline; }
 
 .tagbtn{
   flex:0 0 auto;
-  padding: 6px 10px;              /* smaller */
+  padding: 6px 10px;
   border-radius: 999px;
   border: 1px solid rgba(10,18,20,.10);
   background: rgba(255,255,255,.26);
   color: rgba(8,14,16,.70);
   cursor:pointer;
   white-space:nowrap;
-  font-size: 12px;               /* smaller */
+  font-size: 12px;
   font-weight: 800;
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
 }
@@ -410,7 +410,7 @@ a:hover{ text-decoration: underline; }
   border: 1px solid rgba(10,18,20,.10);
   border-radius: var(--r-xl);
   box-shadow: 0 16px 36px rgba(0,0,0,.12);
-  padding: 12px 14px 12px;       /* smaller padding */
+  padding: 12px 14px 12px;
   overflow: hidden;
   --os-line: var(--os-extra);
 }
@@ -420,11 +420,11 @@ a:hover{ text-decoration: underline; }
   position:absolute;
   left:14px;
   right:14px;
-  top:10px;
+  top:16px; /* ★ナンバリングと被りにくく調整 */
   height:6px;
   border-radius: 999px;
   background: linear-gradient(90deg, rgba(0,0,0,0), var(--os-line), rgba(0,0,0,0));
-  opacity: .80;
+  opacity: .82;
   pointer-events:none;
 }
 
@@ -437,27 +437,33 @@ a:hover{ text-decoration: underline; }
 .scard.os-future{ --os-line: var(--os-future); }
 .scard.os-extra{ --os-line: var(--os-extra); }
 
-/* numbering (id) top-left */
+/* numbering (id) top-left (FIX: more top-left, square, darker text) */
 .scard-num{
   position:absolute;
-  left: 14px;
-  top: 18px;
-  font-size: 12px;
+  left: 10px;
+  top: 10px;
+
+  font-size: 11.5px;
   font-weight: 900;
-  color: rgba(8,14,16,.44);
-  background: rgba(255,255,255,.72);
-  border: 1px solid rgba(10,18,20,.08);
-  padding: 3px 8px;
-  border-radius: 999px;
+  letter-spacing: 0.01em;
+
+  color: rgba(8,14,16,.88);          /* ★濃い文字 */
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(10,18,20,.14);
+
+  padding: 4px 8px;
+  border-radius: 8px;                 /* ★四角寄り */
+  box-shadow: 0 8px 18px rgba(0,0,0,.10);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  z-index: 2;
 }
 
 .scard-top{
   display:flex;
   gap:12px;
   align-items:flex-start;
-  padding-top: 14px; /* space for id badge */
+  padding-top: 18px; /* ★番号バッジぶん確保（最小限） */
 }
 .scard-click{ cursor:pointer; }
 
@@ -479,7 +485,7 @@ a:hover{ text-decoration: underline; }
 
 .scard-title{
   margin:0 0 6px;
-  font-size: 15px;            /* smaller */
+  font-size: 15px;
   line-height: 1.35;
   font-weight: 900;
   color: rgba(8,14,16,.92);
@@ -487,11 +493,11 @@ a:hover{ text-decoration: underline; }
 }
 .scard-summary{
   margin:0;
-  font-size: 12.5px;          /* smaller */
+  font-size: 12.5px;
   line-height: 1.55;
   color: rgba(8,14,16,.62);
   display:-webkit-box;
-  -webkit-line-clamp: 2;      /* reduce height */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow:hidden;
 }
