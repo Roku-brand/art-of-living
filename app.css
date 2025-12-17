@@ -617,4 +617,8 @@ textarea{ min-height: 84px; resize: vertical; }
 input:focus-visible, textarea:focus-visible{
   outline: none;
   box-shadow: 0 0 0 3px rgba(64,220,140,.22), 0 12px 28px rgba(0,0,0,.12);
-  border-color: rgba(64,22
+  border-color: rgba(64,220,140,.38);
+}
+
+/* 下タブは非表示 */
+.bottom-nav{ display:none !important; }
