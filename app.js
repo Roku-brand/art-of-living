@@ -1,12 +1,12 @@
 // ========== 設定 ==========
 const OS_META = [
-  { key: "life",     title: "人生OS", desc: "入口。全体像を掴む。", file: "./data/life.json" },
-  { key: "internal", title: "心の扱い方｜内部OS", desc: "感情・思考・自己調整。", file: "./data/internal.json" },
-  { key: "relation", title: "コミュニケーションの極意｜対人OS", desc: "距離感・交渉・信頼。", file: "./data/relation.json" },
-  { key: "social",   title: "社会での立ち回り｜社会OS", desc: "組織・政治・意思決定。", file: "./data/social.json" },
-  { key: "action",   title: "行動・習慣の技術｜行動OS", desc: "実行・習慣化・継続。", file: "./data/action.json" },
-  { key: "future",   title: "未来への対応策｜未来OS", desc: "AI時代の備え。", file: "./data/future.json" },
-  { key: "extra",    title: "追加OS（仮）", desc: "調整枠・実験枠。", file: "./data/extra.json" }
+  { key: "life",      title: "人生OS",       desc: "判断基準（方向性・価値観・決断・意味）。", file: "./data/life.json" },
+  { key: "internal",  title: "内部心理OS",   desc: "不安・自己否定・怒り・疲れ・回復。",       file: "./data/internal.json" },
+  { key: "relation",  title: "対人関係OS",   desc: "印象・距離感・信頼・境界線。",             file: "./data/relation.json" },
+  { key: "operation", title: "環境操作OS",   desc: "報告・会議・交渉・評価・根回し。",         file: "./data/operation.json" },
+  { key: "exection",  title: "行動OS",       desc: "着手・集中・習慣化・継続・仕組み化。",     file: "./data/exection.json" },
+  { key: "adapt",     title: "適応OS",       desc: "変化察知・AI・キャリア・資産・撤退。",     file: "./data/adapt.json" },
+  { key: "extra",     title: "追加OS（仮）", desc: "調整枠・実験枠。",                          file: "./data/extra.json" }
 ];
 
 const LS_FAV = "shoseijutsu:favorites";
@@ -71,11 +71,15 @@ function normalizeCard(c){
   if (!c || typeof c !== "object") return c;
   const out = { ...c };
 
+  // data wobble absorption
   if (out.pitfalls == null && out.pitfall != null) out.pitfalls = out.pitfall;
 
-  // OS内タブ（分類）互換：category/group → tab
+  // 「タブ（OS内分類）」をデータとして持てるようにする（任意）
+  // 互換：category / group なども吸収
   if (out.tab == null && out.category != null) out.tab = out.category;
   if (out.tab == null && out.group != null) out.tab = out.group;
+
+  // tab は文字列化して空白トリム（未設定は空文字扱い）
   out.tab = String(out.tab ?? "").trim();
 
   return out;
@@ -97,8 +101,8 @@ async function fetchOS(osKey){
     if (!res.ok) throw new Error(`${meta.file} ${res.status}`);
     const json = await res.json();
     const arr = Array.isArray(json) ? json : [];
-    // ★osを必ず付与（OSライン色のため）
-    return arr.map(c => normalizeCard({ ...c, os: c.os || osKey }));
+    // ★osは必ずOSキーに正規化（JSON内のos表記に依存しない）
+    return arr.map(c => normalizeCard({ ...c, os: osKey }));
   } catch (e) {
     console.error("fetchOS error:", e);
     return [];
@@ -170,10 +174,10 @@ function renderHome(){
       <div class="os-select-title">OSを選択</div>
       <div class="os-select-grid">
         ${OS_META.map(m => `
-          <button class="os-mini" data-os="${escapeHtml(m.key)}" type="button">
-            <div class="os-mini-title">${escapeHtml(m.title)}</div>
-            <div class="os-mini-desc">${escapeHtml(m.desc)}</div>
-          </button>
+          <div class="card os-mini" data-os="${m.key}">
+            <h3>${escapeHtml(m.title)}</h3>
+            <p>${escapeHtml(m.desc)}</p>
+          </div>
         `).join("")}
       </div>
     </div>
@@ -195,13 +199,11 @@ function sortById(cards){
   return [...cards].sort((a,b)=> String(a.id).localeCompare(String(b.id)));
 }
 
-/**
- * OS内タブ（分類）を最大 maxTabs 個まで（＋必要なら「その他」）に整形
- */
-function buildTabStats(cards, maxTabs = 7){
+function buildTabStats(cards, maxTabs=7){
   const counts = new Map();
   cards.forEach(c=>{
-    const k = String(c.tab || "").trim() || "未分類";
+    const k = String(c.tab || "").trim();
+    if (!k) return;
     counts.set(k, (counts.get(k) || 0) + 1);
   });
 
@@ -210,18 +212,19 @@ function buildTabStats(cards, maxTabs = 7){
     return String(a[0]).localeCompare(String(b[0]), "ja");
   });
 
+  // maxTabs を超える場合は「その他」に寄せる
   let main = sorted;
   let hasOther = false;
 
   if (sorted.length > maxTabs){
-    const keep = maxTabs - 1; // 「その他」枠
+    const keep = maxTabs - 1; // 「その他」枠を確保
     main = sorted.slice(0, Math.max(0, keep));
     hasOther = true;
   }
 
-  const shownKeys = new Set(main.map(([k])=>k));
+  const shown = new Set(main.map(([k])=>k));
   const otherCount = hasOther
-    ? sorted.filter(([k])=>!shownKeys.has(k)).reduce((acc, [,n])=>acc+n, 0)
+    ? sorted.filter(([k])=>!shown.has(k)).reduce((acc, [,n])=>acc+n, 0)
     : 0;
 
   const tabs = [
@@ -229,34 +232,29 @@ function buildTabStats(cards, maxTabs = 7){
     ...(hasOther ? [{ key: "__other__", label: "その他", count: otherCount }] : [])
   ];
 
-  return { tabs, shownKeys };
+  return { tabs, shownKeys: shown, totalTabs: sorted.length };
 }
 
 function osLabelParts(osKey){
   if (osKey === "life") return { main: "人生OS", sub: "" };
-  if (osKey === "internal") return { main: "1. 心の扱い方", sub: "内部OS" };
-  if (osKey === "relation") return { main: "2. 人との関わり方", sub: "対人OS" };
-  if (osKey === "social") return { main: "3. 社会での立ち回り", sub: "社会OS" };
-  if (osKey === "action") return { main: "4. 行動・習慣の技術", sub: "行動OS" };
-  if (osKey === "future") return { main: "5. キャッチアップの極意", sub: "未来OS" };
+  if (osKey === "internal") return { main: "内部心理OS", sub: "" };
+  if (osKey === "relation") return { main: "対人関係OS", sub: "" };
+  if (osKey === "operation") return { main: "環境操作OS", sub: "" };
+  if (osKey === "exection") return { main: "行動OS", sub: "" };
+  if (osKey === "adapt") return { main: "適応OS", sub: "" };
   if (osKey === "extra") return { main: "追加OS（仮）", sub: "" };
   return { main: osKey, sub: "" };
 }
 
-/**
- * サイドバー（OS切替）
- * - 「トップ」は不要 → 削除
- * - 並び順は人生OSを最上段に固定
- */
 function renderCompactSidebar(currentOS){
   const items = [
-    "life",
-    "internal",
-    "relation",
-    "social",
-    "action",
-    "future",
-    "extra"
+    { key: "life", type: "os" },
+    { key: "internal", type: "os" },
+    { key: "relation", type: "os" },
+    { key: "operation", type: "os" },
+    { key: "exection", type: "os" },
+    { key: "adapt", type: "os" },
+    { key: "extra", type: "os" }
   ];
 
   return `
@@ -264,10 +262,10 @@ function renderCompactSidebar(currentOS){
       <div class="sidebarCompactTitle">処世術OS</div>
 
       <div class="sidebarCompactList" id="osbar">
-        ${items.map(key=>{
-          const p = osLabelParts(key);
+        ${items.map(it=>{
+          const p = osLabelParts(it.key);
           return `
-            <div class="sidebarCompactItem ${key===currentOS ? "isActive" : ""}" data-os="${escapeHtml(key)}">
+            <div class="sidebarCompactItem ${it.key===currentOS ? "isActive" : ""}" data-os="${escapeHtml(it.key)}">
               <div class="sidebarCompactLeft">
                 <div class="sidebarCompactMain">${escapeHtml(p.main)}</div>
                 ${p.sub ? `<div class="sidebarCompactSub">${escapeHtml(p.sub)}</div>` : ``}
@@ -296,461 +294,342 @@ function renderList(osKey){
 
   const allCards = sortById(DATA.byOS[currentOS] ?? []);
 
-  // 2次フィルター：OS内タブ（card.tab）
+  // ★タブ（OS内分類 / 2次フィルター）
   const tabStats = buildTabStats(allCards, 7);
   const tabs = tabStats.tabs;
 
-  const state = { tab: "", expandedId: "" };
+  const q = parseQuery(location.hash.split("?")[1] || "");
+  const activeTabKey = q.tab || "すべて";
+  const tag = q.tag || "";
+
+  // tab filter
+  let filtered = allCards;
+
+  if (activeTabKey !== "すべて"){
+    if (activeTabKey === "__other__"){
+      const shown = tabStats.shownKeys;
+      filtered = filtered.filter(c => {
+        const t = String(c.tab||"").trim();
+        return t && !shown.has(t);
+      });
+    } else {
+      filtered = filtered.filter(c => String(c.tab||"").trim() === activeTabKey);
+    }
+  }
+
+  // tag filter (search)
+  if (tag){
+    const t = String(tag).trim();
+    filtered = filtered.filter(c => (c.tags||[]).some(x => String(x).trim() === t));
+  }
+
+  const tagSet = buildTagSet(allCards);
+
+  const tabButtons = [
+    { key: "すべて", label: "すべて", count: allCards.length },
+    ...tabs
+  ];
 
   view.innerHTML = `
     <div class="list-layout has-mobile-sidebar">
-      <aside class="list-side" id="listSide">
-        ${renderCompactSidebar(currentOS)}
-      </aside>
-
       <div class="list-main">
-        <div class="mobile-side-toggle">
-          <button class="btn ghost" id="btnSideToggle" aria-expanded="false" aria-controls="listSide" aria-label="Toggle OS menu">
-            ☰ メニュー
-          </button>
-        </div>
 
-        <div class="card section" style="padding:0;">
-          <div class="list-headline">
-            <div class="title">${escapeHtml(meta?.title ?? "人生OS")}</div>
-            <div class="count">
-              表示：<span id="countShown">0</span> 件
-              <span class="count-sep">/</span>
-              全<span id="countAll">${allCards.length}</span> 件
-            </div>
+        <div class="card section list-headline">
+          <div class="title">${escapeHtml(meta?.title || currentOS)} の処世術一覧</div>
+          <div class="count">
+            件数：<b>${filtered.length}</b>
+            <span class="count-sep">/</span>
+            全体：<b>${allCards.length}</b>
           </div>
         </div>
 
-        <div class="card section" style="padding:0;">
-          <div class="tabbar-wrap">
-            <div class="tabbar-label">分類（OS内タブ）</div>
-            <div class="tabbar" id="tabbar">
-              <button class="tabbtn active" data-tab="">すべて</button>
-              ${tabs.map(t=>`
-                <button class="tabbtn" data-tab="${escapeHtml(t.key)}">
-                  ${escapeHtml(t.label)}
-                  <span class="tabcount">${t.count}</span>
-                </button>
-              `).join("")}
-            </div>
+        <div class="card section tabbar-wrap">
+          <div class="tabbar-label">OS内タブ（2次フィルター）</div>
+          <div class="tabbar" id="tabbar">
+            ${tabButtons.map(t=>`
+              <button class="tabbtn ${t.key===activeTabKey ? "active":""}" data-tab="${escapeHtml(t.key)}">
+                <span>${escapeHtml(t.label)}</span>
+                <span class="tabcount">${t.count}</span>
+              </button>
+            `).join("")}
           </div>
         </div>
 
-        <div class="cards-grid" id="cards"></div>
+        <div class="card section tagbar-wrap">
+          <div class="tagbar-label">タグ（検索・探索ツール）</div>
+          <div class="tagbar" id="tagbar">
+            ${tagSet.map(t=>`
+              <button class="tagbtn ${t===tag ? "active":""}" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="cards-grid" id="cards">
+          ${filtered.map((c, i)=> renderCard(c, i)).join("")}
+        </div>
+      </div>
+
+      <div class="list-side">
+        ${renderCompactSidebar(currentOS)}
       </div>
     </div>
   `;
 
-  // sidebar wiring
-  const sideEl = $("#listSide");
-  const sideToggleBtn = $("#btnSideToggle");
-  const setSideOpen = (open)=>{
-    if (!sideEl) return;
-    const next = open;
-    sideEl.classList.toggle("isOpen", next);
-    if (sideToggleBtn) sideToggleBtn.setAttribute("aria-expanded", String(next));
-  };
-
-  const toggleSidebar = ()=>{
-    if (!sideEl) return;
-    setSideOpen(!sideEl.classList.contains("isOpen"));
-  };
-
-  if (sideToggleBtn) sideToggleBtn.onclick = toggleSidebar;
-  const closeSidebar = ()=> setSideOpen(false);
-
-  $("#osbar").querySelectorAll("[data-os]").forEach(el=> el.onclick = ()=>{
-    closeSidebar();
-    nav(`#list?os=${el.getAttribute("data-os")}`);
+  // sidebar click
+  view.querySelectorAll("[data-os]").forEach(el=>{
+    el.onclick = ()=> nav(`#list?os=${el.getAttribute("data-os")}`);
   });
+  $("#goSearch").onclick = ()=> nav(`#search?q=&tag=`);
 
-  $("#goSearch").onclick = ()=>{
-    closeSidebar();
-    nav("#search");
-  };
-  $("#goSearch").onkeydown = (e)=>{
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      closeSidebar();
-      nav("#search");
-    }
-  };
-
-  const isInOther = (c)=>{
-    const k = String(c.tab || "").trim() || "未分類";
-    return !tabStats.shownKeys.has(k);
-  };
-
-  const draw = ()=>{
-    let cards = allCards;
-
-    // tab filter
-    if (state.tab){
-      if (state.tab === "__other__") cards = cards.filter(isInOther);
-      else cards = cards.filter(c => (String(c.tab || "").trim() || "未分類") === state.tab);
-    }
-
-    $("#countShown").textContent = String(cards.length);
-
-    const fav = loadFavorites();
-
-    $("#cards").innerHTML = cards.map(c=>{
-      const isOpen = c.id === state.expandedId;
-      const isFav = fav.has(c.id);
-
-      const essenceBullets = splitToBullets(c.essence);
-      const pitfallsBullets = splitToBullets(c.pitfalls);
-      const strategyBullets = splitToBullets(c.strategy);
-
-      const cls = `${osClass(c.os || currentOS)}`;
-
-      return `
-        <div class="scard ${cls}">
-          <div class="scard-top scard-click" data-toggle="${escapeHtml(c.id)}">
-            <div class="scard-icon scard-icon-id">${escapeHtml(c.id)}</div>
-
-            <div class="scard-head">
-              <h3 class="scard-title">${escapeHtml(c.title)}</h3>
-              <p class="scard-summary">${escapeHtml(c.summary)}</p>
-            </div>
-
-            <div class="scard-side">
-              <div class="favmini" data-fav="${escapeHtml(c.id)}" title="お気に入り">
-                <span>${isFav ? "★" : "☆"}</span>
-                <span class="count">0</span>
-              </div>
-            </div>
-          </div>
-
-          ${isOpen ? `
-            <div class="scard-expand">
-              <h4>本質・要点</h4>
-              <ul>${essenceBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
-
-              <h4>やりがちな落とし穴</h4>
-              <ul>${pitfallsBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
-
-              <h4>二周目視点の戦略</h4>
-              <ul>${strategyBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
-            </div>
-          ` : ``}
-
-          <div class="scard-tags">
-            ${(c.tags||[]).map(t=>`
-              <span class="tagchip" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</span>
-            `).join("")}
-          </div>
-        </div>
-      `;
-    }).join("") || `<div class="card" style="padding:14px; color:var(--muted);">該当するカードがありません。</div>`;
-
-    // tag chips → 検索へ（探索導線）
-    $("#cards").querySelectorAll("[data-tag]").forEach(el=>{
-      el.onclick = (e)=>{
-        e.stopPropagation();
-        const t = el.getAttribute("data-tag");
-        nav(`#search?tag=${encodeURIComponent(t)}`);
-      };
-    });
-
-    // expand
-    $("#cards").querySelectorAll("[data-toggle]").forEach(el=>{
-      el.onclick = ()=>{
-        const id = el.getAttribute("data-toggle");
-        state.expandedId = (state.expandedId === id) ? "" : id;
-        draw();
-      };
-    });
-
-    // favorite
-    $("#cards").querySelectorAll("[data-fav]").forEach(el=>{
-      el.onclick = (e)=>{
-        e.stopPropagation();
-        const id = el.getAttribute("data-fav");
-        const set = loadFavorites();
-        if (set.has(id)) set.delete(id); else set.add(id);
-        saveFavorites(set);
-        draw();
-      };
-    });
-  };
-
-  // tab buttons
-  $("#tabbar").querySelectorAll("[data-tab]").forEach(b=>{
-    b.onclick = ()=>{
-      state.tab = b.getAttribute("data-tab");
-      $("#tabbar").querySelectorAll("[data-tab]").forEach(x=>{
-        x.classList.toggle("active", x === b);
-      });
-      state.expandedId = "";
-      draw();
+  // tab click
+  $("#tabbar").querySelectorAll("[data-tab]").forEach(btn=>{
+    btn.onclick = ()=>{
+      const t = btn.getAttribute("data-tab");
+      const next = t === "すべて" ? "" : `&tab=${encodeURIComponent(t)}`;
+      const tagQ = tag ? `&tag=${encodeURIComponent(tag)}` : "";
+      nav(`#list?os=${encodeURIComponent(currentOS)}${next}${tagQ}`);
     };
   });
 
-  draw();
+  // tag click
+  $("#tagbar").querySelectorAll("[data-tag]").forEach(btn=>{
+    btn.onclick = ()=>{
+      const t = btn.getAttribute("data-tag");
+      const nextTag = (t === tag) ? "" : t;
+      const tabQ = (activeTabKey && activeTabKey !== "すべて") ? `&tab=${encodeURIComponent(activeTabKey)}` : "";
+      const tagQ = nextTag ? `&tag=${encodeURIComponent(nextTag)}` : "";
+      nav(`#list?os=${encodeURIComponent(currentOS)}${tabQ}${tagQ}`);
+    };
+  });
+
+  // card events
+  bindCardEvents();
 }
 
-// ========== OS横断検索 ==========
-function renderSearch(initial = {}){
+function renderCard(c, idx){
+  const favs = loadFavorites();
+  const isFav = favs.has(String(c.id));
+  const osKey = c.os || "extra";
+
+  const title = escapeHtml(c.title || "");
+  const summary = escapeHtml(c.summary || "");
+  const tags = (c.tags || []).map(t=>String(t).trim()).filter(Boolean);
+
+  const ess = splitToBullets(c.essence);
+  const pit = splitToBullets(c.pitfalls);
+  const strat = splitToBullets(c.strategy);
+
+  const hasExpand = ess.length || pit.length || strat.length;
+
+  return `
+    <div class="scard ${osClass(osKey)}" data-cardid="${escapeHtml(c.id)}">
+      <div class="scard-num">${escapeHtml(c.id)}</div>
+
+      <div class="scard-top">
+        <div class="scard-icon scard-icon-id">${escapeHtml(c.tab || "") || "—"}</div>
+
+        <div class="scard-head scard-click" data-open="${escapeHtml(c.id)}">
+          <h3 class="scard-title">${title}</h3>
+          <p class="scard-summary">${summary}</p>
+        </div>
+
+        <div class="scard-side">
+          <div class="favmini" data-fav="${escapeHtml(c.id)}">
+            <span>★</span>
+            <span class="count">${isFav ? "保存" : "未保存"}</span>
+          </div>
+        </div>
+      </div>
+
+      ${tags.length ? `
+        <div class="scard-tags">
+          ${tags.map(t=>`<span class="tagchip" data-tagchip="${escapeHtml(t)}">${escapeHtml(t)}</span>`).join("")}
+        </div>
+      ` : ""}
+
+      ${hasExpand ? `
+        <div class="scard-expand" style="display:none;" data-expand="${escapeHtml(c.id)}">
+          ${ess.length ? `<h4>要点</h4><ul>${ess.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+          ${pit.length ? `<h4>落とし穴</h4><ul>${pit.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+          ${strat.length ? `<h4>実装</h4><ul>${strat.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+        </div>
+      ` : ""}
+    </div>
+  `;
+}
+
+function bindCardEvents(){
+  const view = $("#view");
+
+  view.querySelectorAll("[data-open]").forEach(el=>{
+    el.onclick = ()=>{
+      const id = el.getAttribute("data-open");
+      const box = view.querySelector(`[data-expand="${CSS.escape(id)}"]`);
+      if (!box) return;
+      box.style.display = (box.style.display === "none" || !box.style.display) ? "block" : "none";
+    };
+  });
+
+  view.querySelectorAll("[data-fav]").forEach(el=>{
+    el.onclick = ()=>{
+      const id = el.getAttribute("data-fav");
+      const favs = loadFavorites();
+      if (favs.has(id)) favs.delete(id); else favs.add(id);
+      saveFavorites(favs);
+      // 画面再描画（簡易）
+      const h = location.hash;
+      nav("#home"); nav(h);
+    };
+  });
+
+  view.querySelectorAll("[data-tagchip]").forEach(el=>{
+    el.onclick = ()=>{
+      const t = el.getAttribute("data-tagchip");
+      const q = parseQuery(location.hash.split("?")[1] || "");
+      const os = q.os || "life";
+      const tabQ = q.tab ? `&tab=${encodeURIComponent(q.tab)}` : "";
+      nav(`#list?os=${encodeURIComponent(os)}${tabQ}&tag=${encodeURIComponent(t)}`);
+    };
+  });
+}
+
+// ========== 検索 ==========
+function renderSearch({ q, tag }){
   renderShell("list");
   const view = $("#view");
 
-  const state = { q: "", tag: "", expandedId: "" };
+  const all = sortById(DATA.all);
 
-  if (initial.q) state.q = String(initial.q).trim();
-  if (initial.tag) state.tag = String(initial.tag).trim();
+  const query = String(q || "").trim().toLowerCase();
+  const tagq  = String(tag || "").trim();
 
-  const allCards = sortById(DATA.all ?? []);
-  const tags = buildTagSet(allCards);
+  let filtered = all;
+
+  if (tagq){
+    filtered = filtered.filter(c => (c.tags||[]).some(x => String(x).trim() === tagq));
+  }
+  if (query){
+    filtered = filtered.filter(c => {
+      const hay = [
+        c.id, c.title, c.summary, c.tab,
+        ...(c.tags||[]),
+        ...(splitToBullets(c.essence)),
+        ...(splitToBullets(c.pitfalls)),
+        ...(splitToBullets(c.strategy))
+      ].map(x=>String(x||"").toLowerCase()).join(" ");
+      return hay.includes(query);
+    });
+  }
+
+  const allTags = buildTagSet(all);
 
   view.innerHTML = `
-    <div class="list-layout">
-      <aside class="list-side">
-        ${renderCompactSidebar("search")}
-      </aside>
-
-      <div class="list-main">
-        <div class="card section" style="padding:14px;">
-          <div style="font-weight:900; font-size:15px;">検索（OS横断）</div>
-          <div style="color:var(--muted); font-size:12px; margin-top:4px;">タイトル・要約・本質・戦略・タグを対象に検索</div>
-
-          <div style="display:grid; gap:10px; margin-top:10px;">
-            <input class="input" id="q" placeholder="例：不安、交渉、習慣、AI など" />
-          </div>
-        </div>
-
-        <div class="card section" style="padding:0;">
-          <div class="tagbar-wrap">
-            <div class="tagbar-label">タグ（探索ツール）</div>
-            <div class="tagbar" id="tagbar">
-              <button class="tagbtn active" data-tag="">すべて</button>
-              ${tags.map(t=>`<button class="tagbtn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join("")}
-            </div>
-          </div>
-        </div>
-
-        <div class="card section" style="padding:0;">
-          <div class="list-headline">
-            <div class="title">検索結果</div>
-            <div class="count">件数：<span id="countAll">0</span> 件</div>
-          </div>
-        </div>
-
-        <div class="cards-grid" id="cards"></div>
+    <div class="card section">
+      <div class="list-headline" style="padding:0;">
+        <div class="title">検索（OS横断）</div>
+        <div class="count">件数：<b>${filtered.length}</b><span class="count-sep">/</span>全体：<b>${all.length}</b></div>
       </div>
+    </div>
+
+    <div class="card section">
+      <div class="grid">
+        <input class="input" id="q" placeholder="キーワード（例：疲れ / 交渉 / 先延ばし）" value="${escapeHtml(q||"")}" />
+        <input class="input" id="tag" placeholder="タグ（任意）" value="${escapeHtml(tag||"")}" />
+        <div class="row">
+          <button class="btn primary" id="doSearch">検索</button>
+          <button class="btn ghost" id="clearSearch">クリア</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card section tagbar-wrap">
+      <div class="tagbar-label">タグ一覧（クリックで絞り込み）</div>
+      <div class="tagbar" id="tagbar">
+        ${allTags.map(t=>`
+          <button class="tagbtn ${t===tagq ? "active":""}" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>
+        `).join("")}
+      </div>
+    </div>
+
+    <div class="cards-grid" id="cards">
+      ${filtered.map((c, i)=> renderCard(c, i)).join("")}
     </div>
   `;
 
-  // sidebar wiring
-  $("#osbar").querySelectorAll("[data-os]").forEach(el=> el.onclick = ()=> nav(`#list?os=${el.getAttribute("data-os")}`));
-  $("#goSearch").onclick = ()=> nav("#search");
-
-  const matchText = (c, q)=>{
-    if (!q) return true;
-    const s = q.toLowerCase();
-    const hay = [
-      c.title, c.summary,
-      ...(splitToBullets(c.essence)),
-      ...(splitToBullets(c.pitfalls)),
-      ...(splitToBullets(c.strategy)),
-      ...((c.tags||[]).map(String))
-    ].join(" ").toLowerCase();
-    return hay.includes(s);
+  $("#doSearch").onclick = ()=>{
+    const nq = $("#q").value.trim();
+    const nt = $("#tag").value.trim();
+    nav(`#search?q=${encodeURIComponent(nq)}&tag=${encodeURIComponent(nt)}`);
   };
+  $("#clearSearch").onclick = ()=> nav(`#search?q=&tag=`);
 
-  const syncTagbar = ()=>{
-    $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
-      b.classList.toggle("active", b.getAttribute("data-tag") === state.tag);
-    });
-    const allBtn = $("#tagbar").querySelector('[data-tag=""]');
-    if (allBtn) allBtn.classList.toggle("active", state.tag === "");
-  };
-
-  const draw = ()=>{
-    let cards = allCards.filter(c => matchText(c, state.q));
-    if (state.tag) cards = cards.filter(c => (c.tags||[]).includes(state.tag));
-
-    $("#countAll").textContent = String(cards.length);
-
-    const fav = loadFavorites();
-
-    $("#cards").innerHTML = cards.map(c=>{
-      const isOpen = c.id === state.expandedId;
-      const isFav = fav.has(c.id);
-      const cls = `${osClass(c.os)}`;
-
-      const essenceBullets = splitToBullets(c.essence);
-      const pitfallsBullets = splitToBullets(c.pitfalls);
-      const strategyBullets = splitToBullets(c.strategy);
-
-      return `
-        <div class="scard ${cls}">
-          <div class="scard-top scard-click" data-toggle="${escapeHtml(c.id)}">
-            <div class="scard-icon scard-icon-id">${escapeHtml(c.id)}</div>
-
-            <div class="scard-head">
-              <h3 class="scard-title">${escapeHtml(c.title)}</h3>
-              <p class="scard-summary">${escapeHtml(c.summary)}</p>
-            </div>
-
-            <div class="scard-side">
-              <div class="favmini" data-fav="${escapeHtml(c.id)}" title="お気に入り">
-                <span>${isFav ? "★" : "☆"}</span>
-                <span class="count">0</span>
-              </div>
-            </div>
-          </div>
-
-          ${isOpen ? `
-            <div class="scard-expand">
-              <h4>本質・要点</h4>
-              <ul>${essenceBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
-
-              <h4>やりがちな落とし穴</h4>
-              <ul>${pitfallsBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
-
-              <h4>二周目視点の戦略</h4>
-              <ul>${strategyBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
-            </div>
-          ` : ``}
-
-          <div class="scard-tags">
-            ${(c.tags||[]).map(t=>`
-              <span class="tagchip" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</span>
-            `).join("")}
-          </div>
-        </div>
-      `;
-    }).join("") || `<div class="card" style="padding:14px; color:var(--muted);">該当するカードがありません。</div>`;
-
-    // tag chips → 検索内タグフィルタとして動作
-    $("#cards").querySelectorAll("[data-tag]").forEach(el=>{
-      el.onclick = (e)=>{
-        e.stopPropagation();
-        const t = el.getAttribute("data-tag");
-        state.tag = (state.tag === t) ? "" : t;
-        syncTagbar();
-        draw();
-      };
-    });
-
-    $("#cards").querySelectorAll("[data-toggle]").forEach(el=>{
-      el.onclick = ()=>{
-        const id = el.getAttribute("data-toggle");
-        state.expandedId = (state.expandedId === id) ? "" : id;
-        draw();
-      };
-    });
-
-    $("#cards").querySelectorAll("[data-fav]").forEach(el=>{
-      el.onclick = (e)=>{
-        e.stopPropagation();
-        const id = el.getAttribute("data-fav");
-        const set = loadFavorites();
-        if (set.has(id)) set.delete(id); else set.add(id);
-        saveFavorites(set);
-        draw();
-      };
-    });
-  };
-
-  // tag buttons
-  $("#tagbar").querySelectorAll("[data-tag]").forEach(b=>{
-    b.onclick = ()=>{
-      state.tag = b.getAttribute("data-tag");
-      state.expandedId = "";
-      syncTagbar();
-      draw();
+  $("#tagbar").querySelectorAll("[data-tag]").forEach(btn=>{
+    btn.onclick = ()=>{
+      const t = btn.getAttribute("data-tag");
+      const next = (t === tagq) ? "" : t;
+      nav(`#search?q=${encodeURIComponent($("#q").value.trim())}&tag=${encodeURIComponent(next)}`);
     };
   });
 
-  const qEl = $("#q");
-  qEl.value = state.q;
-  qEl.addEventListener("input", ()=>{
-    state.q = qEl.value.trim();
-    draw();
-  });
-
-  syncTagbar();
-  draw();
+  bindCardEvents();
 }
 
 // ========== 詳細 ==========
-function findCardById(id){
-  return DATA.all.find(c => c.id === id);
-}
 function renderDetail(id){
   renderShell("list");
   const view = $("#view");
-  const card = normalizeCard(findCardById(id));
 
-  if (!card) {
-    view.innerHTML = `<div class="card detail">カードが見つかりません：${escapeHtml(id)}</div>`;
+  const card = DATA.all.find(c => String(c.id) === String(id));
+  if (!card){
+    view.innerHTML = `
+      <div class="card section">
+        <div class="title" style="font-weight:900;">カードが見つかりません</div>
+        <div style="margin-top:10px;"><button class="btn" id="back">戻る</button></div>
+      </div>
+    `;
+    $("#back").onclick = ()=> history.back();
     return;
   }
 
-  const osTitle = (OS_META.find(m=>m.key===card.os)?.title) ?? card.os;
-  const fav = loadFavorites();
-  const isFav = fav.has(card.id);
-
-  const essenceBullets = splitToBullets(card.essence);
-  const pitfallsBullets = splitToBullets(card.pitfalls);
-  const strategyBullets = splitToBullets(card.strategy);
+  const ess = splitToBullets(card.essence);
+  const pit = splitToBullets(card.pitfalls);
+  const strat = splitToBullets(card.strategy);
 
   view.innerHTML = `
-    <div class="card detail" style="background:rgba(255,255,255,.62);">
+    <div class="card section">
       <div class="row">
         <div>
-          <h2 style="margin:0 0 6px; font-size:18px;">${escapeHtml(card.title)}</h2>
-          <div class="meta" style="display:flex; gap:8px; flex-wrap:wrap;">
-            <span class="badge id">${escapeHtml(card.id)}</span>
-            <span class="badge">${escapeHtml(osTitle)}</span>
-          </div>
+          <div class="badge id">${escapeHtml(card.id)}</div>
+          <div style="margin-top:8px; font-weight:900; font-size:18px;">${escapeHtml(card.title||"")}</div>
+          <div style="margin-top:6px; color:rgba(10,18,20,.62);">${escapeHtml(card.summary||"")}</div>
         </div>
-        <div style="display:flex; gap:8px;">
-          <button class="btn" id="backToList">一覧へ</button>
-          <button class="btn primary" id="favBtn">${isFav ? "★ お気に入り" : "☆ お気に入り"}</button>
-        </div>
-      </div>
-
-      <div class="kv" style="margin-top:10px;">
-        <h3 style="margin:0 0 4px; font-size:13px;">要約</h3>
-        <p style="margin:0; color:var(--muted);">${escapeHtml(card.summary)}</p>
-      </div>
-
-      <div class="kv" style="margin-top:12px;">
-        <h3 style="margin:0 0 6px; font-size:13px;">本質</h3>
-        <ul style="margin:0 0 0 18px;">${essenceBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
-      </div>
-
-      <div class="kv" style="margin-top:12px;">
-        <h3 style="margin:0 0 6px; font-size:13px;">落とし穴</h3>
-        <ul style="margin:0 0 0 18px;">${pitfallsBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
-      </div>
-
-      <div class="kv" style="margin-top:12px;">
-        <h3 style="margin:0 0 6px; font-size:13px;">戦略</h3>
-        <ul style="margin:0 0 0 18px;">${strategyBullets.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
-      </div>
-
-      <div class="tags" style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
-        ${(card.tags||[]).map(t=>`<span class="badge">#${escapeHtml(t)}</span>`).join("")}
+        <button class="btn ghost" id="back">戻る</button>
       </div>
     </div>
+
+    ${ess.length ? `
+      <div class="card section">
+        <div style="font-weight:900; margin-bottom:8px;">要点</div>
+        <ul>${ess.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      </div>
+    `:""}
+
+    ${pit.length ? `
+      <div class="card section">
+        <div style="font-weight:900; margin-bottom:8px;">落とし穴</div>
+        <ul>${pit.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      </div>
+    `:""}
+
+    ${strat.length ? `
+      <div class="card section">
+        <div style="font-weight:900; margin-bottom:8px;">実装</div>
+        <ul>${strat.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      </div>
+    `:""}
   `;
 
-  $("#backToList").onclick = ()=> nav(`#list?os=${encodeURIComponent(card.os || "life")}`);
-  $("#favBtn").onclick = ()=>{
-    const set = loadFavorites();
-    if (set.has(card.id)) set.delete(id); else set.add(card.id);
-    saveFavorites(set);
-    renderDetail(card.id);
-  };
+  $("#back").onclick = ()=> history.back();
 }
 
 // ========== マイページ ==========
@@ -758,81 +637,59 @@ function renderMy(){
   renderShell("my");
   const view = $("#view");
 
-  const favSet = loadFavorites();
-  const favorites = DATA.all.filter(c => favSet.has(c.id));
+  const favs = loadFavorites();
+  const all = sortById(DATA.all);
+  const favList = all.filter(c => favs.has(String(c.id)));
+
   const personal = loadPersonalCards();
 
   view.innerHTML = `
-    <div class="card" style="padding:14px;">
-      <div style="font-size:18px; margin-bottom:6px; font-weight:900;">マイページ（β）</div>
-      <div class="small" style="color:var(--muted); font-size:12px;">お気に入り（localStorage）と、個人追加（ローカル保存）</div>
+    <div class="card section">
+      <div class="list-headline" style="padding:0;">
+        <div class="title">マイページ</div>
+        <div class="count">お気に入り：<b>${favList.length}</b>件</div>
+      </div>
     </div>
 
-    <div class="card section" style="padding:14px;">
-      <div class="row">
-        <div style="font-size:14px; color:var(--muted);">お気に入り一覧</div>
-        <button class="btn danger" id="clearFav">お気に入り全消去</button>
+    <div class="card section">
+      <div style="font-weight:900; margin-bottom:10px;">お気に入り</div>
+      <div class="cards-grid">
+        ${favList.length ? favList.map((c,i)=>renderCard(c,i)).join("") : `<div style="color:rgba(10,18,20,.60);">まだ保存がありません。</div>`}
       </div>
-      <div class="section" id="favList" style="margin-top:10px;"></div>
     </div>
 
-    <div class="card section" style="padding:14px;">
-      <div style="font-size:14px; color:var(--muted); margin-bottom:10px;">個人追加（β）</div>
+    <div class="card section">
+      <div style="font-weight:900; margin-bottom:10px;">個人追加カード（追加OS）</div>
 
-      <div class="grid" style="grid-template-columns:1fr; gap:10px;">
-        <input class="input" id="pid" placeholder="id（例：P-001）" />
-        <input class="input" id="ptitle" placeholder="title（魅力的なタイトル）" />
-        <input class="input" id="psummary" placeholder="summary（要約）" />
-        <textarea id="pessence" placeholder="essence（本質）"></textarea>
-        <textarea id="ppitfalls" placeholder="pitfalls（落とし穴）"></textarea>
-        <textarea id="pstrategy" placeholder="strategy（戦略）"></textarea>
-        <input class="input" id="ptags" placeholder='tags（カンマ区切り：例 交渉,距離感）' />
-
-        <div class="row">
-          <button class="btn primary" id="addPersonal">追加する</button>
-          <button class="btn" id="reload">再読み込み</button>
-          <span class="small" style="color:var(--muted); font-size:12px;">追加カードは extra として一覧に反映</span>
-        </div>
+      <div class="grid" style="grid-template-columns:1fr 1fr; gap:10px;">
+        <input class="input" id="pid" placeholder="ID（例：X-001）" />
+        <input class="input" id="ptitle" placeholder="タイトル（1行）" />
       </div>
 
-      <div class="section small" id="personalInfo" style="margin-top:10px; color:var(--muted); font-size:12px;"></div>
+      <input class="input" id="psummary" placeholder="要約（1行）" style="margin-top:10px;" />
+
+      <textarea class="input" id="pessence" placeholder="要点（改行区切り）" style="margin-top:10px;"></textarea>
+      <textarea class="input" id="ppitfalls" placeholder="落とし穴（改行区切り）" style="margin-top:10px;"></textarea>
+      <textarea class="input" id="pstrategy" placeholder="実装（改行区切り）" style="margin-top:10px;"></textarea>
+
+      <input class="input" id="ptags" placeholder="タグ（カンマ区切り）" style="margin-top:10px;" />
+
+      <div class="row" style="margin-top:12px;">
+        <button class="btn primary" id="savePersonal">保存</button>
+        <span id="personalInfo" style="color:rgba(10,18,20,.55); font-size:12px;"></span>
+      </div>
     </div>
   `;
 
   const renderFavList = ()=>{
-    $("#favList").innerHTML = favorites.length
-      ? favorites.map(c=>`
-        <div class="card item" style="display:flex; gap:12px; align-items:flex-start; padding:12px;">
-          <div style="flex:1;">
-            <div class="meta"><span class="badge id">${escapeHtml(c.id)}</span></div>
-            <h4 style="margin:6px 0; font-size:14px;">${escapeHtml(c.title)}</h4>
-            <div class="small" style="color:var(--muted); font-size:12px;">${escapeHtml(c.summary)}</div>
-          </div>
-          <button class="btn primary" data-open="${escapeHtml(c.id)}">詳細</button>
-        </div>
-      `).join("")
-      : `<div class="small" style="color:var(--muted); font-size:12px;">お気に入りはまだありません。</div>`;
-
-    $("#favList").querySelectorAll("[data-open]").forEach(b=>{
-      b.onclick = ()=> nav(`#detail?id=${encodeURIComponent(b.getAttribute("data-open"))}`);
-    });
+    // no-op: 現在はカード描画済み
   };
 
-  $("#clearFav").onclick = ()=>{
-    saveFavorites(new Set());
-    nav("#my");
-  };
-
-  $("#reload").onclick = async ()=>{
-    await loadAll();
-    nav("#my");
-  };
-
-  $("#addPersonal").onclick = async ()=>{
+  $("#savePersonal").onclick = async ()=>{
     const id = $("#pid").value.trim();
     const title = $("#ptitle").value.trim();
     if (!id || !title){
-      alert("id と title は必須です");
+      alert("ID と タイトル は必須です。");
       return;
     }
     const card = normalizeCard({
