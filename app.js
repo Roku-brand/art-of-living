@@ -310,7 +310,7 @@ function renderList(osKey){
 
       <div class="list-main">
         <div class="mobile-side-toggle">
-          <button class="btn ghost" id="btnSideToggle" aria-expanded="false" aria-controls="listSide" aria-label="処世術OSメニューを開閉">
+          <button class="btn ghost" id="btnSideToggle" aria-expanded="false" aria-controls="listSide" aria-label="Toggle OS menu">
             ☰ 処世術OS
           </button>
         </div>
@@ -351,7 +351,7 @@ function renderList(osKey){
   const sideToggleBtn = $("#btnSideToggle");
   const setSideOpen = (open)=>{
     if (!sideEl) return;
-    const next = (typeof open === "boolean")
+    const next = typeof open === "boolean"
       ? open
       : !sideEl.classList.contains("isOpen");
     sideEl.classList.toggle("isOpen", next);
