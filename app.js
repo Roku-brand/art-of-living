@@ -310,7 +310,7 @@ function renderList(osKey){
 
       <div class="list-main">
         <div class="mobile-side-toggle">
-          <button class="btn ghost" id="btnSideToggle" aria-expanded="false" aria-controls="listSide">
+          <button class="btn ghost" id="btnSideToggle" aria-expanded="false" aria-controls="listSide" aria-label="処世術OSメニューの開閉">
             ☰ 処世術OS
           </button>
         </div>
@@ -370,7 +370,11 @@ function renderList(osKey){
     nav("#search");
   };
   $("#goSearch").onkeydown = (e)=>{
-    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); nav("#search"); }
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      closeSidebar();
+      nav("#search");
+    }
   };
 
   const isInOther = (c)=>{
