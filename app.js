@@ -351,8 +351,9 @@ function renderList(osKey){
   const sideToggleBtn = $("#btnSideToggle");
   const setSideOpen = (open)=>{
     if (!sideEl) return;
-    let next = !sideEl.classList.contains("isOpen");
-    if (typeof open === "boolean") next = open;
+    const next = typeof open === "boolean"
+      ? open
+      : !sideEl.classList.contains("isOpen");
     sideEl.classList.toggle("isOpen", next);
     if (sideToggleBtn) sideToggleBtn.setAttribute("aria-expanded", String(next));
   };
