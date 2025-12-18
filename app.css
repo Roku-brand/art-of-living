@@ -20,6 +20,8 @@
   --shadow0: 0 14px 34px rgba(0,0,0,.12);
   --shadow1: 0 22px 52px rgba(0,0,0,.16);
 
+  --space-sm: 10px;
+
   --r-xl: 22px;
   --r-lg: 18px;
   --r-md: 14px;
@@ -231,7 +233,7 @@ a:hover{ text-decoration: underline; }
 .list-main{ min-width:0; }
 .list-side{ min-width:0; position: sticky; top: 74px; align-self: start; }
 
-.mobile-side-toggle{ display:none; margin-bottom: 10px; justify-content: flex-end; }
+.mobile-side-toggle{ display:none; margin-bottom: var(--space-sm); justify-content: flex-end; }
 
 @media (max-width: 920px){
   .list-layout{ grid-template-columns: 1fr; }
