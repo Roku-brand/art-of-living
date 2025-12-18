@@ -231,9 +231,14 @@ a:hover{ text-decoration: underline; }
 .list-main{ min-width:0; }
 .list-side{ min-width:0; position: sticky; top: 74px; align-self: start; }
 
+.mobile-side-toggle{ display:none; margin-bottom: 10px; justify-content: flex-end; }
+
 @media (max-width: 920px){
   .list-layout{ grid-template-columns: 1fr; }
   .list-side{ position: static; }
+  .list-layout.has-mobile-sidebar .mobile-side-toggle{ display:flex; }
+  .list-layout.has-mobile-sidebar .list-side{ display:none; }
+  .list-layout.has-mobile-sidebar .list-side.isOpen{ display:block; }
 }
 
 /* ---------- Compact Sidebar ---------- */

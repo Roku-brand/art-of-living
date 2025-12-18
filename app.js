@@ -303,12 +303,18 @@ function renderList(osKey){
   const state = { tab: "", expandedId: "" };
 
   view.innerHTML = `
-    <div class="list-layout">
-      <aside class="list-side">
+    <div class="list-layout has-mobile-sidebar">
+      <aside class="list-side" id="listSide">
         ${renderCompactSidebar(currentOS)}
       </aside>
 
       <div class="list-main">
+        <div class="mobile-side-toggle">
+          <button class="btn ghost" id="btnSideToggle" aria-expanded="false" aria-controls="listSide">
+            ☰ 処世術OS
+          </button>
+        </div>
+
         <div class="card section" style="padding:0;">
           <div class="list-headline">
             <div class="title">${escapeHtml(meta?.title ?? "人生OS")}</div>
@@ -341,9 +347,28 @@ function renderList(osKey){
   `;
 
   // sidebar wiring
-  $("#osbar").querySelectorAll("[data-os]").forEach(el=> el.onclick = ()=> nav(`#list?os=${el.getAttribute("data-os")}`));
+  const sideEl = $("#listSide");
+  const sideToggleBtn = $("#btnSideToggle");
+  const setSideOpen = (open)=>{
+    if (!sideEl) return;
+    const next = open ?? !sideEl.classList.contains("isOpen");
+    sideEl.classList.toggle("isOpen", next);
+    if (sideToggleBtn) sideToggleBtn.setAttribute("aria-expanded", String(next));
+  };
+  setSideOpen(false);
 
-  $("#goSearch").onclick = ()=> nav("#search");
+  if (sideToggleBtn) sideToggleBtn.onclick = ()=> setSideOpen();
+  const closeSidebar = ()=> setSideOpen(false);
+
+  $("#osbar").querySelectorAll("[data-os]").forEach(el=> el.onclick = ()=>{
+    closeSidebar();
+    nav(`#list?os=${el.getAttribute("data-os")}`);
+  });
+
+  $("#goSearch").onclick = ()=>{
+    closeSidebar();
+    nav("#search");
+  };
   $("#goSearch").onkeydown = (e)=>{
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); nav("#search"); }
   };
