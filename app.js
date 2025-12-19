@@ -300,7 +300,6 @@ function renderList(osKey) {
 
   const q = parseQuery(location.hash.split("?")[1] || "");
   const activeTabKey = q.tab || "すべて";
-  const tag = q.tag || "";
 
   // tab filter
   let filtered = allCards;
@@ -316,14 +315,6 @@ function renderList(osKey) {
       filtered = filtered.filter((c) => String(c.tab || "").trim() === activeTabKey);
     }
   }
-
-  // tag filter (search)
-  if (tag) {
-    const t = String(tag).trim();
-    filtered = filtered.filter((c) => (c.tags || []).some((x) => String(x).trim() === t));
-  }
-
-  const tagSet = buildTagSet(allCards);
 
   const tabButtons = [
     { key: "すべて", label: "すべて", count: allCards.length },
@@ -359,15 +350,6 @@ function renderList(osKey) {
           </div>
         </div>
 
-        <div class="card section tagbar-wrap">
-          <div class="tagbar-label">タグ（検索・探索ツール）</div>
-          <div class="tagbar" id="tagbar">
-            ${tagSet.map((t) => `
-              <button class="tagbtn ${t === tag ? "active" : ""}" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>
-            `).join("")}
-          </div>
-        </div>
-
         <div class="cards-grid" id="cards">
           ${filtered.map((c, i) => renderCard(c, i)).join("")}
         </div>
@@ -386,19 +368,7 @@ function renderList(osKey) {
     btn.onclick = () => {
       const t = btn.getAttribute("data-tab");
       const next = t === "すべて" ? "" : `&tab=${encodeURIComponent(t)}`;
-      const tagQ = tag ? `&tag=${encodeURIComponent(tag)}` : "";
-      nav(`#list?os=${encodeURIComponent(currentOS)}${next}${tagQ}`);
-    };
-  });
-
-  // tag click
-  $("#tagbar").querySelectorAll("[data-tag]").forEach((btn) => {
-    btn.onclick = () => {
-      const t = btn.getAttribute("data-tag");
-      const nextTag = (t === tag) ? "" : t;
-      const tabQ = (activeTabKey && activeTabKey !== "すべて") ? `&tab=${encodeURIComponent(activeTabKey)}` : "";
-      const tagQ = nextTag ? `&tag=${encodeURIComponent(nextTag)}` : "";
-      nav(`#list?os=${encodeURIComponent(currentOS)}${tabQ}${tagQ}`);
+      nav(`#list?os=${encodeURIComponent(currentOS)}${next}`);
     };
   });
 
@@ -485,9 +455,8 @@ function bindCardEvents() {
     el.onclick = () => {
       const t = el.getAttribute("data-tagchip");
       const q = parseQuery(location.hash.split("?")[1] || "");
-      const os = q.os || "life";
-      const tabQ = q.tab ? `&tab=${encodeURIComponent(q.tab)}` : "";
-      nav(`#list?os=${encodeURIComponent(os)}${tabQ}&tag=${encodeURIComponent(t)}`);
+      const queryText = q.q || "";
+      nav(`#search?q=${encodeURIComponent(queryText)}&tag=${encodeURIComponent(t)}`);
     };
   });
 }
@@ -523,37 +492,50 @@ function renderSearch({ q, tag }) {
   const allTags = buildTagSet(all);
 
   view.innerHTML = `
-    <div class="card section">
-      <div class="list-headline" style="padding:0;">
-        <div class="title">検索（OS横断）</div>
-        <div class="count">件数：<b>${filtered.length}</b><span class="count-sep">/</span>全体：<b>${all.length}</b></div>
+    <div class="list-layout has-mobile-sidebar">
+      <div class="list-side">
+        ${renderCompactSidebar("")}
       </div>
-    </div>
 
-    <div class="card section">
-      <div class="grid">
-        <input class="input" id="q" placeholder="キーワード（例：疲れ / 交渉 / 先延ばし）" value="${escapeHtml(q || "")}" />
-        <input class="input" id="tag" placeholder="タグ（任意）" value="${escapeHtml(tag || "")}" />
-        <div class="row">
-          <button class="btn primary" id="doSearch">検索</button>
-          <button class="btn ghost" id="clearSearch">クリア</button>
+      <div class="list-main">
+        <div class="card section">
+          <div class="list-headline" style="padding:0;">
+            <div class="title">検索（OS横断）</div>
+            <div class="count">件数：<b>${filtered.length}</b><span class="count-sep">/</span>全体：<b>${all.length}</b></div>
+          </div>
+        </div>
+
+        <div class="card section">
+          <div class="grid">
+            <input class="input" id="q" placeholder="キーワード（例：疲れ / 交渉 / 先延ばし）" value="${escapeHtml(q || "")}" />
+            <input class="input" id="tag" placeholder="タグ（任意）" value="${escapeHtml(tag || "")}" />
+            <div class="row">
+              <button class="btn primary" id="doSearch">検索</button>
+              <button class="btn ghost" id="clearSearch">クリア</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card section tagbar-wrap">
+          <div class="tagbar-label">タグ一覧（クリックで絞り込み）</div>
+          <div class="tagbar" id="tagbar">
+            ${allTags.map((t) => `
+              <button class="tagbtn ${t === tagq ? "active" : ""}" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="cards-grid" id="cards">
+          ${filtered.map((c) => renderCard(c)).join("")}
         </div>
       </div>
     </div>
-
-    <div class="card section tagbar-wrap">
-      <div class="tagbar-label">タグ一覧（クリックで絞り込み）</div>
-      <div class="tagbar" id="tagbar">
-        ${allTags.map((t) => `
-          <button class="tagbtn ${t === tagq ? "active" : ""}" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>
-        `).join("")}
-      </div>
-    </div>
-
-    <div class="cards-grid" id="cards">
-      ${filtered.map((c) => renderCard(c)).join("")}
-    </div>
   `;
+
+  view.querySelectorAll("[data-os]").forEach((el) => {
+    el.onclick = () => nav(`#list?os=${el.getAttribute("data-os")}`);
+  });
+  $("#goSearch").onclick = () => nav(`#search?q=&tag=`);
 
   $("#doSearch").onclick = () => {
     const nq = $("#q").value.trim();
