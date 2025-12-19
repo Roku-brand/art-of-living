@@ -460,7 +460,8 @@ function bindCardEvents() {
     el.onclick = () => {
       const t = el.getAttribute("data-tagchip");
       const q = parseQuery(location.hash.split("?")[1] || "");
-      const currentQuery = q.q || "";
+      const searchInput = $("#q");
+      const currentQuery = searchInput ? searchInput.value.trim() : (q.q || "");
       nav(`#search?q=${encodeURIComponent(currentQuery)}&tag=${encodeURIComponent(t)}`);
     };
   });
