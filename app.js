@@ -285,6 +285,14 @@ function renderCompactSidebar(currentOS) {
   `;
 }
 
+function bindSidebarActions(container) {
+  container.querySelectorAll("[data-os]").forEach((el) => {
+    el.onclick = () => nav(`#list?os=${el.getAttribute("data-os")}`);
+  });
+  const goSearch = container.querySelector("#goSearch");
+  if (goSearch) goSearch.onclick = () => nav(`#search?q=&tag=`);
+}
+
 function renderList(osKey) {
   renderShell("list");
   const view = $("#view");
@@ -358,10 +366,7 @@ function renderList(osKey) {
   `;
 
   // sidebar click
-  view.querySelectorAll("[data-os]").forEach((el) => {
-    el.onclick = () => nav(`#list?os=${el.getAttribute("data-os")}`);
-  });
-  $("#goSearch").onclick = () => nav(`#search?q=&tag=`);
+  bindSidebarActions(view);
 
   // tab click
   $("#tabbar").querySelectorAll("[data-tab]").forEach((btn) => {
@@ -532,10 +537,7 @@ function renderSearch({ q, tag }) {
     </div>
   `;
 
-  view.querySelectorAll("[data-os]").forEach((el) => {
-    el.onclick = () => nav(`#list?os=${el.getAttribute("data-os")}`);
-  });
-  $("#goSearch").onclick = () => nav(`#search?q=&tag=`);
+  bindSidebarActions(view);
 
   $("#doSearch").onclick = () => {
     const nq = $("#q").value.trim();
