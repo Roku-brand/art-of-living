@@ -499,7 +499,7 @@ function renderSearch({ q, tag }) {
   view.innerHTML = `
     <div class="list-layout has-mobile-sidebar">
       <div class="list-side">
-        ${renderCompactSidebar("")}
+        ${renderCompactSidebar(null)}
       </div>
 
       <div class="list-main">
