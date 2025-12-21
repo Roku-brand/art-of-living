@@ -22,9 +22,10 @@
 
   --space-sm: 10px;
 
-  --r-xl: 22px;
-  --r-lg: 18px;
-  --r-md: 14px;
+  /* 角張ったデザイン（力強さを出すため） */
+  --r-xl: 6px;
+  --r-lg: 4px;
+  --r-md: 3px;
 
   /* Sidebar compact */
   --sb-accent: #0b8f65;
@@ -114,7 +115,7 @@ a:hover{ text-decoration: underline; }
   font-family: inherit;
   font-size: .88rem;
   padding: 7px 11px;
-  border-radius: 999px;
+  border-radius: var(--r-md);
   cursor: pointer;
   border: 1px solid var(--line);
   background: rgba(255,255,255,.22);
@@ -191,7 +192,7 @@ a:hover{ text-decoration: underline; }
   box-shadow: none;
 
   padding: 10px 10px;
-  border-radius: 14px;
+  border-radius: var(--r-md);
 
   cursor: pointer;
   transition: background-color .16s ease, transform .16s ease;
@@ -426,7 +427,7 @@ a:hover{ text-decoration: underline; }
 .tabbtn{
   flex:0 0 auto;
   padding: 8px 12px;
-  border-radius: 999px;
+  border-radius: var(--r-md);
   border: 1px solid rgba(10,18,20,.10);
   background: rgba(255,255,255,.26);
   color: rgba(8,14,16,.72);
@@ -446,7 +447,7 @@ a:hover{ text-decoration: underline; }
   background: rgba(255,255,255,.55);
   border: 1px solid rgba(10,18,20,.10);
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: var(--r-md);
 }
 .tabbtn.active{
   color: rgba(255,255,255,.96);
@@ -493,7 +494,7 @@ a:hover{ text-decoration: underline; }
 .tagbtn{
   flex:0 0 auto;
   padding: 6px 10px;
-  border-radius: 999px;
+  border-radius: var(--r-md);
   border: 1px solid rgba(10,18,20,.10);
   background: rgba(255,255,255,.26);
   color: rgba(8,14,16,.70);
@@ -545,7 +546,7 @@ a:hover{ text-decoration: underline; }
   right:14px;
   top:16px;
   height:6px;
-  border-radius: 999px;
+  border-radius: var(--r-md);
   background: linear-gradient(90deg, rgba(0,0,0,0), var(--os-line), rgba(0,0,0,0));
   opacity: .82;
   pointer-events:none;
@@ -641,7 +642,7 @@ a:hover{ text-decoration: underline; }
   justify-content:center;
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: var(--r-md);
   border: 1px solid rgba(10,18,20,.10);
   background: rgba(255,255,255,.54);
   cursor:pointer;
@@ -670,7 +671,7 @@ a:hover{ text-decoration: underline; }
 }
 .tagchip{
   padding: 5px 9px;
-  border-radius: 999px;
+  border-radius: var(--r-md);
   border: 1px solid color-mix(in srgb, var(--os-line) 45%, rgba(10,18,20,.10));
   background: color-mix(in srgb, var(--os-line) 10%, rgba(255,255,255,.70));
   color: rgba(8,14,16,.78);
@@ -712,7 +713,7 @@ a:hover{ text-decoration: underline; }
 /* Forms */
 .input, input, textarea{
   width:100%;
-  border-radius: 14px;
+  border-radius: var(--r-md);
   border: 1px solid rgba(10,18,20,.10);
   background: rgba(255,255,255,.42);
   padding: 10px 12px;
@@ -730,7 +731,7 @@ textarea{ min-height: 84px; resize: vertical; }
   display:inline-flex;
   align-items:center;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: var(--r-md);
   border: 1px solid rgba(10,18,20,.10);
   background: rgba(255,255,255,.42);
   color: rgba(8,14,16,.60);

@@ -20,6 +20,18 @@ const OS_META = [
 const LS_FAV = "shoseijutsu:favorites";
 const LS_PERSONAL = "shoseijutsu:personalCards";
 
+// ========== 2次フィルター（タブ）の表示順序 ==========
+// 各OSごとに指定した順番でタブを表示、その他は右端に配置
+const TAB_ORDER = {
+  life: ["方向性", "価値観", "選択", "優先度", "時間感覚", "学び", "限界認識", "意味", "関係", "健康"],
+  internal: ["不安", "自己否定", "怒り", "疲れ・回復", "焦り", "モヤモヤ", "無力感", "自責", "先延ばし", "自己信頼", "納得感", "感情鈍化", "内的ブレーキ", "再起動"],
+  relation: ["①距離感", "②印象", "③雑談・やり取り", "④信頼・期待", "⑤衝突・違和感", "⑥維持・選択"],
+  operation: ["報告・合意", "交渉術", "構造", "承認・制度", "管理", "判断"],
+  exection: ["着手", "分解", "集中", "継続", "ペース", "計画", "整理", "停滞", "摩耗", "寿命", "終了", "中断", "再開", "再起動", "再設計", "完走"],
+  adapt: ["変化", "学習", "技術変化", "キャリア", "役割", "リスク", "選択肢", "柔軟性", "不確実性", "前提崩壊", "陳腐化", "速度", "疲労", "視野", "撤退", "判断"],
+  extra: []
+};
+
 // ========== ユーティリティ ==========
 const $ = (sel) => document.querySelector(sel);
 
@@ -171,7 +183,7 @@ function sortById(cards) {
   return [...cards].sort((a, b) => String(a.id).localeCompare(String(b.id)));
 }
 
-function buildTabStats(cards, maxTabs = 7) {
+function buildTabStats(cards, maxTabs = 7, osKey = null) {
   const counts = new Map();
   cards.forEach((c) => {
     const k = String(c.tab || "").trim();
@@ -179,9 +191,30 @@ function buildTabStats(cards, maxTabs = 7) {
     counts.set(k, (counts.get(k) || 0) + 1);
   });
 
+  // 指定した順番でタブをソート（その他は右端に配置）
+  const order = (osKey && TAB_ORDER[osKey]) || [];
   const sorted = [...counts.entries()].sort((a, b) => {
-    if (b[1] !== a[1]) return b[1] - a[1];
-    return String(a[0]).localeCompare(String(b[0]), "ja");
+    const aKey = a[0];
+    const bKey = b[0];
+    const aIsOther = aKey === "その他" || aKey.includes("その他");
+    const bIsOther = bKey === "その他" || bKey.includes("その他");
+    
+    // その他は常に最後
+    if (aIsOther && !bIsOther) return 1;
+    if (!aIsOther && bIsOther) return -1;
+    if (aIsOther && bIsOther) return String(aKey).localeCompare(String(bKey), "ja");
+    
+    // 指定順序があればその順番を使用
+    const aIndex = order.indexOf(aKey);
+    const bIndex = order.indexOf(bKey);
+    
+    // 両方とも順序リストにある場合
+    if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+    // 片方だけ順序リストにある場合（リストにある方を先に）
+    if (aIndex !== -1) return -1;
+    if (bIndex !== -1) return 1;
+    // どちらも順序リストにない場合は日本語順
+    return String(aKey).localeCompare(String(bKey), "ja");
   });
 
   // maxTabs を超える場合は「その他」に寄せる（常備）
@@ -265,7 +298,7 @@ function renderList(osKey) {
   const allCards = sortById(DATA.byOS[currentOS] ?? []);
 
   // ★タブ（OS内分類 / 2次フィルター）
-  const tabStats = buildTabStats(allCards, 7);
+  const tabStats = buildTabStats(allCards, 7, currentOS);
   const tabs = tabStats.tabs;
 
   const q = parseQuery(location.hash.split("?")[1] || "");
