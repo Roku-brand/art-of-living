@@ -398,27 +398,25 @@ function renderCard(c) {
 
   return `
     <div class="scard ${osClass(osKey)}" data-cardid="${escapeHtml(c.id)}">
-      <div class="scard-num">${escapeHtml(c.id)}</div>
-
       <div class="scard-top">
-        <div class="scard-icon scard-icon-id">${escapeHtml(c.tab || "") || "—"}</div>
-
         <div class="scard-head scard-click" data-open="${escapeHtml(c.id)}">
-          <h3 class="scard-title">${title}</h3>
+          <div class="scard-title-row">
+            <span class="scard-num">${escapeHtml(c.id)}</span>
+            <h3 class="scard-title">${title}</h3>
+          </div>
           <p class="scard-summary">${summary}</p>
         </div>
 
         <div class="scard-side">
-          <div class="favmini" data-fav="${escapeHtml(c.id)}">
-            <span>★</span>
-            <span class="count">${isFav ? "保存" : "未保存"}</span>
+          <div class="favmini ${isFav ? "is-fav" : ""}" data-fav="${escapeHtml(c.id)}">
+            <span class="star">${isFav ? "★" : "☆"}</span>
           </div>
         </div>
       </div>
 
       ${tags.length ? `
         <div class="scard-tags">
-          ${tags.map((t) => `<span class="tagchip" data-tagchip="${escapeHtml(t)}">${escapeHtml(t)}</span>`).join("")}
+          ${tags.map((t) => { const escaped = escapeHtml(t); return `<span class="tagchip" data-tagchip="${escaped}">#${escaped}</span>`; }).join("")}
         </div>
       ` : ""}
 
