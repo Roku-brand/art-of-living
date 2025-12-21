@@ -191,13 +191,16 @@ function buildTabStats(cards, maxTabs = 7, osKey = null) {
     counts.set(k, (counts.get(k) || 0) + 1);
   });
 
+  // 「その他」タブかどうかを判定するヘルパー関数
+  const isOtherTab = (key) => key === "その他" || key.endsWith("その他");
+
   // 指定した順番でタブをソート（その他は右端に配置）
-  const order = (osKey && TAB_ORDER[osKey]) || [];
+  const order = TAB_ORDER[osKey] ?? [];
   const sorted = [...counts.entries()].sort((a, b) => {
     const aKey = a[0];
     const bKey = b[0];
-    const aIsOther = aKey === "その他" || aKey.includes("その他");
-    const bIsOther = bKey === "その他" || bKey.includes("その他");
+    const aIsOther = isOtherTab(aKey);
+    const bIsOther = isOtherTab(bKey);
     
     // その他は常に最後
     if (aIsOther && !bIsOther) return 1;
