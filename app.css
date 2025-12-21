@@ -42,6 +42,9 @@
   --os-exection: #f59e0b; /* amber */
   --os-adapt:    #06b6d4; /* cyan */
   --os-extra:    #64748b; /* slate */
+
+  /* UI colors */
+  --color-amber: #f59e0b;
 }
 
 *{ box-sizing:border-box; }
@@ -530,33 +533,20 @@ a:hover{ text-decoration: underline; }
 .scard.os-adapt{ --os-line: var(--os-adapt); }
 .scard.os-extra{ --os-line: var(--os-extra); }
 
-/* numbering top-left */
+/* numbering inline (subtle) */
 .scard-num{
-  position:absolute;
-  left: 10px;
-  top: 10px;
-
-  font-size: 11.5px;
-  font-weight: 900;
-  letter-spacing: 0.01em;
-
-  color: rgba(8,14,16,.88);
-  background: rgba(255,255,255,.92);
-  border: 1px solid rgba(10,18,20,.14);
-
-  padding: 4px 8px;
-  border-radius: 8px;
-  box-shadow: 0 8px 18px rgba(0,0,0,.10);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  flex: 0 0 auto;
 }
 
 .scard-top{
   display:flex;
   gap:12px;
   align-items:flex-start;
-  padding-top: 18px;
+  padding-top: 20px;
 }
 .scard-click{ cursor:pointer; }
 
@@ -585,12 +575,14 @@ a:hover{ text-decoration: underline; }
 .scard-head{ flex:1; min-width:0; }
 
 .scard-title{
-  margin:0 0 6px;
-  font-size: 15px;
+  margin:0;
+  font-size: 17px;
   line-height: 1.35;
   font-weight: 900;
-  color: rgba(8,14,16,.92);
-  letter-spacing: .01em;
+  color: rgba(8,14,16,.96);
+  letter-spacing: .02em;
+  border-left: 3px solid var(--os-line);
+  padding-left: 10px;
 }
 .scard-summary{
   margin:0;
@@ -603,6 +595,13 @@ a:hover{ text-decoration: underline; }
   overflow:hidden;
 }
 
+.scard-title-row{
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
 .scard-side{
   display:flex;
   flex-direction:column;
@@ -612,19 +611,27 @@ a:hover{ text-decoration: underline; }
 .favmini{
   display:flex;
   align-items:center;
-  gap:6px;
-  padding: 6px 10px;
-  border-radius: 999px;
+  justify-content:center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   border: 1px solid rgba(10,18,20,.10);
   background: rgba(255,255,255,.54);
   cursor:pointer;
   user-select:none;
-  box-shadow: 0 10px 18px rgba(0,0,0,.10);
-  font-size: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,.08);
+  font-size: 18px;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
 }
-.favmini .count{
-  color: rgba(8,14,16,.46);
-  font-size: 12px;
+.favmini:hover{
+  transform: scale(1.08);
+  box-shadow: 0 10px 20px rgba(0,0,0,.12);
+}
+.favmini .star{
+  color: rgba(10,18,20,.28);
+}
+.favmini.is-fav .star{
+  color: var(--color-amber);
 }
 
 /* tags */
