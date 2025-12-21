@@ -363,6 +363,26 @@ a:hover{ text-decoration: underline; }
 }
 
 /* ---------- List Head ---------- */
+.list-hero{
+  background: rgba(255,255,255,.42);
+  border: 1px solid rgba(11,143,101,.18);
+  border-radius: var(--r-xl);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow0);
+}
+.list-hero-title{
+  font-size: 20px;
+  font-weight: 900;
+  color: rgba(11,143,101,.95);
+  margin-bottom: 8px;
+}
+.list-hero-subtitle{
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(8,14,16,.72);
+}
+
 .list-headline{
   padding: 12px 14px;
   display:flex;

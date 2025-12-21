@@ -8,13 +8,13 @@
 
 // ========== 設定 ==========
 const OS_META = [
-  { key: "life",      title: "人生OS",       desc: "判断基準（方向性・価値観・決断・意味）。", file: "./data/life.json" },
-  { key: "internal",  title: "内部心理OS",   desc: "不安・自己否定・怒り・疲れ・回復。",       file: "./data/internal.json" },
-  { key: "relation",  title: "対人関係OS",   desc: "印象・距離感・信頼・境界線。",             file: "./data/relation.json" },
-  { key: "operation", title: "環境操作OS",   desc: "報告・会議・交渉・評価・根回し。",         file: "./data/operation.json" },
-  { key: "exection",  title: "行動OS",       desc: "着手・集中・習慣化・継続・仕組み化。",     file: "./data/exection.json" },
-  { key: "adapt",     title: "適応OS",       desc: "変化察知・AI・キャリア・資産・撤退。",     file: "./data/adapt.json" },
-  { key: "extra",     title: "追加OS（仮）", desc: "調整枠・実験枠。",                          file: "./data/extra.json" }
+  { key: "life",      title: "人生OS",       subtitle: "①迷わない行き方", desc: "判断基準（方向性・価値観・決断・意味）。", file: "./data/life.json" },
+  { key: "internal",  title: "内部心理OS",   subtitle: "②心の扱い方",     desc: "不安・自己否定・怒り・疲れ・回復。",       file: "./data/internal.json" },
+  { key: "relation",  title: "対人関係OS",   subtitle: "③人との関わり方", desc: "印象・距離感・信頼・境界線。",             file: "./data/relation.json" },
+  { key: "operation", title: "環境操作OS",   subtitle: "④影響力を行使する技術", desc: "報告・会議・交渉・評価・根回し。",         file: "./data/operation.json" },
+  { key: "exection",  title: "行動OS",       subtitle: "⑤行動・習慣の技術", desc: "着手・集中・習慣化・継続・仕組み化。",     file: "./data/exection.json" },
+  { key: "adapt",     title: "適応OS",       subtitle: "⑥キャッチアップの極意", desc: "変化察知・AI・キャリア・資産・撤退。",     file: "./data/adapt.json" },
+  { key: "extra",     title: "追加OS（仮）", subtitle: "⑦追加・実験枠",   desc: "調整枠・実験枠。",                          file: "./data/extra.json" }
 ];
 
 const LS_FAV = "shoseijutsu:favorites";
@@ -152,7 +152,6 @@ function renderShell(activeTab) {
         </div>
 
         <div class="header-actions">
-          <button class="btn ghost ${activeTab === "top" ? "active" : ""}" id="btnTop">トップ</button>
           <button class="btn ghost ${activeTab === "list" ? "active" : ""}" id="btnList">処世術一覧</button>
           <button class="btn ghost ${activeTab === "my" ? "active" : ""}" id="btnMy">マイページ</button>
         </div>
@@ -162,48 +161,10 @@ function renderShell(activeTab) {
     <div class="container" id="view"></div>
   `;
 
-  $("#btnTop").onclick = () => nav("#home");
   $("#btnList").onclick = () => nav("#list?os=life");
   $("#btnMy").onclick = () => nav("#my");
 }
 
-// ========== 画面：トップ ==========
-function renderHome() {
-  renderShell("top");
-  const view = $("#view");
-
-  const copy = `情報の洪水に惑わされないためには、点在する情報ではなく“構造化された知恵”が必要。
-本書は、自己啓発・心理学・行動科学・対人術・キャリア論などを 5つのOS・195の項目 に集約した「処世術の体系書」です。`;
-
-  view.innerHTML = `
-    <div class="card section" style="padding:14px;">
-      <div style="font-size:18px; font-weight:900; margin-bottom:8px;">処世術禄</div>
-      <p class="hero-copy" style="margin:0; white-space:pre-line; color:rgba(10,18,20,.72);">${escapeHtml(copy)}</p>
-
-      <div class="row" style="margin-top:12px;">
-        <button class="btn primary" id="goList">処世術一覧へ</button>
-        <span class="subtle" style="color:rgba(10,18,20,.50); font-size:12px;">7つのOS・200項目（目標値として固定表示）</span>
-      </div>
-    </div>
-
-    <div class="card section" style="padding:14px;">
-      <div class="os-select-title">OSを選択</div>
-      <div class="os-select-grid">
-        ${OS_META.map(m => `
-          <button class="os-mini" data-os="${m.key}" type="button">
-            <div class="os-mini-title">${escapeHtml(m.title)}</div>
-            <div class="os-mini-desc">${escapeHtml(m.desc)}</div>
-          </button>
-        `).join("")}
-      </div>
-    </div>
-  `;
-
-  $("#goList").onclick = () => nav("#list?os=life");
-  view.querySelectorAll("[data-os]").forEach((el) => {
-    el.onclick = () => nav(`#list?os=${el.getAttribute("data-os")}`);
-  });
-}
 
 // ========== 一覧 ==========
 function sortById(cards) {
@@ -251,6 +212,11 @@ function osLabel(osKey) {
   return meta ? meta.title : osKey;
 }
 
+function osSubtitle(osKey) {
+  const meta = OS_META.find((m) => m.key === osKey);
+  return meta ? meta.subtitle : "";
+}
+
 function renderCompactSidebar(currentOS) {
   const items = [
     "life", "internal", "relation", "operation", "exection", "adapt", "extra"
@@ -264,6 +230,7 @@ function renderCompactSidebar(currentOS) {
         ${items.map((k) => `
           <div class="sidebarCompactItem ${k === currentOS ? "isActive" : ""}" data-os="${escapeHtml(k)}">
             <div class="sidebarCompactLeft">
+              <div class="sidebarCompactSub">${escapeHtml(osSubtitle(k))}</div>
               <div class="sidebarCompactMain">${escapeHtml(osLabel(k))}</div>
             </div>
           </div>
@@ -325,6 +292,8 @@ function renderList(osKey) {
   ];
 
   // ★重要：DOM順を「sidebar → main」にして grid(320px / 1fr) と一致させる
+  const heroSubtitle = "自己啓発・心理学・行動科学・対人術・キャリア論などを ７つのOS・200の項目に集約した「処世術の体系書」";
+
   view.innerHTML = `
     <div class="list-layout has-mobile-sidebar">
       <div class="list-side">
@@ -332,6 +301,11 @@ function renderList(osKey) {
       </div>
 
       <div class="list-main">
+        <div class="list-hero">
+          <div class="list-hero-title">処世術禄</div>
+          <div class="list-hero-subtitle">${escapeHtml(heroSubtitle)}</div>
+        </div>
+
         <div class="list-headline">
           <div class="title">${escapeHtml(meta?.title || currentOS)} の処世術一覧</div>
           <div class="count">
@@ -662,9 +636,7 @@ async function boot() {
   await loadAll();
 
   const onRoute = () => {
-    const hash = location.hash || "#home";
-
-    if (hash.startsWith("#home")) return renderHome();
+    const hash = location.hash || "#list?os=life";
 
     if (hash.startsWith("#list")) {
       const q = parseQuery(hash.split("?")[1] || "");
@@ -684,7 +656,8 @@ async function boot() {
 
     if (hash.startsWith("#my")) return renderMy();
 
-    renderHome();
+    // Default: redirect to list
+    renderList("life");
   };
 
   window.addEventListener("hashchange", onRoute);
