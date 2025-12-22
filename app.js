@@ -159,6 +159,11 @@ function renderShell(activeTab) {
     <div class="header">
       <div class="header-inner">
         <div class="brand">
+          <button class="hamburger-btn" id="hamburgerBtn" aria-label="メニュー">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+          </button>
           <h1>処世術禄</h1>
           <small>Shoseijutsu OS</small>
         </div>
@@ -170,11 +175,70 @@ function renderShell(activeTab) {
       </div>
     </div>
 
+    <!-- モバイルOS選択メニュー -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+      <div class="mobile-menu-panel" id="mobileMenuPanel">
+        <div class="mobile-menu-header">
+          <span class="mobile-menu-title">処世術OS</span>
+          <button class="mobile-menu-close" id="mobileMenuClose" aria-label="閉じる">×</button>
+        </div>
+        <div class="mobile-menu-list">
+          ${OS_META.map((m) => `
+            <button class="mobile-menu-item" data-os-nav="${escapeHtml(m.key)}">
+              <span class="mobile-menu-subtitle">${escapeHtml(m.subtitle)}</span>
+              <span class="mobile-menu-main">${escapeHtml(m.title)}</span>
+              <span class="mobile-menu-desc">${escapeHtml(m.desc)}</span>
+            </button>
+          `).join("")}
+        </div>
+        <div class="mobile-menu-footer">
+          <button class="mobile-menu-search" id="mobileMenuSearch">
+            <span class="mobile-menu-search-icon">🔍</span>
+            <span>検索（OS横断）</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="container" id="view"></div>
   `;
 
   $("#btnList").onclick = () => nav("#list?os=life");
   $("#btnMy").onclick = () => nav("#my");
+
+  // ハンバーガーメニューの開閉
+  const overlay = $("#mobileMenuOverlay");
+  const panel = $("#mobileMenuPanel");
+
+  $("#hamburgerBtn").onclick = () => {
+    overlay.classList.add("is-open");
+    panel.classList.add("is-open");
+  };
+
+  const closeMenu = () => {
+    overlay.classList.remove("is-open");
+    panel.classList.remove("is-open");
+  };
+
+  $("#mobileMenuClose").onclick = closeMenu;
+  overlay.onclick = (e) => {
+    if (e.target === overlay) closeMenu();
+  };
+
+  // OS選択
+  overlay.querySelectorAll("[data-os-nav]").forEach((btn) => {
+    btn.onclick = () => {
+      const osKey = btn.getAttribute("data-os-nav");
+      closeMenu();
+      nav(`#list?os=${encodeURIComponent(osKey)}`);
+    };
+  });
+
+  // 検索
+  $("#mobileMenuSearch").onclick = () => {
+    closeMenu();
+    nav("#search?q=");
+  };
 }
 
 
@@ -599,40 +663,126 @@ function renderMy() {
   const favList = all.filter((c) => favs.has(String(c.id)));
   const personal = loadPersonalCards();
 
+  // OS別お気に入り統計
+  const osFavStats = OS_META.map((m) => {
+    const count = favList.filter((c) => c.os === m.key).length;
+    return { key: m.key, title: m.title, subtitle: m.subtitle, count };
+  }).filter((s) => s.count > 0);
+
   view.innerHTML = `
-    <div class="card section">
-      <div class="list-headline" style="padding:0;">
-        <div class="title">マイページ</div>
-        <div class="count">お気に入り：<b>${favList.length}</b>件</div>
+    <!-- マイページヒーロー -->
+    <div class="mypage-hero">
+      <div class="mypage-hero-icon">📚</div>
+      <div class="mypage-hero-content">
+        <h2 class="mypage-hero-title">マイページ</h2>
+        <p class="mypage-hero-subtitle">お気に入りの処世術と個人カードを管理</p>
       </div>
     </div>
 
-    <div class="card section">
-      <div style="font-weight:900; margin-bottom:10px;">お気に入り</div>
+    <!-- 統計カード -->
+    <div class="mypage-stats">
+      <div class="mypage-stat-card stat-favorites">
+        <div class="mypage-stat-icon">★</div>
+        <div class="mypage-stat-info">
+          <div class="mypage-stat-value">${favList.length}</div>
+          <div class="mypage-stat-label">お気に入り</div>
+        </div>
+      </div>
+      <div class="mypage-stat-card stat-personal">
+        <div class="mypage-stat-icon">✎</div>
+        <div class="mypage-stat-info">
+          <div class="mypage-stat-value">${personal.length}</div>
+          <div class="mypage-stat-label">個人カード</div>
+        </div>
+      </div>
+    </div>
+
+    ${osFavStats.length ? `
+    <!-- OS別お気に入り分布 -->
+    <div class="mypage-section">
+      <div class="mypage-section-header">
+        <span class="mypage-section-icon">📊</span>
+        <span class="mypage-section-title">OS別お気に入り分布</span>
+      </div>
+      <div class="mypage-os-stats">
+        ${osFavStats.map((s) => `
+          <button class="mypage-os-stat-item" data-os-link="${escapeHtml(s.key)}">
+            <span class="mypage-os-stat-sub">${escapeHtml(s.subtitle)}</span>
+            <span class="mypage-os-stat-name">${escapeHtml(s.title)}</span>
+            <span class="mypage-os-stat-count">${s.count}件</span>
+          </button>
+        `).join("")}
+      </div>
+    </div>
+    ` : ""}
+
+    <!-- お気に入り一覧 -->
+    <div class="mypage-section">
+      <div class="mypage-section-header">
+        <span class="mypage-section-icon">★</span>
+        <span class="mypage-section-title">お気に入り一覧</span>
+        <span class="mypage-section-count">${favList.length}件</span>
+      </div>
       <div class="cards-grid">
-        ${favList.length ? favList.map((c) => renderCard(c)).join("") : `<div style="color:rgba(10,18,20,.60);">まだ保存がありません。</div>`}
+        ${favList.length ? favList.map((c) => renderCard(c)).join("") : `
+          <div class="mypage-empty">
+            <div class="mypage-empty-icon">☆</div>
+            <div class="mypage-empty-text">まだお気に入りがありません</div>
+            <div class="mypage-empty-hint">カード右上の☆をタップして追加</div>
+          </div>
+        `}
       </div>
     </div>
 
-    <div class="card section">
-      <div style="font-weight:900; margin-bottom:10px;">個人追加カード（追加OS）</div>
-
-      <div class="grid" style="grid-template-columns:1fr 1fr; gap:10px;">
-        <input class="input" id="pid" placeholder="ID（例：X-001）" />
-        <input class="input" id="ptitle" placeholder="タイトル（1行）" />
+    <!-- 個人カード追加 -->
+    <div class="mypage-section">
+      <div class="mypage-section-header">
+        <span class="mypage-section-icon">✎</span>
+        <span class="mypage-section-title">個人カード追加</span>
       </div>
+      <div class="mypage-form">
+        <div class="mypage-form-row">
+          <div class="mypage-form-field">
+            <label class="mypage-form-label">ID *</label>
+            <input class="input" id="pid" placeholder="例：X-001" />
+          </div>
+          <div class="mypage-form-field">
+            <label class="mypage-form-label">タイトル *</label>
+            <input class="input" id="ptitle" placeholder="1行で入力" />
+          </div>
+        </div>
 
-      <input class="input" id="psummary" placeholder="要約（1行）" style="margin-top:10px;" />
+        <div class="mypage-form-field">
+          <label class="mypage-form-label">要約</label>
+          <input class="input" id="psummary" placeholder="カードの概要（1行）" />
+        </div>
 
-      <textarea class="input" id="pessence" placeholder="要点（改行区切り）" style="margin-top:10px;"></textarea>
-      <textarea class="input" id="ppitfalls" placeholder="落とし穴（改行区切り）" style="margin-top:10px;"></textarea>
-      <textarea class="input" id="pstrategy" placeholder="実装（改行区切り）" style="margin-top:10px;"></textarea>
+        <div class="mypage-form-field">
+          <label class="mypage-form-label">要点</label>
+          <textarea class="input" id="pessence" placeholder="改行区切りで入力"></textarea>
+        </div>
 
-      <input class="input" id="ptags" placeholder="タグ（カンマ区切り）" style="margin-top:10px;" />
+        <div class="mypage-form-field">
+          <label class="mypage-form-label">落とし穴</label>
+          <textarea class="input" id="ppitfalls" placeholder="改行区切りで入力"></textarea>
+        </div>
 
-      <div class="row" style="margin-top:12px;">
-        <button class="btn primary" id="savePersonal">保存</button>
-        <span id="personalInfo" style="color:rgba(10,18,20,.55); font-size:12px;"></span>
+        <div class="mypage-form-field">
+          <label class="mypage-form-label">実装</label>
+          <textarea class="input" id="pstrategy" placeholder="改行区切りで入力"></textarea>
+        </div>
+
+        <div class="mypage-form-field">
+          <label class="mypage-form-label">タグ</label>
+          <input class="input" id="ptags" placeholder="カンマ区切り（例：習慣,生産性）" />
+        </div>
+
+        <div class="mypage-form-actions">
+          <button class="btn primary" id="savePersonal">
+            <span>カードを保存</span>
+          </button>
+          <span id="personalInfo" class="mypage-form-info"></span>
+        </div>
       </div>
     </div>
   `;
@@ -663,7 +813,16 @@ function renderMy() {
     nav("#list?os=extra");
   };
 
-  $("#personalInfo").textContent = `保存済みの個人追加カード：${personal.length}件`;
+  $("#personalInfo").textContent = `保存済み：${personal.length}件`;
+  
+  // OS別統計のクリックイベント
+  view.querySelectorAll("[data-os-link]").forEach((btn) => {
+    btn.onclick = () => {
+      const osKey = btn.getAttribute("data-os-link");
+      nav(`#list?os=${encodeURIComponent(osKey)}`);
+    };
+  });
+
   bindCardEvents();
 }
 
