@@ -493,7 +493,7 @@ function renderCard(c) {
         <div class="scard-expand" style="display:none;" data-expand="${escapeHtml(c.id)}">
           ${ess.length ? `<h4>要点</h4><ul>${ess.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
           ${pit.length ? `<h4>落とし穴</h4><ul>${pit.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
-          ${strat.length ? `<h4>実装</h4><ul>${strat.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+          ${strat.length ? `<h4>戦略</h4><ul>${strat.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
         </div>
       ` : ""}
     </div>
@@ -644,7 +644,7 @@ function renderDetail(id) {
 
     ${strat.length ? `
       <div class="card section">
-        <div style="font-weight:900; margin-bottom:8px;">実装</div>
+        <div style="font-weight:900; margin-bottom:8px;">戦略</div>
         <ul>${strat.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
       </div>
     ` : ""}
@@ -768,7 +768,7 @@ function renderMy() {
         </div>
 
         <div class="mypage-form-field">
-          <label class="mypage-form-label">実装</label>
+          <label class="mypage-form-label">戦略</label>
           <textarea class="input" id="pstrategy" placeholder="改行区切りで入力"></textarea>
         </div>
 
