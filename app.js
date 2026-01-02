@@ -118,7 +118,7 @@ function osClass(osKey) {
 }
 
 // ========== データ読み込み ==========
-let DATA = { byOS: {}, all: [] };
+let DATA = { byOS: {}, all: [], situations: [] };
 
 async function fetchOS(osKey) {
   const meta = OS_META.find((x) => x.key === osKey);
@@ -150,6 +150,17 @@ async function loadAll() {
   DATA.byOS.extra = mergedExtra;
 
   DATA.all = OS_META.flatMap((m) => (DATA.byOS[m.key] ?? []));
+
+  // シチュエーション別ページを読み込み
+  try {
+    const sitRes = await fetch("./data/situations.json", { cache: "no-store" });
+    if (sitRes.ok) {
+      DATA.situations = await sitRes.json();
+    }
+  } catch (e) {
+    console.error("fetchSituations error:", e);
+    DATA.situations = [];
+  }
 }
 
 // ========== UI シェル ==========
@@ -192,6 +203,11 @@ function renderShell(activeTab) {
           `).join("")}
         </div>
         <div class="mobile-menu-footer">
+          <button class="mobile-menu-item mobile-menu-situations" id="mobileMenuSituations">
+            <span class="mobile-menu-subtitle">悩み別まとめ</span>
+            <span class="mobile-menu-main">シチュエーション別</span>
+            <span class="mobile-menu-desc">既存カードを悩み・なりたい状態から再編成</span>
+          </button>
           <button class="mobile-menu-search" id="mobileMenuSearch">
             <span class="mobile-menu-search-icon">🔍</span>
             <span>検索（OS横断）</span>
@@ -238,6 +254,12 @@ function renderShell(activeTab) {
   $("#mobileMenuSearch").onclick = () => {
     closeMenu();
     nav("#search?q=");
+  };
+
+  // シチュエーション別
+  $("#mobileMenuSituations").onclick = () => {
+    closeMenu();
+    nav("#situations");
   };
 }
 
@@ -317,7 +339,7 @@ function osSubtitle(osKey) {
   return meta ? meta.subtitle : "";
 }
 
-function renderCompactSidebar(currentOS) {
+function renderCompactSidebar(currentOS, activeSituation = false) {
   const items = [
     "life", "internal", "relation", "operation", "exection", "adapt", "extra"
   ];
@@ -328,13 +350,22 @@ function renderCompactSidebar(currentOS) {
 
       <div class="sidebarCompactList" id="osbar">
         ${items.map((k) => `
-          <div class="sidebarCompactItem ${k === currentOS ? "isActive" : ""}" data-os="${escapeHtml(k)}">
+          <div class="sidebarCompactItem ${k === currentOS && !activeSituation ? "isActive" : ""}" data-os="${escapeHtml(k)}">
             <div class="sidebarCompactLeft">
               <div class="sidebarCompactSub">${escapeHtml(osSubtitle(k))}</div>
               <div class="sidebarCompactMain">${escapeHtml(osLabel(k))}</div>
             </div>
           </div>
         `).join("")}
+      </div>
+
+      <div class="sidebarCompactSection">
+        <div class="sidebarCompactItem sidebarCompactSituation ${activeSituation ? "isActive" : ""}" id="goSituations" role="button" tabindex="0">
+          <div class="sidebarCompactLeft">
+            <div class="sidebarCompactSub">悩み別まとめ</div>
+            <div class="sidebarCompactMain">シチュエーション別</div>
+          </div>
+        </div>
       </div>
 
       <div class="sidebarCompactFooter">
@@ -353,6 +384,8 @@ function bindSidebarActions(container) {
   });
   const goSearch = container.querySelector("#goSearch");
   if (goSearch) goSearch.onclick = () => nav(`#search?q=`);
+  const goSituations = container.querySelector("#goSituations");
+  if (goSituations) goSituations.onclick = () => nav(`#situations`);
 }
 
 function renderList(osKey) {
@@ -825,6 +858,166 @@ function renderMy() {
   bindCardEvents();
 }
 
+// ========== シチュエーション別ページ ==========
+function renderSituationsList() {
+  renderShell("list");
+  const view = $("#view");
+
+  const situations = DATA.situations || [];
+
+  view.innerHTML = `
+    <div class="list-layout has-mobile-sidebar">
+      <div class="list-side">
+        ${renderCompactSidebar(null, true)}
+      </div>
+
+      <div class="list-main">
+        <div class="list-hero situation-hero">
+          <div class="list-hero-title">シチュエーション別まとめ</div>
+          <div class="list-hero-subtitle">既存の処世術カードを「悩み」「なりたい状態」「詰まり感」から直接アクセスできる入口として再編成。抽象論ではなく、判断・行動・立ち回りの集合体として処世術を再提示する。</div>
+        </div>
+
+        <div class="list-headline">
+          <div class="title">シチュエーション一覧</div>
+          <div class="count">全 <b>${situations.length}</b> テーマ</div>
+        </div>
+
+        <div class="situations-grid">
+          ${situations.map((s) => {
+            const cardCount = (s.cards || []).length;
+            return `
+              <button class="situation-card" data-situation="${escapeHtml(s.id)}">
+                <div class="situation-card-num">${escapeHtml(s.id)}</div>
+                <div class="situation-card-title">${escapeHtml(s.title)}</div>
+                <div class="situation-card-aim">${escapeHtml(s.aim)}</div>
+                <div class="situation-card-meta">関連カード：${cardCount}件</div>
+              </button>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+
+  bindSidebarActions(view);
+
+  // シチュエーションカードのクリックイベント
+  view.querySelectorAll("[data-situation]").forEach((el) => {
+    el.onclick = () => {
+      const id = el.getAttribute("data-situation");
+      nav(`#situation?id=${encodeURIComponent(id)}`);
+    };
+  });
+}
+
+function renderSituationDetail(situationId) {
+  renderShell("list");
+  const view = $("#view");
+
+  const situation = (DATA.situations || []).find((s) => s.id === situationId);
+
+  if (!situation) {
+    view.innerHTML = `
+      <div class="card section">
+        <div class="title" style="font-weight:900;">シチュエーションが見つかりません</div>
+        <div style="margin-top:10px;"><button class="btn" id="back">戻る</button></div>
+      </div>
+    `;
+    $("#back").onclick = () => history.back();
+    return;
+  }
+
+  // カード情報を取得
+  const cardIds = situation.cards || [];
+  const cards = cardIds.map((id) => DATA.all.find((c) => c.id === id)).filter(Boolean);
+
+  // 「人生を後悔させない人の処世術」特別対応
+  const hasTheme = situation.theme && situation.theme.sections;
+
+  view.innerHTML = `
+    <div class="list-layout has-mobile-sidebar">
+      <div class="list-side">
+        ${renderCompactSidebar(null, true)}
+      </div>
+
+      <div class="list-main">
+        <div class="situation-detail-hero">
+          <button class="btn ghost situation-back" id="backToList">← シチュエーション一覧</button>
+          <div class="situation-detail-num">${escapeHtml(situation.id)}</div>
+          <h1 class="situation-detail-title">${escapeHtml(situation.title)}</h1>
+          <p class="situation-detail-aim">${escapeHtml(situation.aim)}</p>
+        </div>
+
+        ${hasTheme ? renderThemeSections(situation.theme, cards) : ""}
+
+        <div class="situation-cards-section">
+          <div class="situation-section-header">
+            <span class="situation-section-icon">📋</span>
+            <span class="situation-section-title">該当する処世術カード</span>
+            <span class="situation-section-count">${cards.length}件</span>
+          </div>
+          <div class="cards-grid" id="cards">
+            ${cards.map((c) => renderCard(c)).join("")}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  bindSidebarActions(view);
+  bindCardEvents();
+
+  // Theme section card references - scroll to and expand the corresponding card
+  view.querySelectorAll(".situation-theme-card-ref[data-open]").forEach((el) => {
+    el.onclick = () => {
+      const id = el.getAttribute("data-open");
+      const box = view.querySelector(`[data-expand="${CSS.escape(id)}"]`);
+      if (box) {
+        // Show the expand box
+        box.style.display = "block";
+        // Scroll to the card
+        const card = box.closest(".scard");
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+    };
+  });
+
+  $("#backToList").onclick = () => nav("#situations");
+}
+
+function renderThemeSections(theme, allCards) {
+  if (!theme || !theme.sections) return "";
+
+  return `
+    <div class="situation-theme-sections">
+      ${theme.sections.map((section) => {
+        const sectionCards = (section.cards || [])
+          .map((id) => allCards.find((c) => c.id === id) || DATA.all.find((c) => c.id === id))
+          .filter(Boolean);
+
+        return `
+          <div class="situation-theme-section">
+            <h3 class="situation-theme-title">${escapeHtml(section.title)}</h3>
+            <p class="situation-theme-desc">${escapeHtml(section.description)}</p>
+            ${sectionCards.length > 0 ? `
+              <div class="situation-theme-cards">
+                ${sectionCards.map((c) => `
+                  <div class="situation-theme-card-ref" data-open="${escapeHtml(c.id)}">
+                    <span class="situation-theme-card-id">${escapeHtml(c.id)}</span>
+                    <span class="situation-theme-card-title">${escapeHtml(c.title)}</span>
+                  </div>
+                `).join("")}
+              </div>
+            ` : ""}
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
 // ========== ルーティング ==========
 async function boot() {
   await loadAll();
@@ -846,6 +1039,13 @@ async function boot() {
     if (hash.startsWith("#detail")) {
       const q = parseQuery(hash.split("?")[1] || "");
       return renderDetail(q.id || "");
+    }
+
+    if (hash.startsWith("#situations")) return renderSituationsList();
+
+    if (hash.startsWith("#situation")) {
+      const q = parseQuery(hash.split("?")[1] || "");
+      return renderSituationDetail(q.id || "");
     }
 
     if (hash.startsWith("#my")) return renderMy();
