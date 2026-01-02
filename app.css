@@ -1189,6 +1189,62 @@ input:focus-visible, textarea:focus-visible{
   color: rgba(255,255,255,.96);
 }
 
+/* シチュエーションカテゴリセクション */
+.situation-category-section{
+  margin-bottom: 24px;
+}
+.situation-category-header{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  background: linear-gradient(180deg, rgba(139,92,246,.12), rgba(139,92,246,.06));
+  border: 1px solid rgba(139,92,246,.20);
+  border-radius: var(--r-lg);
+  box-shadow: 0 8px 18px rgba(0,0,0,.08);
+}
+.situation-category-icon{
+  font-size: 22px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,.72);
+  border-radius: var(--r-md);
+  flex-shrink: 0;
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+}
+.situation-category-info{
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.situation-category-title{
+  font-size: 16px;
+  font-weight: 900;
+  color: rgba(8,14,16,.90);
+  line-height: 1.25;
+}
+.situation-category-desc{
+  font-size: 12px;
+  color: rgba(8,14,16,.58);
+  line-height: 1.4;
+}
+.situation-category-count{
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(139,92,246,.85);
+  padding: 5px 10px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(139,92,246,.22);
+  border-radius: var(--r-md);
+  flex-shrink: 0;
+}
+
 /* シチュエーション一覧グリッド */
 .situations-grid{
   display: grid;
