@@ -1,6 +1,7 @@
 {
   "name": "処世術禄（Shoseijutsu OS）",
   "short_name": "処世術禄",
+  "description": "自己啓発・心理学・行動科学・対人術・キャリア論などを７つのOS・200の項目に集約した「処世術の体系書」",
   "start_url": "./index.html#home",
   "display": "standalone",
   "background_color": "#070a12",
