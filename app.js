@@ -859,11 +859,37 @@ function renderMy() {
 }
 
 // ========== シチュエーション別ページ ==========
+// カテゴリ順序と表示設定
+const SITUATION_CATEGORIES = [
+  { key: "成功・仕事力", icon: "🏆", desc: "成功と仕事で成果を出すための処世術" },
+  { key: "対人関係・印象", icon: "🤝", desc: "人との関わり方と印象形成の処世術" },
+  { key: "人間力・器量", icon: "🌟", desc: "人としての魅力と信頼を高める処世術" },
+  { key: "組織・環境", icon: "🏢", desc: "組織の中で上手く立ち回る処世術" },
+  { key: "内面・感情", icon: "💭", desc: "心と感情を整える処世術" },
+  { key: "人生設計", icon: "🧭", desc: "人生の方向性と意思決定の処世術" }
+];
+
+function groupSituationsByCategory(situations) {
+  const grouped = new Map();
+  SITUATION_CATEGORIES.forEach((cat) => grouped.set(cat.key, []));
+  
+  situations.forEach((s) => {
+    const cat = s.category || "";
+    // Only add to existing categories (ignore uncategorized items)
+    if (grouped.has(cat)) {
+      grouped.get(cat).push(s);
+    }
+  });
+  
+  return grouped;
+}
+
 function renderSituationsList() {
   renderShell("list");
   const view = $("#view");
 
   const situations = DATA.situations || [];
+  const grouped = groupSituationsByCategory(situations);
 
   view.innerHTML = `
     <div class="list-layout has-mobile-sidebar">
@@ -882,19 +908,35 @@ function renderSituationsList() {
           <div class="count">全 <b>${situations.length}</b> テーマ</div>
         </div>
 
-        <div class="situations-grid">
-          ${situations.map((s) => {
-            const cardCount = (s.cards || []).length;
-            return `
-              <button class="situation-card" data-situation="${escapeHtml(s.id)}">
-                <div class="situation-card-num">${escapeHtml(s.id)}</div>
-                <div class="situation-card-title">${escapeHtml(s.title)}</div>
-                <div class="situation-card-aim">${escapeHtml(s.aim)}</div>
-                <div class="situation-card-meta">関連カード：${cardCount}件</div>
-              </button>
-            `;
-          }).join("")}
-        </div>
+        ${SITUATION_CATEGORIES.map((cat) => {
+          const catSituations = grouped.get(cat.key);
+          if (catSituations.length === 0) return "";
+          return `
+            <div class="situation-category-section">
+              <div class="situation-category-header">
+                <span class="situation-category-icon">${cat.icon}</span>
+                <div class="situation-category-info">
+                  <span class="situation-category-title">${escapeHtml(cat.key)}</span>
+                  <span class="situation-category-desc">${escapeHtml(cat.desc)}</span>
+                </div>
+                <span class="situation-category-count">${catSituations.length}件</span>
+              </div>
+              <div class="situations-grid">
+                ${catSituations.map((s) => {
+                  const cardCount = (s.cards || []).length;
+                  return `
+                    <button class="situation-card" data-situation="${escapeHtml(s.id)}">
+                      <div class="situation-card-num">${escapeHtml(s.id)}</div>
+                      <div class="situation-card-title">${escapeHtml(s.title)}</div>
+                      <div class="situation-card-aim">${escapeHtml(s.aim)}</div>
+                      <div class="situation-card-meta">関連カード：${cardCount}件</div>
+                    </button>
+                  `;
+                }).join("")}
+              </div>
+            </div>
+          `;
+        }).join("")}
       </div>
     </div>
   `;
