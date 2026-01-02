@@ -967,6 +967,23 @@ function renderSituationDetail(situationId) {
   bindSidebarActions(view);
   bindCardEvents();
 
+  // Theme section card references - scroll to and expand the corresponding card
+  view.querySelectorAll(".situation-theme-card-ref[data-open]").forEach((el) => {
+    el.onclick = () => {
+      const id = el.getAttribute("data-open");
+      const box = view.querySelector(`[data-expand="${CSS.escape(id)}"]`);
+      if (box) {
+        // Show the expand box
+        box.style.display = "block";
+        // Scroll to the card
+        const card = box.closest(".scard");
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+    };
+  });
+
   $("#backToList").onclick = () => nav("#situations");
 }
 
