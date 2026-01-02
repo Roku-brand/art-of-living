@@ -874,9 +874,11 @@ function groupSituationsByCategory(situations) {
   SITUATION_CATEGORIES.forEach((cat) => grouped.set(cat.key, []));
   
   situations.forEach((s) => {
-    const cat = s.category || "その他";
-    if (!grouped.has(cat)) grouped.set(cat, []);
-    grouped.get(cat).push(s);
+    const cat = s.category || "";
+    // Only add to existing categories (ignore uncategorized items)
+    if (grouped.has(cat)) {
+      grouped.get(cat).push(s);
+    }
   });
   
   return grouped;
@@ -907,7 +909,7 @@ function renderSituationsList() {
         </div>
 
         ${SITUATION_CATEGORIES.map((cat) => {
-          const catSituations = grouped.get(cat.key) || [];
+          const catSituations = grouped.get(cat.key);
           if (catSituations.length === 0) return "";
           return `
             <div class="situation-category-section">
