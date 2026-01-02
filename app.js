@@ -859,11 +859,36 @@ function renderMy() {
 }
 
 // ========== シチュエーション別ページ ==========
+// テーマカテゴリの定義
+const SITUATION_THEME_CATEGORIES = [
+  "成果・実績",
+  "対人関係",
+  "自己管理",
+  "組織・環境",
+  "総合・人間力"
+];
+
 function renderSituationsList() {
   renderShell("list");
   const view = $("#view");
 
   const situations = DATA.situations || [];
+
+  // テーマ別にグループ化
+  const themeGroups = {};
+  const uncategorized = [];
+  
+  SITUATION_THEME_CATEGORIES.forEach((theme) => {
+    themeGroups[theme] = [];
+  });
+  
+  situations.forEach((s) => {
+    if (s.themeCategory && themeGroups[s.themeCategory]) {
+      themeGroups[s.themeCategory].push(s);
+    } else {
+      uncategorized.push(s);
+    }
+  });
 
   view.innerHTML = `
     <div class="list-layout has-mobile-sidebar">
@@ -882,19 +907,54 @@ function renderSituationsList() {
           <div class="count">全 <b>${situations.length}</b> テーマ</div>
         </div>
 
-        <div class="situations-grid">
-          ${situations.map((s) => {
-            const cardCount = (s.cards || []).length;
-            return `
-              <button class="situation-card" data-situation="${escapeHtml(s.id)}">
-                <div class="situation-card-num">${escapeHtml(s.id)}</div>
-                <div class="situation-card-title">${escapeHtml(s.title)}</div>
-                <div class="situation-card-aim">${escapeHtml(s.aim)}</div>
-                <div class="situation-card-meta">関連カード：${cardCount}件</div>
-              </button>
-            `;
-          }).join("")}
-        </div>
+        ${SITUATION_THEME_CATEGORIES.map((theme) => {
+          const themeList = themeGroups[theme] || [];
+          if (themeList.length === 0) return "";
+          
+          return `
+            <div class="situation-theme-group">
+              <div class="situation-theme-header">
+                <h2 class="situation-theme-category">${escapeHtml(theme)}</h2>
+                <span class="situation-theme-count">${themeList.length}件</span>
+              </div>
+              <div class="situations-grid">
+                ${themeList.map((s) => {
+                  const cardCount = (s.cards || []).length;
+                  return `
+                    <button class="situation-card" data-situation="${escapeHtml(s.id)}">
+                      <div class="situation-card-num">${escapeHtml(s.id)}</div>
+                      <div class="situation-card-title">${escapeHtml(s.title)}</div>
+                      <div class="situation-card-aim">${escapeHtml(s.aim)}</div>
+                      <div class="situation-card-meta">関連カード：${cardCount}件</div>
+                    </button>
+                  `;
+                }).join("")}
+              </div>
+            </div>
+          `;
+        }).join("")}
+        
+        ${uncategorized.length > 0 ? `
+          <div class="situation-theme-group">
+            <div class="situation-theme-header">
+              <h2 class="situation-theme-category">その他</h2>
+              <span class="situation-theme-count">${uncategorized.length}件</span>
+            </div>
+            <div class="situations-grid">
+              ${uncategorized.map((s) => {
+                const cardCount = (s.cards || []).length;
+                return `
+                  <button class="situation-card" data-situation="${escapeHtml(s.id)}">
+                    <div class="situation-card-num">${escapeHtml(s.id)}</div>
+                    <div class="situation-card-title">${escapeHtml(s.title)}</div>
+                    <div class="situation-card-aim">${escapeHtml(s.aim)}</div>
+                    <div class="situation-card-meta">関連カード：${cardCount}件</div>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        ` : ""}
       </div>
     </div>
   `;
