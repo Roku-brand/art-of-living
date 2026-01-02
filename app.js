@@ -483,17 +483,16 @@ function renderCard(c) {
         </div>
       </div>
 
-      ${tags.length ? `
-        <div class="scard-tags">
-          ${tags.map((t) => { const escaped = escapeHtml(t); return `<span class="tagchip" data-tagchip="${escaped}">#${escaped}</span>`; }).join("")}
-        </div>
-      ` : ""}
-
       ${hasExpand ? `
         <div class="scard-expand" style="display:none;" data-expand="${escapeHtml(c.id)}">
           ${ess.length ? `<h4>要点</h4><ul>${ess.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
           ${pit.length ? `<h4>落とし穴</h4><ul>${pit.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
           ${strat.length ? `<h4>戦略</h4><ul>${strat.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+          ${tags.length ? `
+            <div class="scard-tags">
+              ${tags.map((t) => { const escaped = escapeHtml(t); return `<span class="tagchip" data-tagchip="${escaped}">#${escaped}</span>`; }).join("")}
+            </div>
+          ` : ""}
         </div>
       ` : ""}
     </div>
