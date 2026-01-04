@@ -175,8 +175,7 @@ function renderShell(activeTab) {
             <span class="hamburger-line"></span>
             <span class="hamburger-line"></span>
           </button>
-          <h1>処世術禄</h1>
-          <small>Shoseijutsu OS</small>
+          <h1>人生の処世術200</h1>
         </div>
 
         <div class="header-actions">
@@ -435,7 +434,7 @@ function renderList(osKey) {
 
       <div class="list-main">
         <div class="list-hero">
-          <div class="list-hero-title">処世術禄</div>
+          <div class="list-hero-title">人生の処世術200</div>
           <div class="list-hero-subtitle">${escapeHtml(heroSubtitle)}</div>
         </div>
 
