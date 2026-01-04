@@ -489,7 +489,6 @@ function renderCard(c) {
   const osKey = c.os || "extra";
 
   const title = escapeHtml(c.title || "");
-  const summary = escapeHtml(c.summary || "");
   const tags = (c.tags || []).map((t) => String(t).trim()).filter(Boolean);
 
   const ess = splitToBullets(c.essence);
@@ -506,7 +505,6 @@ function renderCard(c) {
             <span class="scard-num">${escapeHtml(c.id)}</span>
             <h3 class="scard-title">${title}</h3>
           </div>
-          <p class="scard-summary">${summary}</p>
         </div>
 
         <div class="scard-side">
@@ -654,7 +652,6 @@ function renderDetail(id) {
         <div>
           <div class="badge id">${escapeHtml(card.id)}</div>
           <div style="margin-top:8px; font-weight:900; font-size:18px;">${escapeHtml(card.title || "")}</div>
-          <div style="margin-top:6px; color:rgba(10,18,20,.62);">${escapeHtml(card.summary || "")}</div>
         </div>
         <button class="btn ghost" id="back">戻る</button>
       </div>
