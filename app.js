@@ -19,6 +19,7 @@ const OS_META = [
 
 const LS_FAV = "shoseijutsu:favorites";
 const LS_PERSONAL = "shoseijutsu:personalCards";
+const LS_USER = "shoseijutsu:user";
 
 // ========== 2次フィルター（タブ）の表示順序 ==========
 // 各OSごとに指定した順番でタブを表示、その他は右端に配置
@@ -60,6 +61,39 @@ function loadPersonalCards() {
 }
 function savePersonalCards(cards) {
   localStorage.setItem(LS_PERSONAL, JSON.stringify(cards));
+}
+
+// ========== ユーザー認証（ローカルストレージベース） ==========
+function loadUser() {
+  return readJSONSafe(localStorage.getItem(LS_USER)) ?? null;
+}
+function saveUser(user) {
+  if (user) {
+    localStorage.setItem(LS_USER, JSON.stringify(user));
+  } else {
+    localStorage.removeItem(LS_USER);
+  }
+}
+function isLoggedIn() {
+  return loadUser() !== null;
+}
+function login(username) {
+  const user = {
+    username: username,
+    createdAt: new Date().toISOString()
+  };
+  saveUser(user);
+  return user;
+}
+function logout() {
+  saveUser(null);
+}
+
+// ページを再描画するためのヘルパー関数
+function refreshPage() {
+  const h = location.hash || "#my";
+  nav("#temp");
+  nav(h);
 }
 
 function parseQuery(qs) {
@@ -166,6 +200,9 @@ async function loadAll() {
 // ========== UI シェル ==========
 function renderShell(activeTab) {
   const app = $("#app");
+  const user = loadUser();
+  const loggedIn = user !== null;
+
   app.innerHTML = `
     <div class="header">
       <div class="header-inner">
@@ -181,6 +218,38 @@ function renderShell(activeTab) {
         <div class="header-actions">
           <button class="btn ghost ${activeTab === "list" ? "active" : ""}" id="btnList">処世術一覧</button>
           <button class="btn ghost ${activeTab === "my" ? "active" : ""}" id="btnMy">マイページ</button>
+          ${loggedIn ? `
+            <div class="header-user">
+              <span class="header-user-icon">👤</span>
+              <span class="header-user-name">${escapeHtml(user.username)}</span>
+              <button class="btn ghost header-logout" id="btnLogout">ログアウト</button>
+            </div>
+          ` : `
+            <button class="btn primary" id="btnLogin">ログイン</button>
+          `}
+        </div>
+      </div>
+    </div>
+
+    <!-- ログインモーダル -->
+    <div class="login-modal-overlay" id="loginModalOverlay">
+      <div class="login-modal" id="loginModal">
+        <div class="login-modal-header">
+          <span class="login-modal-title">ログイン</span>
+          <button class="login-modal-close" id="loginModalClose" aria-label="閉じる">×</button>
+        </div>
+        <div class="login-modal-body">
+          <div class="login-form-field">
+            <label class="login-form-label">ユーザー名</label>
+            <input class="input" id="loginUsername" placeholder="ユーザー名を入力" />
+          </div>
+          <div class="login-form-info" id="loginInfo"></div>
+          <div class="login-form-actions">
+            <button class="btn primary" id="btnDoLogin">ログイン</button>
+          </div>
+          <div class="login-form-note">
+            ※ このアプリはデモ版です。任意のユーザー名でログインできます。
+          </div>
         </div>
       </div>
     </div>
@@ -220,6 +289,56 @@ function renderShell(activeTab) {
 
   $("#btnList").onclick = () => nav("#list?os=life");
   $("#btnMy").onclick = () => nav("#my");
+
+  // ログインモーダルの開閉
+  const loginOverlay = $("#loginModalOverlay");
+  const loginModal = $("#loginModal");
+
+  const openLoginModal = () => {
+    loginOverlay.classList.add("is-open");
+    loginModal.classList.add("is-open");
+  };
+
+  const closeLoginModal = () => {
+    loginOverlay.classList.remove("is-open");
+    loginModal.classList.remove("is-open");
+    $("#loginUsername").value = "";
+    $("#loginInfo").textContent = "";
+  };
+
+  const btnLogin = $("#btnLogin");
+  if (btnLogin) btnLogin.onclick = openLoginModal;
+
+  const loginModalClose = $("#loginModalClose");
+  if (loginModalClose) loginModalClose.onclick = closeLoginModal;
+
+  loginOverlay.onclick = (e) => {
+    if (e.target === loginOverlay) closeLoginModal();
+  };
+
+  // ログイン処理
+  const btnDoLogin = $("#btnDoLogin");
+  if (btnDoLogin) {
+    btnDoLogin.onclick = () => {
+      const username = $("#loginUsername").value.trim();
+      if (!username) {
+        $("#loginInfo").textContent = "ユーザー名を入力してください。";
+        return;
+      }
+      login(username);
+      closeLoginModal();
+      refreshPage();
+    };
+  }
+
+  // ログアウト処理
+  const btnLogout = $("#btnLogout");
+  if (btnLogout) {
+    btnLogout.onclick = () => {
+      logout();
+      refreshPage();
+    };
+  }
 
   // ハンバーガーメニューの開閉
   const overlay = $("#mobileMenuOverlay");
@@ -686,6 +805,8 @@ function renderMy() {
   renderShell("my");
   const view = $("#view");
 
+  const user = loadUser();
+  const loggedIn = user !== null;
   const favs = loadFavorites();
   const all = sortById(DATA.all);
   const favList = all.filter((c) => favs.has(String(c.id)));
@@ -697,6 +818,13 @@ function renderMy() {
     return { key: m.key, title: m.title, subtitle: m.subtitle, count };
   }).filter((s) => s.count > 0);
 
+  // ログイン日時のフォーマット
+  const formatDate = (isoDate) => {
+    if (!isoDate) return "";
+    const d = new Date(isoDate);
+    return `${d.getFullYear()}/${(d.getMonth() + 1).toString().padStart(2, "0")}/${d.getDate().toString().padStart(2, "0")}`;
+  };
+
   view.innerHTML = `
     <!-- マイページヒーロー -->
     <div class="mypage-hero">
@@ -705,6 +833,36 @@ function renderMy() {
         <h2 class="mypage-hero-title">マイページ</h2>
         <p class="mypage-hero-subtitle">お気に入りの処世術と個人カードを管理</p>
       </div>
+    </div>
+
+    <!-- アカウント情報 -->
+    <div class="mypage-section mypage-account-section">
+      <div class="mypage-section-header">
+        <span class="mypage-section-icon">👤</span>
+        <span class="mypage-section-title">アカウント</span>
+      </div>
+      ${loggedIn ? `
+        <div class="mypage-account-info">
+          <div class="mypage-account-row">
+            <span class="mypage-account-label">ユーザー名</span>
+            <span class="mypage-account-value">${escapeHtml(user.username)}</span>
+          </div>
+          <div class="mypage-account-row">
+            <span class="mypage-account-label">登録日</span>
+            <span class="mypage-account-value">${escapeHtml(formatDate(user.createdAt))}</span>
+          </div>
+          <div class="mypage-account-actions">
+            <button class="btn ghost danger" id="btnAccountLogout">ログアウト</button>
+          </div>
+        </div>
+      ` : `
+        <div class="mypage-account-guest">
+          <div class="mypage-account-guest-icon">🔒</div>
+          <div class="mypage-account-guest-text">ログインしていません</div>
+          <div class="mypage-account-guest-hint">ログインすると、お気に入りや個人カードを保存できます。</div>
+          <button class="btn primary" id="btnAccountLogin">ログイン</button>
+        </div>
+      `}
     </div>
 
     <!-- 統計カード -->
@@ -850,6 +1008,28 @@ function renderMy() {
       nav(`#list?os=${encodeURIComponent(osKey)}`);
     };
   });
+
+  // アカウントセクションのログイン/ログアウトボタン
+  const btnAccountLogin = $("#btnAccountLogin");
+  if (btnAccountLogin) {
+    btnAccountLogin.onclick = () => {
+      // ログインモーダルを開く
+      const loginOverlay = $("#loginModalOverlay");
+      const loginModal = $("#loginModal");
+      if (loginOverlay && loginModal) {
+        loginOverlay.classList.add("is-open");
+        loginModal.classList.add("is-open");
+      }
+    };
+  }
+
+  const btnAccountLogout = $("#btnAccountLogout");
+  if (btnAccountLogout) {
+    btnAccountLogout.onclick = () => {
+      logout();
+      refreshPage();
+    };
+  }
 
   bindCardEvents();
 }
