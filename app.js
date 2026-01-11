@@ -859,23 +859,20 @@ function renderMy() {
       </div>
       ${loggedIn ? `
         <div class="mypage-account-info">
-          <div class="mypage-account-row">
-            <span class="mypage-account-label">ユーザー名</span>
-            <span class="mypage-account-value">${escapeHtml(user.username)}</span>
-          </div>
-          <div class="mypage-account-row">
-            <span class="mypage-account-label">登録日</span>
-            <span class="mypage-account-value">${escapeHtml(formatDate(user.createdAt))}</span>
-          </div>
-          <div class="mypage-account-actions">
+          <div class="mypage-account-compact">
+            <div class="mypage-account-summary">
+              <span class="mypage-account-label">ユーザー名</span>
+              <span class="mypage-account-value">${escapeHtml(user.username)}</span>
+              <span class="mypage-account-divider">/</span>
+              <span class="mypage-account-label">登録日</span>
+              <span class="mypage-account-value">${escapeHtml(formatDate(user.createdAt))}</span>
+            </div>
             <button class="btn ghost danger" id="btnAccountLogout">ログアウト</button>
           </div>
         </div>
       ` : `
         <div class="mypage-account-guest">
-          <div class="mypage-account-guest-icon">🔒</div>
           <div class="mypage-account-guest-text">ログインしていません</div>
-          <div class="mypage-account-guest-hint">ログインすると、お気に入りや個人カードを保存できます。</div>
           <button class="btn primary" id="btnAccountLogin">ログイン</button>
         </div>
       `}

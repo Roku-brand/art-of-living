@@ -1633,59 +1633,56 @@ input:focus-visible, textarea:focus-visible{
 
 .mypage-account-info{
   display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
-.mypage-account-row{
+.mypage-account-compact{
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,.58);
+  border: 1px solid rgba(10,18,20,.08);
+  border-radius: var(--r-md);
+  flex-wrap: wrap;
+}
+.mypage-account-summary{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.mypage-account-label{
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(8,14,16,.52);
+}
+.mypage-account-value{
+  font-size: 14px;
+  font-weight: 800;
+  color: rgba(8,14,16,.82);
+}
+.mypage-account-divider{
+  font-size: 12px;
+  color: rgba(8,14,16,.35);
+}
+
+.mypage-account-guest{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
   padding: 10px 12px;
   background: rgba(255,255,255,.58);
   border: 1px solid rgba(10,18,20,.08);
   border-radius: var(--r-md);
 }
-.mypage-account-label{
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(8,14,16,.52);
-  min-width: 80px;
-}
-.mypage-account-value{
-  font-size: 14px;
-  font-weight: 800;
-  color: rgba(8,14,16,.82);
-  flex: 1;
-}
-.mypage-account-actions{
-  padding-top: 8px;
-  display: flex;
-  gap: 10px;
-}
-
-.mypage-account-guest{
-  text-align: center;
-  padding: 24px 16px;
-}
-.mypage-account-guest-icon{
-  font-size: 36px;
-  margin-bottom: 12px;
-  opacity: .6;
-}
 .mypage-account-guest-text{
   font-size: 15px;
   font-weight: 800;
   color: rgba(8,14,16,.72);
-  margin-bottom: 6px;
-}
-.mypage-account-guest-hint{
-  font-size: 12px;
-  color: rgba(8,14,16,.52);
-  margin-bottom: 16px;
-  line-height: 1.5;
 }
 .mypage-account-guest .btn{
-  padding: 10px 24px;
+  padding: 8px 18px;
 }
 
 /* ========== 状況別処世術ページ（箇条書きUI） ========== */
