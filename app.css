@@ -2399,3 +2399,139 @@ input:focus-visible, textarea:focus-visible{
     font-size: 9px;
   }
 }
+
+/* ========== 状況別処世術 トピックグリッド（長方形カード） ========== */
+.tips-topics-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (min-width: 700px){
+  .tips-topics-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1000px){
+  .tips-topics-grid{ grid-template-columns: repeat(4, 1fr); }
+}
+
+.tips-topic-card{
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 16px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(99,102,241,.20);
+  border-radius: var(--r-xl);
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(99,102,241,.10);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  min-height: 140px;
+}
+.tips-topic-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 16px 38px rgba(99,102,241,.18);
+  border-color: rgba(99,102,241,.40);
+}
+.tips-topic-card:active{
+  transform: translateY(0);
+}
+
+.tips-topic-card-title{
+  font-size: 15px;
+  font-weight: 900;
+  color: rgba(8,14,16,.92);
+  line-height: 1.35;
+}
+
+.tips-topic-card-preview{
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(8,14,16,.58);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.tips-topic-card-count{
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(99,102,241,.80);
+  margin-top: auto;
+}
+
+/* ========== 状況別処世術 トピック詳細ページ ========== */
+.tips-detail-hero{
+  background: linear-gradient(135deg, rgba(99,102,241,.18), rgba(139,92,246,.12), rgba(59,130,246,.14));
+  border: 1px solid rgba(99,102,241,.25);
+  border-radius: var(--r-xl);
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  box-shadow: 0 16px 40px rgba(99,102,241,.12), var(--shadow0);
+}
+
+.tips-back{
+  margin-bottom: 16px;
+}
+
+.tips-detail-category{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.tips-detail-category-icon{
+  font-size: 20px;
+}
+
+.tips-detail-category-name{
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(99,102,241,.80);
+}
+
+.tips-detail-title{
+  margin: 0 0 10px;
+  font-size: 26px;
+  font-weight: 900;
+  color: rgba(8,14,16,.94);
+  line-height: 1.3;
+}
+
+.tips-detail-count{
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(8,14,16,.58);
+}
+
+.tips-detail-content{
+  background: rgba(255,255,255,.58);
+  border: 1px solid rgba(10,18,20,.10);
+  border-radius: var(--r-xl);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow0);
+}
+
+@media (max-width: 600px){
+  .tips-detail-hero{
+    padding: 18px 16px;
+  }
+  .tips-detail-title{
+    font-size: 22px;
+  }
+  .tips-detail-content{
+    padding: 14px 16px;
+  }
+  .tips-topic-card{
+    padding: 14px 12px;
+    min-height: 120px;
+  }
+  .tips-topic-card-title{
+    font-size: 14px;
+  }
+}
