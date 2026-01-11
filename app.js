@@ -560,15 +560,6 @@ function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = nu
         `;}).join("")}
       </div>
 
-      <div class="sidebarCompactSection">
-        <div class="sidebarCompactItem sidebarCompactSituation ${activeSituation ? "isActive" : ""}" id="goSituations" role="button" tabindex="0">
-          <div class="sidebarCompactLeft">
-            <div class="sidebarCompactSub">悩み別まとめ</div>
-            <div class="sidebarCompactMain">シチュエーション別</div>
-          </div>
-        </div>
-      </div>
-
       <div class="sidebarCompactFooter">
         <div class="sidebarCompactSearch" id="goSearch" role="button" tabindex="0">
           <span class="sidebarCompactDot" aria-hidden="true"></span>
@@ -585,8 +576,6 @@ function bindSidebarActions(container) {
   });
   const goSearch = container.querySelector("#goSearch");
   if (goSearch) goSearch.onclick = () => nav(`#search?q=`);
-  const goSituations = container.querySelector("#goSituations");
-  if (goSituations) goSituations.onclick = () => nav(`#situations`);
 }
 
 function renderList(osKey, focusOsId = null) {
