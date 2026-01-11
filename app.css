@@ -2871,6 +2871,26 @@ input:focus-visible, textarea:focus-visible{
   background: rgba(99,102,241,.12);
   border-radius: var(--r-md);
 }
+.tips-detail-toggle-wrap{
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+.tips-detail-toggle{
+  border: 1px solid rgba(10,18,20,.12);
+  background: rgba(255,255,255,.92);
+  color: rgba(8,14,16,.78);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+}
+.tips-detail-toggle[aria-expanded="true"]{
+  background: rgba(99,102,241,.12);
+  color: rgba(36,39,104,.88);
+}
 .tips-detail-list{
   display: flex;
   flex-direction: column;

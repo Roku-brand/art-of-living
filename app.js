@@ -1335,7 +1335,10 @@ function renderTipsTopicDetail(topicNavId) {
           <span class="tips-detail-count-simple">${items.length}件</span>
         </div>
       </div>
-      <div class="tips-detail-list">
+      <div class="tips-detail-toggle-wrap">
+        <button class="tips-detail-toggle" type="button" aria-expanded="false">一覧を開く</button>
+      </div>
+      <div class="tips-detail-list" hidden>
         ${items.map((item, idx) => `
           <div class="tips-detail-item">
             <span class="tips-detail-item-num">${idx + 1}</span>
@@ -1361,6 +1364,22 @@ function renderTipsTopicDetail(topicNavId) {
       nav(`#detail?id=${encodeURIComponent(cardId)}`);
     };
   });
+
+  const detailToggle = view.querySelector(".tips-detail-toggle");
+  const detailList = view.querySelector(".tips-detail-list");
+  if (detailToggle && detailList) {
+    detailToggle.onclick = () => {
+      const isHidden = detailList.hasAttribute("hidden");
+      if (isHidden) {
+        detailList.removeAttribute("hidden");
+        detailToggle.textContent = "一覧を閉じる";
+      } else {
+        detailList.setAttribute("hidden", "");
+        detailToggle.textContent = "一覧を開く";
+      }
+      detailToggle.setAttribute("aria-expanded", String(isHidden));
+    };
+  }
 }
 
 // ========== シチュエーション別ページ ==========
