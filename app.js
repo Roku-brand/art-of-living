@@ -273,33 +273,56 @@ function renderShell(activeTab) {
             <h1>処世術禄</h1>
           </div>
         </div>
-        <p class="header-subtitle">
-          ケース別処世術と体系処世術をシンプルに整理。
-        </p>
-
+        <div class="header-right">
+          <p class="header-subtitle">
+            ケース別処世術と体系処世術をシンプルに整理。
+          </p>
+          <button class="header-account-btn" id="headerAccountBtn" aria-label="アカウント">
+            ${loggedIn ? `<span class="header-account-icon logged-in">👤</span>` : `<span class="header-account-icon">👤</span>`}
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- ログインモーダル -->
+    <!-- アカウントモーダル -->
     <div class="login-modal-overlay" id="loginModalOverlay">
       <div class="login-modal" id="loginModal">
-        <div class="login-modal-header">
-          <span class="login-modal-title">ログイン</span>
-          <button class="login-modal-close" id="loginModalClose" aria-label="閉じる">×</button>
-        </div>
-        <div class="login-modal-body">
-          <div class="login-form-field">
-            <label class="login-form-label">ユーザー名</label>
-            <input class="input" id="loginUsername" placeholder="ユーザー名を入力" />
+        ${loggedIn ? `
+          <div class="login-modal-header">
+            <span class="login-modal-title">アカウント管理</span>
+            <button class="login-modal-close" id="loginModalClose" aria-label="閉じる">×</button>
           </div>
-          <div class="login-form-info" id="loginInfo"></div>
-          <div class="login-form-actions">
-            <button class="btn primary" id="btnDoLogin">ログイン</button>
+          <div class="login-modal-body">
+            <div class="account-modal-info">
+              <div class="account-modal-icon">👤</div>
+              <div class="account-modal-details">
+                <div class="account-modal-label">ユーザー名</div>
+                <div class="account-modal-value">${escapeHtml(user?.username || "")}</div>
+              </div>
+            </div>
+            <div class="account-modal-actions">
+              <button class="btn ghost danger" id="btnModalLogout">ログアウト</button>
+            </div>
           </div>
-          <div class="login-form-note">
-            ※ このアプリはデモ版です。任意のユーザー名でログインできます。
+        ` : `
+          <div class="login-modal-header">
+            <span class="login-modal-title">ログイン</span>
+            <button class="login-modal-close" id="loginModalClose" aria-label="閉じる">×</button>
           </div>
-        </div>
+          <div class="login-modal-body">
+            <div class="login-form-field">
+              <label class="login-form-label">ユーザー名</label>
+              <input class="input" id="loginUsername" placeholder="ユーザー名を入力" />
+            </div>
+            <div class="login-form-info" id="loginInfo"></div>
+            <div class="login-form-actions">
+              <button class="btn primary" id="btnDoLogin">ログイン</button>
+            </div>
+            <div class="login-form-note">
+              ※ このアプリはデモ版です。任意のユーザー名でログインできます。
+            </div>
+          </div>
+        `}
       </div>
     </div>
 
@@ -340,8 +363,15 @@ function renderShell(activeTab) {
   const closeLoginModal = () => {
     loginOverlay.classList.remove("is-open");
     loginModal.classList.remove("is-open");
-    $("#loginUsername").value = "";
-    $("#loginInfo").textContent = "";
+    const usernameInput = $("#loginUsername");
+    const loginInfo = $("#loginInfo");
+    if (usernameInput) usernameInput.value = "";
+    if (loginInfo) loginInfo.textContent = "";
+  };
+
+  const openAccountModal = () => {
+    loginOverlay.classList.add("is-open");
+    loginModal.classList.add("is-open");
   };
 
   const loginModalClose = $("#loginModalClose");
@@ -350,6 +380,22 @@ function renderShell(activeTab) {
   loginOverlay.onclick = (e) => {
     if (e.target === loginOverlay) closeLoginModal();
   };
+
+  // ヘッダーのアカウントボタン
+  const headerAccountBtn = $("#headerAccountBtn");
+  if (headerAccountBtn) {
+    headerAccountBtn.onclick = openAccountModal;
+  }
+
+  // モーダル内のログアウトボタン
+  const btnModalLogout = $("#btnModalLogout");
+  if (btnModalLogout) {
+    btnModalLogout.onclick = () => {
+      logout();
+      closeLoginModal();
+      refreshPage();
+    };
+  }
 
   // ログイン処理
   const btnDoLogin = $("#btnDoLogin");
@@ -862,8 +908,6 @@ function renderMy() {
   renderShell("my");
   const view = $("#view");
 
-  const user = loadUser();
-  const loggedIn = user !== null;
   const favs = loadFavorites();
   const all = sortById(DATA.all);
   const favList = all.filter((c) => favs.has(String(c.id)));
@@ -872,19 +916,6 @@ function renderMy() {
   const folderOptions = personalData.folders.map((folder) => `
     <option value="${escapeHtml(folder.id)}">${escapeHtml(folder.name)}</option>
   `).join("");
-
-  // OS別お気に入り統計
-  const osFavStats = OS_META.map((m) => {
-    const count = favList.filter((c) => c.os === m.key).length;
-    return { key: m.key, title: m.title, subtitle: m.subtitle, count };
-  }).filter((s) => s.count > 0);
-
-  // ログイン日時のフォーマット
-  const formatDate = (isoDate) => {
-    if (!isoDate) return "";
-    const d = new Date(isoDate);
-    return `${d.getFullYear()}/${(d.getMonth() + 1).toString().padStart(2, "0")}/${d.getDate().toString().padStart(2, "0")}`;
-  };
 
   view.innerHTML = `
     <!-- マイページヒーロー -->
@@ -895,70 +926,6 @@ function renderMy() {
         <p class="mypage-hero-subtitle">お気に入りの処世術とマイ処世術を管理</p>
       </div>
     </div>
-
-    <!-- アカウント情報 -->
-    <div class="mypage-section mypage-account-section">
-      <div class="mypage-section-header">
-        <span class="mypage-section-icon">👤</span>
-        <span class="mypage-section-title">アカウント</span>
-      </div>
-      ${loggedIn ? `
-        <div class="mypage-account-info">
-          <div class="mypage-account-compact">
-            <div class="mypage-account-summary">
-              <span class="mypage-account-label">ユーザー名</span>
-              <span class="mypage-account-value">${escapeHtml(user.username)}</span>
-              <span class="mypage-account-divider">/</span>
-              <span class="mypage-account-label">登録日</span>
-              <span class="mypage-account-value">${escapeHtml(formatDate(user.createdAt))}</span>
-            </div>
-            <button class="btn ghost danger" id="btnAccountLogout">ログアウト</button>
-          </div>
-        </div>
-      ` : `
-        <div class="mypage-account-guest">
-          <div class="mypage-account-guest-text">ログインしていません</div>
-          <button class="btn primary" id="btnAccountLogin">ログイン</button>
-        </div>
-      `}
-    </div>
-
-    <!-- 統計カード -->
-    <div class="mypage-stats">
-      <div class="mypage-stat-card stat-favorites">
-        <div class="mypage-stat-icon">★</div>
-        <div class="mypage-stat-info">
-          <div class="mypage-stat-value">${favList.length}</div>
-          <div class="mypage-stat-label">お気に入り</div>
-        </div>
-      </div>
-      <div class="mypage-stat-card stat-personal">
-        <div class="mypage-stat-icon">✎</div>
-        <div class="mypage-stat-info">
-          <div class="mypage-stat-value">${totalPersonalTips}</div>
-          <div class="mypage-stat-label">マイ処世術</div>
-        </div>
-      </div>
-    </div>
-
-    ${osFavStats.length ? `
-    <!-- OS別お気に入り分布 -->
-    <div class="mypage-section">
-      <div class="mypage-section-header">
-        <span class="mypage-section-icon">📊</span>
-        <span class="mypage-section-title">OS別お気に入り分布</span>
-      </div>
-      <div class="mypage-os-stats">
-        ${osFavStats.map((s) => `
-          <button class="mypage-os-stat-item" data-os-link="${escapeHtml(s.key)}">
-            <span class="mypage-os-stat-sub">${escapeHtml(s.subtitle)}</span>
-            <span class="mypage-os-stat-name">${escapeHtml(s.title)}</span>
-            <span class="mypage-os-stat-count">${s.count}件</span>
-          </button>
-        `).join("")}
-      </div>
-    </div>
-    ` : ""}
 
     <!-- お気に入り一覧 -->
     <div class="mypage-section">
@@ -978,139 +945,193 @@ function renderMy() {
       </div>
     </div>
 
-    <!-- フォルダー作成 -->
-    <div class="mypage-section">
-      <div class="mypage-section-header">
-        <span class="mypage-section-icon">📁</span>
-        <span class="mypage-section-title">フォルダー作成</span>
-      </div>
-      <div class="mypage-form">
-        <div class="mypage-form-row">
-          <div class="mypage-form-field">
-            <label class="mypage-form-label">フォルダー名 *</label>
-            <input class="input" id="folderName" placeholder="例：仕事術メモ" />
-          </div>
-          <div class="mypage-form-field">
-            <label class="mypage-form-label">追加</label>
-            <button class="btn primary" id="addFolder">フォルダーを追加</button>
-          </div>
-        </div>
-        <span id="folderInfo" class="mypage-form-info"></span>
-      </div>
-    </div>
-
-    <!-- マイ処世術の追加 -->
-    <div class="mypage-section">
-      <div class="mypage-section-header">
-        <span class="mypage-section-icon">✎</span>
-        <span class="mypage-section-title">マイ処世術の追加</span>
-      </div>
-      <div class="mypage-form">
-        <div class="mypage-form-row">
-          <div class="mypage-form-field">
-            <label class="mypage-form-label">フォルダー *</label>
-            <select class="input" id="tipFolder">
-              ${folderOptions || `<option value=\"\" disabled selected>フォルダーを作成してください</option>`}
-            </select>
-          </div>
-          <div class="mypage-form-field">
-            <label class="mypage-form-label">処世術（1行） *</label>
-            <input class="input" id="tipText" placeholder="1行で入力" />
-          </div>
-        </div>
-        <div class="mypage-form-actions">
-          <button class="btn primary" id="addTip">処世術を追加</button>
-          <span id="tipInfo" class="mypage-form-info"></span>
-        </div>
-      </div>
-    </div>
-
     <!-- マイ処世術一覧 -->
     <div class="mypage-section">
       <div class="mypage-section-header">
         <span class="mypage-section-icon">📚</span>
         <span class="mypage-section-title">マイ処世術一覧</span>
         <span class="mypage-section-count">${totalPersonalTips}件</span>
+        <button class="mypage-add-folder-btn" id="showFolderForm" aria-label="フォルダーを追加">＋</button>
       </div>
+      
+      <!-- フォルダー作成フォーム（デフォルト非表示） -->
+      <div class="mypage-folder-form" id="folderFormContainer" style="display: none;">
+        <div class="mypage-folder-form-inner">
+          <input class="input" id="folderName" placeholder="フォルダー名を入力" />
+          <div class="mypage-folder-form-actions">
+            <button class="btn primary" id="addFolder">作成</button>
+            <button class="btn ghost" id="cancelFolderForm">キャンセル</button>
+          </div>
+        </div>
+      </div>
+
       <div class="mypage-folders">
         ${personalData.folders.length ? personalData.folders.map((folder) => `
           <div class="mypage-folder-card" data-folder="${escapeHtml(folder.id)}">
-            <div class="mypage-folder-header">
-              <div>
-                <div class="mypage-folder-name">${escapeHtml(folder.name)}</div>
-                <div class="mypage-folder-count">${folder.items.length}件</div>
+            <button class="mypage-folder-header-btn" data-folder-toggle="${escapeHtml(folder.id)}" aria-expanded="false">
+              <div class="mypage-folder-header-left">
+                <span class="mypage-folder-icon">📁</span>
+                <div class="mypage-folder-info">
+                  <div class="mypage-folder-name">${escapeHtml(folder.name)}</div>
+                  <div class="mypage-folder-count">${folder.items.length}件</div>
+                </div>
               </div>
-            </div>
-            <div class="mypage-folder-tips">
-              ${folder.items.length ? folder.items.map((item) => `
-                <div class="mypage-tip-item">
-                  <span class="mypage-tip-text">${escapeHtml(item.text)}</span>
-                  <button class="btn ghost" data-tip-edit="${escapeHtml(folder.id)}:${escapeHtml(item.id)}">編集</button>
-                </div>
-              `).join("") : `
-                <div class="mypage-empty">
-                  <div class="mypage-empty-icon">✏️</div>
-                  <div class="mypage-empty-text">まだ処世術がありません</div>
-                  <div class="mypage-empty-hint">上のフォームから1行で追加できます</div>
-                </div>
-              `}
+              <span class="mypage-folder-chevron">⌄</span>
+            </button>
+            <div class="mypage-folder-content" data-folder-content="${escapeHtml(folder.id)}" style="display: none;">
+              <div class="mypage-folder-actions">
+                <button class="btn ghost" data-folder-edit="${escapeHtml(folder.id)}">フォルダー名編集</button>
+                <button class="btn ghost danger" data-folder-delete="${escapeHtml(folder.id)}">削除</button>
+              </div>
+              <div class="mypage-folder-tips">
+                ${folder.items.length ? folder.items.map((item) => `
+                  <div class="mypage-tip-item">
+                    <span class="mypage-tip-text">${escapeHtml(item.text)}</span>
+                    <div class="mypage-tip-actions">
+                      <button class="btn ghost small" data-tip-edit="${escapeHtml(folder.id)}:${escapeHtml(item.id)}">編集</button>
+                      <button class="btn ghost danger small" data-tip-delete="${escapeHtml(folder.id)}:${escapeHtml(item.id)}">削除</button>
+                    </div>
+                  </div>
+                `).join("") : `
+                  <div class="mypage-empty-small">
+                    <div class="mypage-empty-text">まだ処世術がありません</div>
+                  </div>
+                `}
+              </div>
+              <div class="mypage-add-tip-form">
+                <input class="input" data-tip-input="${escapeHtml(folder.id)}" placeholder="新しい処世術を入力..." />
+                <button class="btn primary" data-add-tip="${escapeHtml(folder.id)}">追加</button>
+              </div>
             </div>
           </div>
         `).join("") : `
           <div class="mypage-empty">
             <div class="mypage-empty-icon">📁</div>
             <div class="mypage-empty-text">フォルダーがまだありません</div>
-            <div class="mypage-empty-hint">まずはフォルダーを作成してください</div>
+            <div class="mypage-empty-hint">右上の＋をタップしてフォルダーを作成</div>
           </div>
         `}
       </div>
     </div>
   `;
 
-  $("#addFolder").onclick = () => {
-    const name = $("#folderName").value.trim();
-    if (!name) {
-      alert("フォルダー名を入力してください。");
-      return;
-    }
-    const data = loadPersonalData();
-    data.folders.push({
-      id: createPersonalId("folder"),
-      name,
-      items: []
-    });
-    savePersonalData(data);
-    refreshPage();
-  };
+  // フォルダー作成フォームの表示/非表示
+  const showFolderFormBtn = $("#showFolderForm");
+  const folderFormContainer = $("#folderFormContainer");
+  const cancelFolderFormBtn = $("#cancelFolderForm");
 
-  $("#addTip").onclick = () => {
-    const folderId = $("#tipFolder").value;
-    const text = $("#tipText").value.trim();
-    if (!folderId) {
-      alert("フォルダーを選択してください。");
-      return;
-    }
-    if (!text) {
-      alert("処世術の内容を入力してください。");
-      return;
-    }
-    const data = loadPersonalData();
-    const folder = data.folders.find((f) => f.id === folderId);
-    if (!folder) {
-      alert("フォルダーが見つかりません。");
-      return;
-    }
-    folder.items.push({
-      id: createPersonalId("tip"),
-      text
-    });
-    savePersonalData(data);
-    refreshPage();
-  };
+  if (showFolderFormBtn && folderFormContainer) {
+    showFolderFormBtn.onclick = () => {
+      folderFormContainer.style.display = folderFormContainer.style.display === "none" ? "block" : "none";
+    };
+  }
 
-  $("#folderInfo").textContent = `フォルダー：${personalData.folders.length}件`;
-  $("#tipInfo").textContent = `保存済み：${totalPersonalTips}件`;
+  if (cancelFolderFormBtn && folderFormContainer) {
+    cancelFolderFormBtn.onclick = () => {
+      folderFormContainer.style.display = "none";
+      const folderNameInput = $("#folderName");
+      if (folderNameInput) folderNameInput.value = "";
+    };
+  }
 
+  // フォルダー追加
+  const addFolderBtn = $("#addFolder");
+  if (addFolderBtn) {
+    addFolderBtn.onclick = () => {
+      const folderNameInput = $("#folderName");
+      const name = folderNameInput?.value.trim();
+      if (!name) {
+        alert("フォルダー名を入力してください。");
+        return;
+      }
+      const data = loadPersonalData();
+      data.folders.push({
+        id: createPersonalId("folder"),
+        name,
+        items: []
+      });
+      savePersonalData(data);
+      refreshPage();
+    };
+  }
+
+  // フォルダー展開/折りたたみ
+  view.querySelectorAll("[data-folder-toggle]").forEach((btn) => {
+    btn.onclick = () => {
+      const folderId = btn.getAttribute("data-folder-toggle");
+      const content = view.querySelector(`[data-folder-content="${CSS.escape(folderId)}"]`);
+      if (content) {
+        const isHidden = content.style.display === "none";
+        content.style.display = isHidden ? "block" : "none";
+        btn.setAttribute("aria-expanded", String(isHidden));
+        btn.querySelector(".mypage-folder-chevron").style.transform = isHidden ? "rotate(180deg)" : "";
+      }
+    };
+  });
+
+  // フォルダー名編集
+  view.querySelectorAll("[data-folder-edit]").forEach((btn) => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const folderId = btn.getAttribute("data-folder-edit");
+      const data = loadPersonalData();
+      const folder = data.folders.find((f) => f.id === folderId);
+      if (!folder) {
+        alert("フォルダーが見つかりません。");
+        return;
+      }
+      const newName = prompt("フォルダー名を編集してください", folder.name);
+      if (!newName || !newName.trim()) return;
+      folder.name = newName.trim();
+      savePersonalData(data);
+      refreshPage();
+    };
+  });
+
+  // フォルダー削除
+  view.querySelectorAll("[data-folder-delete]").forEach((btn) => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const folderId = btn.getAttribute("data-folder-delete");
+      const data = loadPersonalData();
+      const folder = data.folders.find((f) => f.id === folderId);
+      if (!folder) {
+        alert("フォルダーが見つかりません。");
+        return;
+      }
+      if (!confirm(`「${folder.name}」を削除しますか？\n（中の処世術${folder.items.length}件も削除されます）`)) return;
+      data.folders = data.folders.filter((f) => f.id !== folderId);
+      savePersonalData(data);
+      refreshPage();
+    };
+  });
+
+  // 処世術追加
+  view.querySelectorAll("[data-add-tip]").forEach((btn) => {
+    btn.onclick = () => {
+      const folderId = btn.getAttribute("data-add-tip");
+      const input = view.querySelector(`[data-tip-input="${CSS.escape(folderId)}"]`);
+      const text = input?.value.trim();
+      if (!text) {
+        alert("処世術の内容を入力してください。");
+        return;
+      }
+      const data = loadPersonalData();
+      const folder = data.folders.find((f) => f.id === folderId);
+      if (!folder) {
+        alert("フォルダーが見つかりません。");
+        return;
+      }
+      folder.items.push({
+        id: createPersonalId("tip"),
+        text
+      });
+      savePersonalData(data);
+      refreshPage();
+    };
+  });
+
+  // 処世術編集
   view.querySelectorAll("[data-tip-edit]").forEach((btn) => {
     btn.onclick = () => {
       const [folderId, tipId] = btn.getAttribute("data-tip-edit").split(":");
@@ -1132,36 +1153,28 @@ function renderMy() {
       refreshPage();
     };
   });
-  
-  // OS別統計のクリックイベント
-  view.querySelectorAll("[data-os-link]").forEach((btn) => {
+
+  // 処世術削除
+  view.querySelectorAll("[data-tip-delete]").forEach((btn) => {
     btn.onclick = () => {
-      const osKey = btn.getAttribute("data-os-link");
-      nav(`#list?os=${encodeURIComponent(osKey)}`);
-    };
-  });
-
-  // アカウントセクションのログイン/ログアウトボタン
-  const btnAccountLogin = $("#btnAccountLogin");
-  if (btnAccountLogin) {
-    btnAccountLogin.onclick = () => {
-      // ログインモーダルを開く
-      const loginOverlay = $("#loginModalOverlay");
-      const loginModal = $("#loginModal");
-      if (loginOverlay && loginModal) {
-        loginOverlay.classList.add("is-open");
-        loginModal.classList.add("is-open");
+      const [folderId, tipId] = btn.getAttribute("data-tip-delete").split(":");
+      const data = loadPersonalData();
+      const folder = data.folders.find((f) => f.id === folderId);
+      if (!folder) {
+        alert("フォルダーが見つかりません。");
+        return;
       }
-    };
-  }
-
-  const btnAccountLogout = $("#btnAccountLogout");
-  if (btnAccountLogout) {
-    btnAccountLogout.onclick = () => {
-      logout();
+      const tip = folder.items.find((item) => item.id === tipId);
+      if (!tip) {
+        alert("処世術が見つかりません。");
+        return;
+      }
+      if (!confirm("この処世術を削除しますか？")) return;
+      folder.items = folder.items.filter((item) => item.id !== tipId);
+      savePersonalData(data);
       refreshPage();
     };
-  }
+  });
 
   bindCardEvents();
 }
