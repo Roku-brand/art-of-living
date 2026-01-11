@@ -1202,7 +1202,10 @@ function renderSituationTips() {
                 <li class="tips-simple-topic">
                   <button class="tips-simple-topic-toggle" type="button" aria-expanded="false">
                     <span class="tips-simple-topic-name">${escapeHtml(topic.name)}</span>
-                    <span class="tips-simple-topic-count">${(topic.items || []).length}件</span>
+                    <span class="tips-simple-topic-meta">
+                      <span class="tips-simple-topic-count">${(topic.items || []).length}件</span>
+                      <span class="tips-simple-topic-toggle-icon" aria-hidden="true">⌄</span>
+                    </span>
                   </button>
                   <ul class="tips-simple-items" hidden>
                     ${(topic.items || []).map((item) => {
@@ -1226,11 +1229,22 @@ function renderSituationTips() {
     </div>
   `;
 
-  view.querySelectorAll(".tips-simple-topic-toggle").forEach((btn) => {
+  const toggles = [...view.querySelectorAll(".tips-simple-topic-toggle")];
+  toggles.forEach((btn) => {
     btn.onclick = () => {
       const items = btn.parentElement?.querySelector(".tips-simple-items");
       if (!items) return;
       const isHidden = items.hasAttribute("hidden");
+
+      toggles.forEach((otherBtn) => {
+        if (otherBtn === btn) return;
+        const otherItems = otherBtn.parentElement?.querySelector(".tips-simple-items");
+        if (otherItems) {
+          otherItems.setAttribute("hidden", "");
+        }
+        otherBtn.setAttribute("aria-expanded", "false");
+      });
+
       if (isHidden) {
         items.removeAttribute("hidden");
       } else {
