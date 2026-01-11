@@ -227,22 +227,10 @@ function renderShell(activeTab) {
             <span class="hamburger-line"></span>
             <span class="hamburger-line"></span>
           </button>
-          <h1>人生の処世術200</h1>
+          <h1>処世術禄</h1>
         </div>
 
         <div class="header-actions">
-          <button class="btn ghost ${activeTab === "tips" ? "active" : ""}" id="btnTips">状況別処世術</button>
-          <button class="btn ghost ${activeTab === "list" ? "active" : ""}" id="btnList">OS処世術</button>
-          <button class="btn ghost ${activeTab === "my" ? "active" : ""}" id="btnMy">マイページ</button>
-          ${loggedIn ? `
-            <div class="header-user">
-              <span class="header-user-icon">👤</span>
-              <span class="header-user-name">${escapeHtml(user.username)}</span>
-              <button class="btn ghost header-logout" id="btnLogout">ログアウト</button>
-            </div>
-          ` : `
-            <button class="btn primary" id="btnLogin">ログイン</button>
-          `}
         </div>
       </div>
     </div>
@@ -270,7 +258,7 @@ function renderShell(activeTab) {
       </div>
     </div>
 
-    <!-- モバイルOS選択メニュー -->
+    <!-- ハンバーガーメニュー -->
     <div class="mobile-menu-overlay" id="mobileMenuOverlay">
       <div class="mobile-menu-panel" id="mobileMenuPanel">
         <div class="mobile-menu-header">
@@ -280,23 +268,21 @@ function renderShell(activeTab) {
         <div class="mobile-menu-list">
           <button class="mobile-menu-item mobile-menu-tips" id="mobileMenuTips">
             <span class="mobile-menu-subtitle">即効性・具体論</span>
-            <span class="mobile-menu-main">状況別処世術</span>
+            <span class="mobile-menu-main">ケース別処世術</span>
             <span class="mobile-menu-desc">すぐに使える箇条書きの処世術</span>
           </button>
-          ${OS_META.map((m) => `
-            <button class="mobile-menu-item" data-os-nav="${escapeHtml(m.key)}">
-              <span class="mobile-menu-subtitle">${escapeHtml(m.subtitle)}</span>
-              <span class="mobile-menu-main">${escapeHtml(m.title)}</span>
-              <span class="mobile-menu-desc">${escapeHtml(m.desc)}</span>
-            </button>
-          `).join("")}
+          <button class="mobile-menu-item" id="mobileMenuOS">
+            <span class="mobile-menu-subtitle">７つのOS体系</span>
+            <span class="mobile-menu-main">体系処世術</span>
+            <span class="mobile-menu-desc">人生・内部心理・対人関係・環境操作・行動・適応の6+1体系</span>
+          </button>
+          <button class="mobile-menu-item" id="mobileMenuMypage">
+            <span class="mobile-menu-subtitle">お気に入り・アカウント</span>
+            <span class="mobile-menu-main">マイページ</span>
+            <span class="mobile-menu-desc">お気に入り管理とログイン</span>
+          </button>
         </div>
         <div class="mobile-menu-footer">
-          <button class="mobile-menu-item mobile-menu-situations" id="mobileMenuSituations">
-            <span class="mobile-menu-subtitle">悩み別まとめ</span>
-            <span class="mobile-menu-main">シチュエーション別</span>
-            <span class="mobile-menu-desc">既存カードを悩み・なりたい状態から再編成</span>
-          </button>
           <button class="mobile-menu-search" id="mobileMenuSearch">
             <span class="mobile-menu-search-icon">🔍</span>
             <span>検索（OS横断）</span>
@@ -307,10 +293,6 @@ function renderShell(activeTab) {
 
     <div class="container" id="view"></div>
   `;
-
-  $("#btnTips").onclick = () => nav("#tips");
-  $("#btnList").onclick = () => nav("#list?os=life");
-  $("#btnMy").onclick = () => nav("#my");
 
   // ログインモーダルの開閉
   const loginOverlay = $("#loginModalOverlay");
@@ -327,9 +309,6 @@ function renderShell(activeTab) {
     $("#loginUsername").value = "";
     $("#loginInfo").textContent = "";
   };
-
-  const btnLogin = $("#btnLogin");
-  if (btnLogin) btnLogin.onclick = openLoginModal;
 
   const loginModalClose = $("#loginModalClose");
   if (loginModalClose) loginModalClose.onclick = closeLoginModal;
@@ -353,15 +332,6 @@ function renderShell(activeTab) {
     };
   }
 
-  // ログアウト処理
-  const btnLogout = $("#btnLogout");
-  if (btnLogout) {
-    btnLogout.onclick = () => {
-      logout();
-      refreshPage();
-    };
-  }
-
   // ハンバーガーメニューの開閉
   const overlay = $("#mobileMenuOverlay");
   const panel = $("#mobileMenuPanel");
@@ -381,7 +351,7 @@ function renderShell(activeTab) {
     if (e.target === overlay) closeMenu();
   };
 
-  // 状況別処世術
+  // ケース別処世術（状況別処世術）
   const mobileMenuTips = $("#mobileMenuTips");
   if (mobileMenuTips) {
     mobileMenuTips.onclick = () => {
@@ -390,14 +360,23 @@ function renderShell(activeTab) {
     };
   }
 
-  // OS選択
-  overlay.querySelectorAll("[data-os-nav]").forEach((btn) => {
-    btn.onclick = () => {
-      const osKey = btn.getAttribute("data-os-nav");
+  // 体系処世術（OS処世術）
+  const mobileMenuOS = $("#mobileMenuOS");
+  if (mobileMenuOS) {
+    mobileMenuOS.onclick = () => {
       closeMenu();
-      nav(`#list?os=${encodeURIComponent(osKey)}`);
+      nav("#list?os=life");
     };
-  });
+  }
+
+  // マイページ
+  const mobileMenuMypage = $("#mobileMenuMypage");
+  if (mobileMenuMypage) {
+    mobileMenuMypage.onclick = () => {
+      closeMenu();
+      nav("#my");
+    };
+  }
 
   // 検索
   $("#mobileMenuSearch").onclick = () => {
@@ -405,11 +384,8 @@ function renderShell(activeTab) {
     nav("#search?q=");
   };
 
-  // シチュエーション別
-  $("#mobileMenuSituations").onclick = () => {
-    closeMenu();
-    nav("#situations");
-  };
+  // 外部から開くためにグローバルに設定
+  window.openLoginModal = openLoginModal;
 }
 
 
