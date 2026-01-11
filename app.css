@@ -134,6 +134,46 @@ a:hover{ text-decoration: underline; }
   flex-wrap:wrap;
 }
 
+/* Header Right Section */
+.header-right{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-account-btn{
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(248,237,240,.30);
+  border-radius: var(--r-md);
+  background: rgba(248,237,240,.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .15s ease, transform .15s ease;
+  flex-shrink: 0;
+}
+.header-account-btn:hover{
+  background: rgba(248,237,240,.22);
+  transform: scale(1.05);
+}
+.header-account-icon{
+  font-size: 18px;
+}
+.header-account-icon.logged-in{
+  background: rgba(11,143,101,.35);
+  border-radius: 50%;
+  padding: 2px;
+}
+@media (max-width: 600px){
+  .header-right{
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
 /* ---------- Container ---------- */
 .container{
   width: 100%;
@@ -1080,6 +1120,51 @@ input:focus-visible, textarea:focus-visible{
   border-radius: var(--r-md);
 }
 
+/* Add folder button in header */
+.mypage-add-folder-btn{
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(11,143,101,.35);
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, rgba(11,143,101,.18), rgba(11,143,101,.10));
+  color: rgba(11,143,101,.92);
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  transition: transform .15s ease, background-color .15s ease, box-shadow .15s ease;
+}
+.mypage-add-folder-btn:hover{
+  transform: scale(1.08);
+  background: linear-gradient(180deg, rgba(11,143,101,.28), rgba(11,143,101,.18));
+  box-shadow: 0 6px 14px rgba(11,143,101,.18);
+}
+
+/* Folder creation form */
+.mypage-folder-form{
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, rgba(11,143,101,.08), rgba(11,143,101,.04));
+  border: 1px solid rgba(11,143,101,.18);
+  border-radius: var(--r-lg);
+}
+.mypage-folder-form-inner{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.mypage-folder-form-inner .input{
+  flex: 1;
+}
+.mypage-folder-form-actions{
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
 /* OS別統計 */
 .mypage-os-stats{
   display: flex;
@@ -1182,35 +1267,91 @@ input:focus-visible, textarea:focus-visible{
 .mypage-folders{
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 .mypage-folder-card{
   background: rgba(255,255,255,.78);
-  border: 1px solid rgba(10,18,20,.08);
+  border: 1px solid rgba(10,18,20,.10);
   border-radius: var(--r-lg);
-  padding: 16px 18px;
+  overflow: hidden;
   box-shadow: var(--shadow0);
+  transition: box-shadow .15s ease, border-color .15s ease;
 }
-.mypage-folder-header{
+.mypage-folder-card:hover{
+  border-color: rgba(11,143,101,.22);
+}
+
+/* Folder header button */
+.mypage-folder-header-btn{
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  gap: 12px;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.55));
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color .15s ease;
+}
+.mypage-folder-header-btn:hover{
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));
+}
+.mypage-folder-header-left{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+.mypage-folder-icon{
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.mypage-folder-info{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
 }
 .mypage-folder-name{
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 900;
   color: rgba(8,14,16,.90);
+  line-height: 1.2;
 }
 .mypage-folder-count{
   font-size: 12px;
   font-weight: 700;
   color: rgba(11,143,101,.85);
 }
+.mypage-folder-chevron{
+  font-size: 14px;
+  color: rgba(8,14,16,.45);
+  transition: transform .2s ease;
+  flex-shrink: 0;
+}
+
+/* Folder content (expandable) */
+.mypage-folder-content{
+  padding: 16px;
+  background: rgba(248,250,252,.65);
+  border-top: 1px solid rgba(10,18,20,.06);
+}
+.mypage-folder-actions{
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(10,18,20,.06);
+}
 .mypage-folder-tips{
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-bottom: 14px;
 }
 .mypage-tip-item{
   display: flex;
@@ -1218,7 +1359,7 @@ input:focus-visible, textarea:focus-visible{
   justify-content: space-between;
   gap: 12px;
   padding: 10px 12px;
-  background: rgba(248,250,252,.75);
+  background: rgba(255,255,255,.80);
   border: 1px solid rgba(10,18,20,.06);
   border-radius: var(--r-md);
 }
@@ -1227,6 +1368,47 @@ input:focus-visible, textarea:focus-visible{
   font-weight: 600;
   color: rgba(8,14,16,.85);
   line-height: 1.5;
+  flex: 1;
+  min-width: 0;
+}
+.mypage-tip-actions{
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.mypage-tip-actions .btn.small{
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+/* Add tip form inside folder */
+.mypage-add-tip-form{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(10,18,20,.06);
+}
+.mypage-add-tip-form .input{
+  flex: 1;
+}
+
+/* Empty state (small) */
+.mypage-empty-small{
+  padding: 16px;
+  text-align: center;
+  color: rgba(8,14,16,.52);
+}
+.mypage-empty-small .mypage-empty-text{
+  font-size: 13px;
+}
+
+/* Legacy folder header - not used in new UI but kept for compatibility */
+.mypage-folder-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
 }
 
 /* ========== シチュエーション別ページ ========== */
@@ -1673,6 +1855,51 @@ input:focus-visible, textarea:focus-visible{
   background: rgba(255,255,255,.50);
   border-radius: var(--r-md);
   border: 1px solid rgba(10,18,20,.08);
+}
+
+/* Account Modal (logged in state) */
+.account-modal-info{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(11,143,101,.18);
+  border-radius: var(--r-lg);
+  margin-bottom: 16px;
+}
+.account-modal-icon{
+  font-size: 32px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(11,143,101,.18), rgba(11,143,101,.08));
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.account-modal-details{
+  flex: 1;
+  min-width: 0;
+}
+.account-modal-label{
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(8,14,16,.52);
+  margin-bottom: 4px;
+}
+.account-modal-value{
+  font-size: 18px;
+  font-weight: 900;
+  color: rgba(8,14,16,.88);
+}
+.account-modal-actions{
+  display: flex;
+  justify-content: flex-end;
+}
+.account-modal-actions .btn{
+  padding: 10px 20px;
 }
 
 /* ========== マイページ アカウントセクション ========== */
