@@ -1754,6 +1754,12 @@ input:focus-visible, textarea:focus-visible{
   flex-direction: column;
   gap: 28px;
 }
+.tips-simple-hero{
+  font-size: 26px;
+  font-weight: 900;
+  color: rgba(8,14,16,.9);
+  letter-spacing: .02em;
+}
 .tips-simple-title{
   font-size: 20px;
   font-weight: 900;
@@ -1764,24 +1770,55 @@ input:focus-visible, textarea:focus-visible{
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+}
+.tips-simple-topic{
+  background: rgba(255,255,255,.7);
+  border: 1px solid rgba(10,18,20,.08);
+  border-radius: var(--r-lg);
+  padding: 12px;
+  box-shadow: var(--sb-shadow);
+}
+.tips-simple-topic-toggle{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
 }
 .tips-simple-topic-name{
   font-size: 16px;
   font-weight: 800;
-  margin-bottom: 6px;
   color: rgba(8,14,16,.78);
 }
+.tips-simple-topic-count{
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(8,14,16,.55);
+}
 .tips-simple-items{
-  margin: 0 0 0 18px;
-  padding: 0;
+  margin: 10px 0 0 18px;
+  padding: 0 0 4px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   color: rgba(8,14,16,.68);
   line-height: 1.6;
+}
+@media (max-width: 800px){
+  .tips-simple-topics{
+    grid-template-columns: 1fr;
+  }
+  .tips-simple-hero{
+    font-size: 22px;
+  }
 }
 
 /* サイドパネル */

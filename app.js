@@ -1191,6 +1191,7 @@ function renderSituationTips() {
 
   view.innerHTML = `
     <div class="tips-simple-layout">
+      <div class="tips-simple-hero">ケース別処世術</div>
       ${sectionMap.map((section) => {
         const topics = buildSectionTopics(section.categoryIds);
         return `
@@ -1199,8 +1200,11 @@ function renderSituationTips() {
             <ul class="tips-simple-topics">
               ${topics.map((topic) => `
                 <li class="tips-simple-topic">
-                  <div class="tips-simple-topic-name">${escapeHtml(topic.name)}</div>
-                  <ul class="tips-simple-items">
+                  <button class="tips-simple-topic-toggle" type="button" aria-expanded="false">
+                    <span class="tips-simple-topic-name">${escapeHtml(topic.name)}</span>
+                    <span class="tips-simple-topic-count">${(topic.items || []).length}件</span>
+                  </button>
+                  <ul class="tips-simple-items" hidden>
                     ${(topic.items || []).map((item) => `
                       <li>${escapeHtml(item.text)}</li>
                     `).join("")}
@@ -1213,6 +1217,20 @@ function renderSituationTips() {
       }).join("")}
     </div>
   `;
+
+  view.querySelectorAll(".tips-simple-topic-toggle").forEach((btn) => {
+    btn.onclick = () => {
+      const items = btn.parentElement?.querySelector(".tips-simple-items");
+      if (!items) return;
+      const isHidden = items.hasAttribute("hidden");
+      if (isHidden) {
+        items.removeAttribute("hidden");
+      } else {
+        items.setAttribute("hidden", "");
+      }
+      btn.setAttribute("aria-expanded", String(isHidden));
+    };
+  });
 }
 
 // ========== ケース別処世術 カテゴリ詳細ページ ==========
