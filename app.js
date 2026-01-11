@@ -60,11 +60,61 @@ function saveFavorites(set) {
   localStorage.setItem(LS_FAV, JSON.stringify([...set]));
 }
 
-function loadPersonalCards() {
-  return readJSONSafe(localStorage.getItem(LS_PERSONAL)) ?? [];
+function createPersonalId(prefix) {
+  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
 }
-function savePersonalCards(cards) {
-  localStorage.setItem(LS_PERSONAL, JSON.stringify(cards));
+
+function normalizePersonalData(raw) {
+  if (!raw || typeof raw !== "object") return { folders: [] };
+  if (!Array.isArray(raw.folders)) return { folders: [] };
+  return {
+    folders: raw.folders.map((folder) => ({
+      id: String(folder.id ?? createPersonalId("folder")),
+      name: String(folder.name ?? "未設定フォルダー").trim() || "未設定フォルダー",
+      items: Array.isArray(folder.items)
+        ? folder.items.map((item) => ({
+          id: String(item.id ?? createPersonalId("tip")),
+          text: String(item.text ?? "").trim()
+        })).filter((item) => item.text)
+        : []
+    }))
+  };
+}
+
+function migratePersonalCards(cards) {
+  if (!Array.isArray(cards) || cards.length === 0) {
+    return { folders: [] };
+  }
+  const items = cards.map((card, index) => {
+    const text = String(card?.title || card?.summary || "").trim();
+    return {
+      id: String(card?.id ?? `legacy-${index + 1}`),
+      text: text || "（無題）"
+    };
+  });
+  return {
+    folders: [
+      {
+        id: "legacy-folder",
+        name: "移行済みカード",
+        items
+      }
+    ]
+  };
+}
+
+function loadPersonalData() {
+  const raw = readJSONSafe(localStorage.getItem(LS_PERSONAL));
+  if (Array.isArray(raw)) {
+    const migrated = migratePersonalCards(raw);
+    savePersonalData(migrated);
+    return migrated;
+  }
+  return normalizePersonalData(raw);
+}
+
+function savePersonalData(data) {
+  localStorage.setItem(LS_PERSONAL, JSON.stringify(normalizePersonalData(data)));
 }
 
 // ========== ユーザー認証（ローカルストレージベース） ==========
@@ -175,17 +225,9 @@ async function fetchOS(osKey) {
 }
 
 async function loadAll() {
-  const personal = loadPersonalCards();
   const results = await Promise.all(OS_META.map((m) => fetchOS(m.key)));
 
   OS_META.forEach((m, i) => { DATA.byOS[m.key] = results[i]; });
-
-  // personal を extra に混ぜる
-  const mergedExtra = [
-    ...(DATA.byOS.extra ?? []),
-    ...personal.map((x) => normalizeCard({ ...x, os: "extra" }))
-  ];
-  DATA.byOS.extra = mergedExtra;
 
   DATA.all = OS_META.flatMap((m) => (DATA.byOS[m.key] ?? []));
 
@@ -228,7 +270,7 @@ function renderShell(activeTab) {
               <span class="hamburger-line"></span>
               <span class="hamburger-line"></span>
             </button>
-            <h1>処世術禄</h1>
+            <h1>処世術禄―自己啓発・心理学・行動科学・対人術などを集約した「処世術の体系書」。</h1>
           </div>
         </div>
         <p class="header-subtitle">
@@ -826,7 +868,11 @@ function renderMy() {
   const favs = loadFavorites();
   const all = sortById(DATA.all);
   const favList = all.filter((c) => favs.has(String(c.id)));
-  const personal = loadPersonalCards();
+  const personalData = loadPersonalData();
+  const totalPersonalTips = personalData.folders.reduce((sum, folder) => sum + folder.items.length, 0);
+  const folderOptions = personalData.folders.map((folder) => `
+    <option value="${escapeHtml(folder.id)}">${escapeHtml(folder.name)}</option>
+  `).join("");
 
   // OS別お気に入り統計
   const osFavStats = OS_META.map((m) => {
@@ -847,7 +893,7 @@ function renderMy() {
       <div class="mypage-hero-icon">📚</div>
       <div class="mypage-hero-content">
         <h2 class="mypage-hero-title">マイページ</h2>
-        <p class="mypage-hero-subtitle">お気に入りの処世術と個人カードを管理</p>
+        <p class="mypage-hero-subtitle">お気に入りの処世術とマイ処世術を管理</p>
       </div>
     </div>
 
@@ -890,8 +936,8 @@ function renderMy() {
       <div class="mypage-stat-card stat-personal">
         <div class="mypage-stat-icon">✎</div>
         <div class="mypage-stat-info">
-          <div class="mypage-stat-value">${personal.length}</div>
-          <div class="mypage-stat-label">個人カード</div>
+          <div class="mypage-stat-value">${totalPersonalTips}</div>
+          <div class="mypage-stat-label">マイ処世術</div>
         </div>
       </div>
     </div>
@@ -933,86 +979,160 @@ function renderMy() {
       </div>
     </div>
 
-    <!-- 個人カード追加 -->
+    <!-- フォルダー作成 -->
     <div class="mypage-section">
       <div class="mypage-section-header">
-        <span class="mypage-section-icon">✎</span>
-        <span class="mypage-section-title">個人カード追加</span>
+        <span class="mypage-section-icon">📁</span>
+        <span class="mypage-section-title">フォルダー作成</span>
       </div>
       <div class="mypage-form">
         <div class="mypage-form-row">
           <div class="mypage-form-field">
-            <label class="mypage-form-label">ID *</label>
-            <input class="input" id="pid" placeholder="例：X-001" />
+            <label class="mypage-form-label">フォルダー名 *</label>
+            <input class="input" id="folderName" placeholder="例：仕事術メモ" />
           </div>
           <div class="mypage-form-field">
-            <label class="mypage-form-label">タイトル *</label>
-            <input class="input" id="ptitle" placeholder="1行で入力" />
+            <label class="mypage-form-label">追加</label>
+            <button class="btn primary" id="addFolder">フォルダーを追加</button>
           </div>
         </div>
+        <span id="folderInfo" class="mypage-form-info"></span>
+      </div>
+    </div>
 
-        <div class="mypage-form-field">
-          <label class="mypage-form-label">要約</label>
-          <input class="input" id="psummary" placeholder="カードの概要（1行）" />
+    <!-- マイ処世術の追加 -->
+    <div class="mypage-section">
+      <div class="mypage-section-header">
+        <span class="mypage-section-icon">✎</span>
+        <span class="mypage-section-title">マイ処世術の追加</span>
+      </div>
+      <div class="mypage-form">
+        <div class="mypage-form-row">
+          <div class="mypage-form-field">
+            <label class="mypage-form-label">フォルダー *</label>
+            <select class="input" id="tipFolder">
+              ${folderOptions || `<option value=\"\" disabled selected>フォルダーを作成してください</option>`}
+            </select>
+          </div>
+          <div class="mypage-form-field">
+            <label class="mypage-form-label">処世術（1行） *</label>
+            <input class="input" id="tipText" placeholder="1行で入力" />
+          </div>
         </div>
-
-        <div class="mypage-form-field">
-          <label class="mypage-form-label">要点</label>
-          <textarea class="input" id="pessence" placeholder="改行区切りで入力"></textarea>
-        </div>
-
-        <div class="mypage-form-field">
-          <label class="mypage-form-label">落とし穴</label>
-          <textarea class="input" id="ppitfalls" placeholder="改行区切りで入力"></textarea>
-        </div>
-
-        <div class="mypage-form-field">
-          <label class="mypage-form-label">戦略</label>
-          <textarea class="input" id="pstrategy" placeholder="改行区切りで入力"></textarea>
-        </div>
-
-        <div class="mypage-form-field">
-          <label class="mypage-form-label">タグ</label>
-          <input class="input" id="ptags" placeholder="カンマ区切り（例：習慣,生産性）" />
-        </div>
-
         <div class="mypage-form-actions">
-          <button class="btn primary" id="savePersonal">
-            <span>カードを保存</span>
-          </button>
-          <span id="personalInfo" class="mypage-form-info"></span>
+          <button class="btn primary" id="addTip">処世術を追加</button>
+          <span id="tipInfo" class="mypage-form-info"></span>
         </div>
+      </div>
+    </div>
+
+    <!-- マイ処世術一覧 -->
+    <div class="mypage-section">
+      <div class="mypage-section-header">
+        <span class="mypage-section-icon">📚</span>
+        <span class="mypage-section-title">マイ処世術一覧</span>
+        <span class="mypage-section-count">${totalPersonalTips}件</span>
+      </div>
+      <div class="mypage-folders">
+        ${personalData.folders.length ? personalData.folders.map((folder) => `
+          <div class="mypage-folder-card" data-folder="${escapeHtml(folder.id)}">
+            <div class="mypage-folder-header">
+              <div>
+                <div class="mypage-folder-name">${escapeHtml(folder.name)}</div>
+                <div class="mypage-folder-count">${folder.items.length}件</div>
+              </div>
+            </div>
+            <div class="mypage-folder-tips">
+              ${folder.items.length ? folder.items.map((item) => `
+                <div class="mypage-tip-item">
+                  <span class="mypage-tip-text">${escapeHtml(item.text)}</span>
+                  <button class="btn ghost" data-tip-edit="${escapeHtml(folder.id)}:${escapeHtml(item.id)}">編集</button>
+                </div>
+              `).join("") : `
+                <div class="mypage-empty">
+                  <div class="mypage-empty-icon">✏️</div>
+                  <div class="mypage-empty-text">まだ処世術がありません</div>
+                  <div class="mypage-empty-hint">上のフォームから1行で追加できます</div>
+                </div>
+              `}
+            </div>
+          </div>
+        `).join("") : `
+          <div class="mypage-empty">
+            <div class="mypage-empty-icon">📁</div>
+            <div class="mypage-empty-text">フォルダーがまだありません</div>
+            <div class="mypage-empty-hint">まずはフォルダーを作成してください</div>
+          </div>
+        `}
       </div>
     </div>
   `;
 
-  $("#savePersonal").onclick = async () => {
-    const id = $("#pid").value.trim();
-    const title = $("#ptitle").value.trim();
-    if (!id || !title) {
-      alert("ID と タイトル は必須です。");
+  $("#addFolder").onclick = () => {
+    const name = $("#folderName").value.trim();
+    if (!name) {
+      alert("フォルダー名を入力してください。");
       return;
     }
-    const card = normalizeCard({
-      id,
-      title,
-      summary: $("#psummary").value.trim(),
-      essence: $("#pessence").value.trim(),
-      pitfalls: $("#ppitfalls").value.trim(),
-      strategy: $("#pstrategy").value.trim(),
-      tags: $("#ptags").value.split(",").map((s) => s.trim()).filter(Boolean),
-      os: "extra"
+    const data = loadPersonalData();
+    data.folders.push({
+      id: createPersonalId("folder"),
+      name,
+      items: []
     });
-
-    const cards = loadPersonalCards();
-    cards.push(card);
-    savePersonalCards(cards);
-
-    await loadAll();
-    nav("#list?os=extra");
+    savePersonalData(data);
+    refreshPage();
   };
 
-  $("#personalInfo").textContent = `保存済み：${personal.length}件`;
+  $("#addTip").onclick = () => {
+    const folderId = $("#tipFolder").value;
+    const text = $("#tipText").value.trim();
+    if (!folderId) {
+      alert("フォルダーを選択してください。");
+      return;
+    }
+    if (!text) {
+      alert("処世術の内容を入力してください。");
+      return;
+    }
+    const data = loadPersonalData();
+    const folder = data.folders.find((f) => f.id === folderId);
+    if (!folder) {
+      alert("フォルダーが見つかりません。");
+      return;
+    }
+    folder.items.push({
+      id: createPersonalId("tip"),
+      text
+    });
+    savePersonalData(data);
+    refreshPage();
+  };
+
+  $("#folderInfo").textContent = `フォルダー：${personalData.folders.length}件`;
+  $("#tipInfo").textContent = `保存済み：${totalPersonalTips}件`;
+
+  view.querySelectorAll("[data-tip-edit]").forEach((btn) => {
+    btn.onclick = () => {
+      const [folderId, tipId] = btn.getAttribute("data-tip-edit").split(":");
+      const data = loadPersonalData();
+      const folder = data.folders.find((f) => f.id === folderId);
+      const tip = folder?.items?.find((item) => item.id === tipId);
+      if (!tip) {
+        alert("処世術が見つかりません。");
+        return;
+      }
+      const nextText = prompt("処世術を編集してください（1行）", tip.text);
+      if (!nextText) return;
+      tip.text = nextText.trim();
+      if (!tip.text) {
+        alert("空欄にはできません。");
+        return;
+      }
+      savePersonalData(data);
+      refreshPage();
+    };
+  });
   
   // OS別統計のクリックイベント
   view.querySelectorAll("[data-os-link]").forEach((btn) => {
@@ -1057,28 +1177,127 @@ function renderSituationTips() {
   const situationTipsData = DATA.situationTips || {};
   const categories = situationTipsData.categories || [];
 
+  const totalTopics = categories.reduce((sum, cat) => sum + (cat.topics || []).length, 0);
+  const totalItems = categories.reduce(
+    (sum, cat) => sum + (cat.topics || []).reduce((acc, topic) => acc + (topic.items || []).length, 0),
+    0
+  );
+
   view.innerHTML = `
-    <div class="tips-fullscreen">
-      <div class="tips-fullscreen-header">
-        <h1 class="tips-fullscreen-title">ケース別処世術</h1>
-        <p class="tips-fullscreen-subtitle">カテゴリを選択してください</p>
+    <div class="tips-index-layout">
+      <div class="tips-index-hero">
+        <div class="tips-index-hero-badge">ケース別処世術</div>
+        <div class="tips-index-hero-title">すべての処世術を一覧で確認</div>
+        <div class="tips-index-hero-subtitle">
+          分類分けを維持しつつ、全ての処世術をトップページで見渡せる構成にしました。
+        </div>
+        <div class="tips-index-stats">
+          <div class="tips-index-stat-item">
+            <span class="tips-index-stat-num">${categories.length}</span>
+            <span class="tips-index-stat-label">Categories</span>
+          </div>
+          <span class="tips-index-stat-divider"></span>
+          <div class="tips-index-stat-item">
+            <span class="tips-index-stat-num">${totalTopics}</span>
+            <span class="tips-index-stat-label">Topics</span>
+          </div>
+          <span class="tips-index-stat-divider"></span>
+          <div class="tips-index-stat-item">
+            <span class="tips-index-stat-num">${totalItems}</span>
+            <span class="tips-index-stat-label">Tips</span>
+          </div>
+        </div>
       </div>
-      <div class="tips-fullscreen-grid">
+
+      <div class="tips-index-nav">
         ${categories.map((cat) => `
-          <button class="tips-fullscreen-card" data-category-nav="${escapeHtml(cat.categoryId)}">
-            <span class="tips-fullscreen-card-icon">${escapeHtml(cat.icon || '📁')}</span>
-            <span class="tips-fullscreen-card-name">${escapeHtml(cat.name)}</span>
+          <button class="tips-index-nav-item" data-scroll="tips-${escapeHtml(cat.categoryId)}">
+            <span class="tips-index-nav-icon">${escapeHtml(cat.icon || "📁")}</span>
+            <span>${escapeHtml(cat.name)}</span>
           </button>
         `).join("")}
+      </div>
+
+      <div class="tips-index-content">
+        ${categories.map((cat) => {
+          const topics = cat.topics || [];
+          const categoryItemCount = topics.reduce((sum, topic) => sum + (topic.items || []).length, 0);
+          return `
+            <section class="tips-category-section" id="tips-${escapeHtml(cat.categoryId)}">
+              <div class="tips-category-header">
+                <span class="tips-category-icon">${escapeHtml(cat.icon || "📁")}</span>
+                <div class="tips-category-info">
+                  <h2 class="tips-category-title">${escapeHtml(cat.name)}</h2>
+                  <span class="tips-category-count">${categoryItemCount}件</span>
+                </div>
+              </div>
+              <div class="tips-topics-list">
+                ${topics.map((topic, topicIdx) => {
+                  const items = topic.items || [];
+                  const preview = items[0]?.text || "";
+                  return `
+                    <div class="tips-accordion" data-accordion>
+                      <button class="tips-accordion-header" data-accordion-toggle>
+                        <div class="tips-accordion-icon-wrap">
+                          <span class="tips-accordion-chevron">▶</span>
+                        </div>
+                        <div class="tips-accordion-title-wrap">
+                          <div class="tips-accordion-title">${escapeHtml(topic.name || `テーマ ${topicIdx + 1}`)}</div>
+                          <div class="tips-accordion-preview">${escapeHtml(preview)}</div>
+                        </div>
+                        <span class="tips-accordion-count">${items.length}件</span>
+                      </button>
+                      <div class="tips-accordion-body">
+                        <ul class="tips-items-list">
+                          ${items.map((item, idx) => `
+                            <li class="tips-item">
+                              <span class="tips-item-num">${idx + 1}</span>
+                              <span class="tips-item-text">${escapeHtml(item.text)}</span>
+                              <div class="tips-item-refs">
+                                ${(item.refs || []).map((ref) => `
+                                  <button class="tips-card-link" data-card-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
+                                `).join("")}
+                              </div>
+                            </li>
+                          `).join("")}
+                        </ul>
+                      </div>
+                    </div>
+                  `;
+                }).join("")}
+              </div>
+            </section>
+          `;
+        }).join("")}
       </div>
     </div>
   `;
 
-  // カテゴリカードのクリックで詳細ページに遷移
-  view.querySelectorAll("[data-category-nav]").forEach((btn) => {
+  view.querySelectorAll("[data-scroll]").forEach((btn) => {
     btn.onclick = () => {
-      const categoryId = btn.getAttribute("data-category-nav");
-      nav(`#tips-category?id=${encodeURIComponent(categoryId)}`);
+      const targetId = btn.getAttribute("data-scroll");
+      const target = view.querySelector(`#${CSS.escape(targetId)}`);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+  });
+
+  view.querySelectorAll("[data-accordion-toggle]").forEach((btn) => {
+    btn.onclick = () => {
+      const accordion = btn.closest("[data-accordion]");
+      const body = accordion?.querySelector(".tips-accordion-body");
+      if (!accordion || !body) return;
+      const isOpen = accordion.classList.toggle("is-open");
+      body.style.maxHeight = isOpen ? `${body.scrollHeight}px` : "0";
+    };
+  });
+
+  view.querySelectorAll("[data-card-ref]").forEach((btn) => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const cardId = btn.getAttribute("data-card-ref");
+      nav(`#detail?id=${encodeURIComponent(cardId)}`);
     };
   });
 }
