@@ -1793,6 +1793,11 @@ input:focus-visible, textarea:focus-visible{
   text-align: left;
   cursor: pointer;
 }
+.tips-simple-topic-meta{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
 .tips-simple-topic-name{
   font-size: 16px;
   font-weight: 800;
@@ -1802,6 +1807,14 @@ input:focus-visible, textarea:focus-visible{
   font-size: 12px;
   font-weight: 700;
   color: rgba(8,14,16,.55);
+}
+.tips-simple-topic-toggle-icon{
+  font-size: 12px;
+  color: rgba(8,14,16,.55);
+  transition: transform 0.2s ease;
+}
+.tips-simple-topic-toggle[aria-expanded="true"] .tips-simple-topic-toggle-icon{
+  transform: rotate(180deg);
 }
 .tips-simple-items{
   margin: 10px 0 0;
