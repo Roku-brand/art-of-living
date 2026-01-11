@@ -227,22 +227,13 @@ function renderShell(activeTab) {
             <span class="hamburger-line"></span>
             <span class="hamburger-line"></span>
           </button>
-          <h1>人生の処世術200</h1>
+          <h1>処世術禄</h1>
         </div>
 
         <div class="header-actions">
-          <button class="btn ghost ${activeTab === "tips" ? "active" : ""}" id="btnTips">状況別処世術</button>
-          <button class="btn ghost ${activeTab === "list" ? "active" : ""}" id="btnList">OS処世術</button>
+          <button class="btn ghost ${activeTab === "tips" ? "active" : ""}" id="btnTips">ケース別処世術</button>
+          <button class="btn ghost ${activeTab === "list" ? "active" : ""}" id="btnList">体系処世術</button>
           <button class="btn ghost ${activeTab === "my" ? "active" : ""}" id="btnMy">マイページ</button>
-          ${loggedIn ? `
-            <div class="header-user">
-              <span class="header-user-icon">👤</span>
-              <span class="header-user-name">${escapeHtml(user.username)}</span>
-              <button class="btn ghost header-logout" id="btnLogout">ログアウト</button>
-            </div>
-          ` : `
-            <button class="btn primary" id="btnLogin">ログイン</button>
-          `}
         </div>
       </div>
     </div>
@@ -270,7 +261,7 @@ function renderShell(activeTab) {
       </div>
     </div>
 
-    <!-- モバイルOS選択メニュー -->
+    <!-- モバイルメニュー -->
     <div class="mobile-menu-overlay" id="mobileMenuOverlay">
       <div class="mobile-menu-panel" id="mobileMenuPanel">
         <div class="mobile-menu-header">
@@ -278,28 +269,20 @@ function renderShell(activeTab) {
           <button class="mobile-menu-close" id="mobileMenuClose" aria-label="閉じる">×</button>
         </div>
         <div class="mobile-menu-list">
-          <button class="mobile-menu-item mobile-menu-tips" id="mobileMenuTips">
+          <button class="mobile-menu-item" id="mobileMenuTips">
             <span class="mobile-menu-subtitle">即効性・具体論</span>
-            <span class="mobile-menu-main">状況別処世術</span>
+            <span class="mobile-menu-main">ケース別処世術</span>
             <span class="mobile-menu-desc">すぐに使える箇条書きの処世術</span>
           </button>
-          ${OS_META.map((m) => `
-            <button class="mobile-menu-item" data-os-nav="${escapeHtml(m.key)}">
-              <span class="mobile-menu-subtitle">${escapeHtml(m.subtitle)}</span>
-              <span class="mobile-menu-main">${escapeHtml(m.title)}</span>
-              <span class="mobile-menu-desc">${escapeHtml(m.desc)}</span>
-            </button>
-          `).join("")}
-        </div>
-        <div class="mobile-menu-footer">
-          <button class="mobile-menu-item mobile-menu-situations" id="mobileMenuSituations">
-            <span class="mobile-menu-subtitle">悩み別まとめ</span>
-            <span class="mobile-menu-main">シチュエーション別</span>
-            <span class="mobile-menu-desc">既存カードを悩み・なりたい状態から再編成</span>
+          <button class="mobile-menu-item" id="mobileMenuList">
+            <span class="mobile-menu-subtitle">体系的に学ぶ</span>
+            <span class="mobile-menu-main">体系処世術</span>
+            <span class="mobile-menu-desc">7つのOSで構成された処世術体系</span>
           </button>
-          <button class="mobile-menu-search" id="mobileMenuSearch">
-            <span class="mobile-menu-search-icon">🔍</span>
-            <span>検索（OS横断）</span>
+          <button class="mobile-menu-item" id="mobileMenuMy">
+            <span class="mobile-menu-subtitle">個人設定</span>
+            <span class="mobile-menu-main">マイページ</span>
+            <span class="mobile-menu-desc">お気に入り・ログイン管理</span>
           </button>
         </div>
       </div>
@@ -312,14 +295,9 @@ function renderShell(activeTab) {
   $("#btnList").onclick = () => nav("#list?os=life");
   $("#btnMy").onclick = () => nav("#my");
 
-  // ログインモーダルの開閉
+  // ログインモーダルの開閉（マイページから呼び出される）
   const loginOverlay = $("#loginModalOverlay");
   const loginModal = $("#loginModal");
-
-  const openLoginModal = () => {
-    loginOverlay.classList.add("is-open");
-    loginModal.classList.add("is-open");
-  };
 
   const closeLoginModal = () => {
     loginOverlay.classList.remove("is-open");
@@ -327,9 +305,6 @@ function renderShell(activeTab) {
     $("#loginUsername").value = "";
     $("#loginInfo").textContent = "";
   };
-
-  const btnLogin = $("#btnLogin");
-  if (btnLogin) btnLogin.onclick = openLoginModal;
 
   const loginModalClose = $("#loginModalClose");
   if (loginModalClose) loginModalClose.onclick = closeLoginModal;
@@ -353,15 +328,6 @@ function renderShell(activeTab) {
     };
   }
 
-  // ログアウト処理
-  const btnLogout = $("#btnLogout");
-  if (btnLogout) {
-    btnLogout.onclick = () => {
-      logout();
-      refreshPage();
-    };
-  }
-
   // ハンバーガーメニューの開閉
   const overlay = $("#mobileMenuOverlay");
   const panel = $("#mobileMenuPanel");
@@ -381,7 +347,7 @@ function renderShell(activeTab) {
     if (e.target === overlay) closeMenu();
   };
 
-  // 状況別処世術
+  // ケース別処世術
   const mobileMenuTips = $("#mobileMenuTips");
   if (mobileMenuTips) {
     mobileMenuTips.onclick = () => {
@@ -390,26 +356,23 @@ function renderShell(activeTab) {
     };
   }
 
-  // OS選択
-  overlay.querySelectorAll("[data-os-nav]").forEach((btn) => {
-    btn.onclick = () => {
-      const osKey = btn.getAttribute("data-os-nav");
+  // 体系処世術
+  const mobileMenuList = $("#mobileMenuList");
+  if (mobileMenuList) {
+    mobileMenuList.onclick = () => {
       closeMenu();
-      nav(`#list?os=${encodeURIComponent(osKey)}`);
+      nav("#list?os=life");
     };
-  });
+  }
 
-  // 検索
-  $("#mobileMenuSearch").onclick = () => {
-    closeMenu();
-    nav("#search?q=");
-  };
-
-  // シチュエーション別
-  $("#mobileMenuSituations").onclick = () => {
-    closeMenu();
-    nav("#situations");
-  };
+  // マイページ
+  const mobileMenuMy = $("#mobileMenuMy");
+  if (mobileMenuMy) {
+    mobileMenuMy.onclick = () => {
+      closeMenu();
+      nav("#my");
+    };
+  }
 }
 
 
@@ -1100,101 +1063,81 @@ function renderSituationTips() {
   const situationTipsData = DATA.situationTips || {};
   const categories = situationTipsData.categories || [];
 
-  // 全トピック数とアイテム数を計算
-  const totalTopics = categories.reduce((sum, cat) => sum + (cat.topics || []).length, 0);
-  const totalItems = categories.reduce((sum, cat) => 
-    sum + (cat.topics || []).reduce((tsum, topic) => tsum + (topic.items || []).length, 0), 0);
-
   view.innerHTML = `
-    <div class="tips-index-layout">
-      <div class="tips-index-hero">
-        <div class="tips-index-hero-badge">💡 実践的な処世術</div>
-        <div class="tips-index-hero-title">状況別処世術</div>
-        <div class="tips-index-hero-subtitle">
-          すぐに使える具体的な行動指針。<br>
-          あなたの「なりたい姿」から逆算した処世術を、クリックして確認できます。
-        </div>
-        <div class="tips-index-stats">
-          <div class="tips-index-stat-item">
-            <span class="tips-index-stat-num">${categories.length}</span>
-            <span class="tips-index-stat-label">カテゴリ</span>
-          </div>
-          <div class="tips-index-stat-divider"></div>
-          <div class="tips-index-stat-item">
-            <span class="tips-index-stat-num">${totalTopics}</span>
-            <span class="tips-index-stat-label">トピック</span>
-          </div>
-          <div class="tips-index-stat-divider"></div>
-          <div class="tips-index-stat-item">
-            <span class="tips-index-stat-num">${totalItems}</span>
-            <span class="tips-index-stat-label">処世術</span>
-          </div>
-        </div>
+    <div class="tips-fullscreen">
+      <div class="tips-fullscreen-header">
+        <h1 class="tips-fullscreen-title">ケース別処世術</h1>
+        <p class="tips-fullscreen-subtitle">カテゴリを選択してください</p>
       </div>
-
-      <div class="tips-index-nav">
+      <div class="tips-fullscreen-grid">
         ${categories.map((cat) => `
-          <a class="tips-index-nav-item" href="#tips-${escapeHtml(cat.categoryId)}">
-            <span class="tips-index-nav-icon">${escapeHtml(cat.icon || '📁')}</span>
-            <span class="tips-index-nav-name">${escapeHtml(cat.name)}</span>
-          </a>
+          <button class="tips-fullscreen-card" data-category-nav="${escapeHtml(cat.categoryId)}">
+            <span class="tips-fullscreen-card-icon">${escapeHtml(cat.icon || '📁')}</span>
+            <span class="tips-fullscreen-card-name">${escapeHtml(cat.name)}</span>
+          </button>
         `).join("")}
-        <a class="tips-index-nav-item tips-index-nav-os" href="#list?os=life">
-          <span class="tips-index-nav-icon">🔗</span>
-          <span class="tips-index-nav-name">OS処世術へ</span>
-        </a>
-      </div>
-
-      <div class="tips-index-content">
-        ${categories.map((cat) => `
-          <div class="tips-category-section" id="tips-${escapeHtml(cat.categoryId)}">
-            <div class="tips-category-header">
-              <span class="tips-category-icon">${escapeHtml(cat.icon || '📁')}</span>
-              <div class="tips-category-info">
-                <h2 class="tips-category-title">${escapeHtml(cat.name)}</h2>
-                <span class="tips-category-count">${(cat.topics || []).length} トピック</span>
-              </div>
-            </div>
-
-            <div class="tips-topics-grid">
-              ${(cat.topics || []).map((topic, topicIdx) => `
-                <button class="tips-topic-card" data-topic-nav="${escapeHtml(cat.categoryId)}:${escapeHtml(topic.topicId || topicIdx)}">
-                  <div class="tips-topic-card-title">${escapeHtml(topic.name)}</div>
-                  <div class="tips-topic-card-preview">${escapeHtml((topic.items || [])[0]?.text || '')}</div>
-                  <div class="tips-topic-card-count">${(topic.items || []).length}件の処世術</div>
-                </button>
-              `).join("")}
-            </div>
-          </div>
-        `).join("")}
-      </div>
-
-      <div class="tips-index-footer">
-        <a class="tips-footer-link" href="#list?os=life">
-          <span class="tips-footer-link-icon">📚</span>
-          <span class="tips-footer-link-text">体系的に学ぶ → OS処世術へ</span>
-        </a>
       </div>
     </div>
   `;
 
-  // トピックカードのクリックで詳細ページに遷移
+  // カテゴリカードのクリックで詳細ページに遷移
+  view.querySelectorAll("[data-category-nav]").forEach((btn) => {
+    btn.onclick = () => {
+      const categoryId = btn.getAttribute("data-category-nav");
+      nav(`#tips-category?id=${encodeURIComponent(categoryId)}`);
+    };
+  });
+}
+
+// ========== ケース別処世術 カテゴリ詳細ページ ==========
+function renderTipsCategoryDetail(categoryId) {
+  renderShell("tips");
+  const view = $("#view");
+
+  const situationTipsData = DATA.situationTips || {};
+  const categories = situationTipsData.categories || [];
+  const category = categories.find((cat) => cat.categoryId === categoryId);
+
+  if (!category) {
+    view.innerHTML = `
+      <div class="card section">
+        <div class="title" style="font-weight:900;">カテゴリが見つかりません</div>
+        <div style="margin-top:10px;"><button class="btn" id="back">戻る</button></div>
+      </div>
+    `;
+    $("#back").onclick = () => nav("#tips");
+    return;
+  }
+
+  const topics = category.topics || [];
+
+  view.innerHTML = `
+    <div class="tips-fullscreen">
+      <div class="tips-fullscreen-header">
+        <button class="btn ghost tips-back" id="backToTips">← 戻る</button>
+        <div class="tips-category-badge">
+          <span class="tips-category-badge-icon">${escapeHtml(category.icon || '📁')}</span>
+          <span class="tips-category-badge-name">${escapeHtml(category.name)}</span>
+        </div>
+      </div>
+      <div class="tips-topics-fullscreen-grid">
+        ${topics.map((topic, topicIdx) => `
+          <button class="tips-topic-btn" data-topic-nav="${escapeHtml(categoryId)}:${escapeHtml(topic.topicId || topicIdx)}">
+            <span class="tips-topic-btn-name">${escapeHtml(topic.name)}</span>
+            <span class="tips-topic-btn-count">${(topic.items || []).length}件</span>
+          </button>
+        `).join("")}
+      </div>
+    </div>
+  `;
+
+  $("#backToTips").onclick = () => nav("#tips");
+
+  // トピックボタンのクリックで詳細ページに遷移
   view.querySelectorAll("[data-topic-nav]").forEach((btn) => {
     btn.onclick = () => {
       const navId = btn.getAttribute("data-topic-nav");
       nav(`#tips-detail?id=${encodeURIComponent(navId)}`);
-    };
-  });
-
-  // ナビゲーションリンクのスムーズスクロール
-  view.querySelectorAll(".tips-index-nav-item[href^='#tips-']").forEach((link) => {
-    link.onclick = (e) => {
-      e.preventDefault();
-      const targetId = link.getAttribute("href").substring(1);
-      const target = document.getElementById(targetId);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
     };
   });
 }
@@ -1232,43 +1175,31 @@ function renderTipsTopicDetail(topicNavId) {
   const items = topic.items || [];
 
   view.innerHTML = `
-    <div class="tips-index-layout">
-      <div class="tips-detail-hero">
-        <button class="btn ghost tips-back" id="backToTips">← 状況別処世術一覧</button>
-        <div class="tips-detail-category">
-          <span class="tips-detail-category-icon">${escapeHtml(category.icon || '📁')}</span>
-          <span class="tips-detail-category-name">${escapeHtml(category.name)}</span>
+    <div class="tips-fullscreen tips-detail-fullscreen">
+      <div class="tips-fullscreen-header">
+        <button class="btn ghost tips-back" id="backToCategory">← ${escapeHtml(category.name)}</button>
+        <div class="tips-detail-title-wrap">
+          <h1 class="tips-detail-title-simple">${escapeHtml(topic.name)}</h1>
+          <span class="tips-detail-count-simple">${items.length}件</span>
         </div>
-        <h1 class="tips-detail-title">${escapeHtml(topic.name)}</h1>
-        <p class="tips-detail-count">${items.length}件の処世術</p>
       </div>
-
-      <div class="tips-detail-content">
-        <ul class="tips-items-list">
-          ${items.map((item, idx) => `
-            <li class="tips-item">
-              <span class="tips-item-num">${idx + 1}</span>
-              <span class="tips-item-text">${escapeHtml(item.text)}</span>
-              <div class="tips-item-refs">
-                ${(item.refs || []).map(ref => `
-                  <button class="tips-card-link" data-card-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
-                `).join("")}
-              </div>
-            </li>
-          `).join("")}
-        </ul>
-      </div>
-
-      <div class="tips-index-footer">
-        <a class="tips-footer-link" href="#tips">
-          <span class="tips-footer-link-icon">←</span>
-          <span class="tips-footer-link-text">状況別処世術一覧に戻る</span>
-        </a>
+      <div class="tips-detail-list">
+        ${items.map((item, idx) => `
+          <div class="tips-detail-item">
+            <span class="tips-detail-item-num">${idx + 1}</span>
+            <span class="tips-detail-item-text">${escapeHtml(item.text)}</span>
+            <div class="tips-detail-item-refs">
+              ${(item.refs || []).map(ref => `
+                <button class="tips-ref-btn" data-card-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
+              `).join("")}
+            </div>
+          </div>
+        `).join("")}
       </div>
     </div>
   `;
 
-  $("#backToTips").onclick = () => nav("#tips");
+  $("#backToCategory").onclick = () => nav(`#tips-category?id=${encodeURIComponent(categoryId)}`);
 
   // カードIDクリックハンドラ - カード詳細を開く
   view.querySelectorAll("[data-card-ref]").forEach((btn) => {
@@ -1512,6 +1443,11 @@ async function boot() {
       return renderSituationDetail(q.id || "");
     }
 
+    if (hash.startsWith("#tips-category")) {
+      const q = parseQuery(hash.split("?")[1] || "");
+      return renderTipsCategoryDetail(q.id || "");
+    }
+
     if (hash.startsWith("#tips-detail")) {
       const q = parseQuery(hash.split("?")[1] || "");
       return renderTipsTopicDetail(q.id || "");
@@ -1523,7 +1459,7 @@ async function boot() {
 
     if (hash.startsWith("#my")) return renderMy();
 
-    // Default: redirect to tips (状況別処世術)
+    // Default: redirect to tips (ケース別処世術)
     renderSituationTips();
   };
 
