@@ -384,7 +384,7 @@ function renderShell(activeTab) {
     nav("#search?q=");
   };
 
-  // 外部から開くためにグローバルに設定
+  // マイページからログインモーダルを開くためにグローバルに設定
   window.openLoginModal = openLoginModal;
 }
 

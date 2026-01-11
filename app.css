@@ -1990,7 +1990,7 @@ input:focus-visible, textarea:focus-visible{
   100%{ box-shadow: var(--shadow0); }
 }
 
-/* ========== 状況別処世術 インデックススタイル（シンプル化） ========== */
+/* ========== ケース別処世術 インデックススタイル ========== */
 .tips-index-layout{
   max-width: 100%;
   margin: 0;

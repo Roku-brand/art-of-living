@@ -1,17 +1,21 @@
-const CACHE = "shoseijutsu-static-v1";
+const CACHE = "shoseijutsu-static-v3";
 const ASSETS = [
   "./",
   "./index.html",
   "./app.css",
   "./app.js",
   "./manifest.webmanifest",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
   "./data/life.json",
   "./data/internal.json",
   "./data/relation.json",
-  "./data/social.json",
-  "./data/action.json",
-  "./data/future.json",
-  "./data/extra.json"
+  "./data/operation.json",
+  "./data/exection.json",
+  "./data/adapt.json",
+  "./data/extra.json",
+  "./data/situations.json",
+  "./data/situation-tips.json"
 ];
 
 self.addEventListener("install", (e) => {
