@@ -222,12 +222,18 @@ function renderShell(activeTab) {
     <div class="header">
       <div class="header-inner">
         <div class="brand">
-          <button class="hamburger-btn" id="hamburgerBtn" aria-label="メニュー">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-          </button>
-          <h1>処世術禄</h1>
+          <div class="brand-main">
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="メニュー">
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+              <span class="hamburger-line"></span>
+            </button>
+            <h1>処世術禄</h1>
+          </div>
+          <p class="brand-subtitle">
+            情報の洪水に惑わされないためには、点在する情報ではなく“構造化された知恵”が必要。<br>
+            自己啓発・心理学・行動科学・対人術・キャリア論などを集約した「処世術の体系書」。
+          </p>
         </div>
 
       </div>

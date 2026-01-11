@@ -87,8 +87,18 @@ a:hover{ text-decoration: underline; }
   padding: 10px 14px;
   display:flex;
   gap:12px;
-  align-items:center;
+  align-items:flex-start;
   justify-content:space-between;
+}
+.brand{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.brand-main{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 .brand h1{
   margin:0;
@@ -96,6 +106,13 @@ a:hover{ text-decoration: underline; }
   font-weight: 900;
   letter-spacing: .04em;
   color: inherit;
+}
+.brand-subtitle{
+  margin:0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(248,237,240,.82);
+  max-width: 640px;
 }
 .brand small{ display:none; }
 
