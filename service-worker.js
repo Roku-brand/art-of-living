@@ -1,4 +1,4 @@
-const CACHE = "shoseijutsu-static-v1";
+const CACHE = "shoseijutsu-static-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -11,7 +11,11 @@ const ASSETS = [
   "./data/social.json",
   "./data/action.json",
   "./data/future.json",
-  "./data/extra.json"
+  "./data/extra.json",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
+  "./icons/apple-touch-icon.png",
+  "./icons/favicon.png"
 ];
 
 self.addEventListener("install", (e) => {
