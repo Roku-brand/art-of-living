@@ -1091,7 +1091,7 @@ function renderMy() {
 }
 
 // ========== 状況別処世術ページ（新規） ==========
-// インデックススタイルで分類ごとに表示
+// インデックススタイルで分類ごとに表示、アコーディオン形式
 
 function renderSituationTips() {
   renderShell("tips");
@@ -1108,14 +1108,27 @@ function renderSituationTips() {
   view.innerHTML = `
     <div class="tips-index-layout">
       <div class="tips-index-hero">
+        <div class="tips-index-hero-badge">💡 実践的な処世術</div>
         <div class="tips-index-hero-title">状況別処世術</div>
-        <div class="tips-index-hero-subtitle">すぐに使える具体的な行動指針。分類別に整理された処世術を参照できます。</div>
+        <div class="tips-index-hero-subtitle">
+          すぐに使える具体的な行動指針。<br>
+          あなたの「なりたい姿」から逆算した処世術を、クリックして確認できます。
+        </div>
         <div class="tips-index-stats">
-          <span class="tips-index-stat"><b>${categories.length}</b> カテゴリ</span>
-          <span class="tips-index-stat-sep">・</span>
-          <span class="tips-index-stat"><b>${totalTopics}</b> トピック</span>
-          <span class="tips-index-stat-sep">・</span>
-          <span class="tips-index-stat"><b>${totalItems}</b> 項目</span>
+          <div class="tips-index-stat-item">
+            <span class="tips-index-stat-num">${categories.length}</span>
+            <span class="tips-index-stat-label">カテゴリ</span>
+          </div>
+          <div class="tips-index-stat-divider"></div>
+          <div class="tips-index-stat-item">
+            <span class="tips-index-stat-num">${totalTopics}</span>
+            <span class="tips-index-stat-label">トピック</span>
+          </div>
+          <div class="tips-index-stat-divider"></div>
+          <div class="tips-index-stat-item">
+            <span class="tips-index-stat-num">${totalItems}</span>
+            <span class="tips-index-stat-label">処世術</span>
+          </div>
         </div>
       </div>
 
@@ -1143,36 +1156,33 @@ function renderSituationTips() {
               </div>
             </div>
 
-            <div class="tips-topics-grid">
-              ${(cat.topics || []).map((topic) => `
-                <div class="tips-topic-card">
-                  <div class="tips-topic-header">
-                    <h3 class="tips-topic-title">${escapeHtml(topic.name)}</h3>
-                    <span class="tips-topic-count">${(topic.items || []).length}件</span>
-                  </div>
-                  <div class="tips-topic-table">
-                    <table class="tips-table">
-                      <thead>
-                        <tr>
-                          <th class="tips-table-num">#</th>
-                          <th class="tips-table-text">処世術</th>
-                          <th class="tips-table-refs">関連カード</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        ${(topic.items || []).map((item, idx) => `
-                          <tr class="tips-table-row">
-                            <td class="tips-table-num">${idx + 1}</td>
-                            <td class="tips-table-text">${escapeHtml(item.text)}</td>
-                            <td class="tips-table-refs">
-                              ${(item.refs || []).map(ref => `
-                                <button class="tips-card-link" data-card-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
-                              `).join("")}
-                            </td>
-                          </tr>
-                        `).join("")}
-                      </tbody>
-                    </table>
+            <div class="tips-topics-list">
+              ${(cat.topics || []).map((topic, topicIdx) => `
+                <div class="tips-accordion" data-accordion="${escapeHtml(cat.categoryId)}-${topicIdx}">
+                  <button class="tips-accordion-header" data-toggle="${escapeHtml(cat.categoryId)}-${topicIdx}">
+                    <div class="tips-accordion-icon-wrap">
+                      <span class="tips-accordion-chevron">▶</span>
+                    </div>
+                    <div class="tips-accordion-title-wrap">
+                      <h3 class="tips-accordion-title">${escapeHtml(topic.name)}</h3>
+                      <span class="tips-accordion-preview">${escapeHtml((topic.items || [])[0]?.text || '')}${(topic.items || []).length > 1 ? ' ほか' : ''}</span>
+                    </div>
+                    <span class="tips-accordion-count">${(topic.items || []).length}件</span>
+                  </button>
+                  <div class="tips-accordion-body" data-body="${escapeHtml(cat.categoryId)}-${topicIdx}">
+                    <ul class="tips-items-list">
+                      ${(topic.items || []).map((item, idx) => `
+                        <li class="tips-item">
+                          <span class="tips-item-num">${idx + 1}</span>
+                          <span class="tips-item-text">${escapeHtml(item.text)}</span>
+                          <div class="tips-item-refs">
+                            ${(item.refs || []).map(ref => `
+                              <button class="tips-card-link" data-card-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
+                            `).join("")}
+                          </div>
+                        </li>
+                      `).join("")}
+                    </ul>
                   </div>
                 </div>
               `).join("")}
@@ -1180,12 +1190,39 @@ function renderSituationTips() {
           </div>
         `).join("")}
       </div>
+
+      <div class="tips-index-footer">
+        <a class="tips-footer-link" href="#list?os=life">
+          <span class="tips-footer-link-icon">📚</span>
+          <span class="tips-footer-link-text">体系的に学ぶ → OS処世術へ</span>
+        </a>
+      </div>
     </div>
   `;
 
+  // アコーディオンのトグル処理（デフォルトは閉じた状態）
+  view.querySelectorAll("[data-toggle]").forEach((btn) => {
+    btn.onclick = () => {
+      const id = btn.getAttribute("data-toggle");
+      const accordion = view.querySelector(`[data-accordion="${CSS.escape(id)}"]`);
+      const body = view.querySelector(`[data-body="${CSS.escape(id)}"]`);
+      if (!accordion || !body) return;
+
+      const isOpen = accordion.classList.contains("is-open");
+      if (isOpen) {
+        accordion.classList.remove("is-open");
+        body.style.maxHeight = "0";
+      } else {
+        accordion.classList.add("is-open");
+        body.style.maxHeight = body.scrollHeight + "px";
+      }
+    };
+  });
+
   // カードIDクリックハンドラ - カード詳細を開く
   view.querySelectorAll("[data-card-ref]").forEach((btn) => {
-    btn.onclick = () => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
       const cardId = btn.getAttribute("data-card-ref");
       nav(`#detail?id=${encodeURIComponent(cardId)}`);
     };
