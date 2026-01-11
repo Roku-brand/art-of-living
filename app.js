@@ -1091,100 +1091,117 @@ function renderMy() {
 }
 
 // ========== 状況別処世術ページ（新規） ==========
-// 箇条書きUIで即効性・具体論を提供
+// インデックススタイルで分類ごとに表示
 
-function renderSituationTips(selectedCat) {
+function renderSituationTips() {
   renderShell("tips");
   const view = $("#view");
 
-  const situationTips = DATA.situationTips || [];
-  
-  // デフォルトで最初のカテゴリを選択
-  const activeCat = selectedCat || (situationTips.length > 0 ? situationTips[0].situationId : null);
-  const activeCategory = situationTips.find(s => s.situationId === activeCat) || situationTips[0];
+  const situationTipsData = DATA.situationTips || {};
+  const categories = situationTipsData.categories || [];
+
+  // 全トピック数とアイテム数を計算
+  const totalTopics = categories.reduce((sum, cat) => sum + (cat.topics || []).length, 0);
+  const totalItems = categories.reduce((sum, cat) => 
+    sum + (cat.topics || []).reduce((tsum, topic) => tsum + (topic.items || []).length, 0), 0);
 
   view.innerHTML = `
-    <div class="tips-layout">
-      <div class="tips-side">
-        <div class="tips-side-header">
-          <span class="tips-side-icon">📋</span>
-          <span class="tips-side-title">状況カテゴリ</span>
-        </div>
-        <div class="tips-categories" id="tipsCategories">
-          ${situationTips.map((cat) => `
-            <button class="tips-category-item ${cat.situationId === activeCat ? 'is-active' : ''}" 
-                    data-cat="${escapeHtml(cat.situationId)}">
-              <span class="tips-category-name">${escapeHtml(cat.name)}</span>
-              <span class="tips-category-count">${cat.items.length}件</span>
-            </button>
-          `).join("")}
-        </div>
-        <div class="tips-side-footer">
-          <button class="tips-os-link" id="goToOS">
-            <span class="tips-os-link-icon">🔗</span>
-            <span>OS処世術へ</span>
-          </button>
+    <div class="tips-index-layout">
+      <div class="tips-index-hero">
+        <div class="tips-index-hero-title">状況別処世術</div>
+        <div class="tips-index-hero-subtitle">すぐに使える具体的な行動指針。分類別に整理された処世術を参照できます。</div>
+        <div class="tips-index-stats">
+          <span class="tips-index-stat"><b>${categories.length}</b> カテゴリ</span>
+          <span class="tips-index-stat-sep">・</span>
+          <span class="tips-index-stat"><b>${totalTopics}</b> トピック</span>
+          <span class="tips-index-stat-sep">・</span>
+          <span class="tips-index-stat"><b>${totalItems}</b> 項目</span>
         </div>
       </div>
 
-      <div class="tips-main">
-        <div class="tips-hero">
-          <div class="tips-hero-title">状況別処世術</div>
-          <div class="tips-hero-subtitle">すぐに使える具体的な行動指針。OSを理解しなくても実践できます。</div>
-        </div>
+      <div class="tips-index-nav">
+        ${categories.map((cat) => `
+          <a class="tips-index-nav-item" href="#tips-${escapeHtml(cat.categoryId)}">
+            <span class="tips-index-nav-icon">${escapeHtml(cat.icon || '📁')}</span>
+            <span class="tips-index-nav-name">${escapeHtml(cat.name)}</span>
+          </a>
+        `).join("")}
+        <a class="tips-index-nav-item tips-index-nav-os" href="#list?os=life">
+          <span class="tips-index-nav-icon">🔗</span>
+          <span class="tips-index-nav-name">OS処世術へ</span>
+        </a>
+      </div>
 
-        ${activeCategory ? `
-          <div class="tips-content">
-            <div class="tips-content-header">
-              <h2 class="tips-content-title">${escapeHtml(activeCategory.name)}</h2>
-              <span class="tips-content-count">${activeCategory.items.length}件</span>
+      <div class="tips-index-content">
+        ${categories.map((cat) => `
+          <div class="tips-category-section" id="tips-${escapeHtml(cat.categoryId)}">
+            <div class="tips-category-header">
+              <span class="tips-category-icon">${escapeHtml(cat.icon || '📁')}</span>
+              <div class="tips-category-info">
+                <h2 class="tips-category-title">${escapeHtml(cat.name)}</h2>
+                <span class="tips-category-count">${(cat.topics || []).length} トピック</span>
+              </div>
             </div>
 
-            <div class="tips-list" id="tipsList">
-              ${activeCategory.items.map((item, idx) => `
-                <div class="tips-row">
-                  <span class="tips-row-num">${idx + 1}</span>
-                  <span class="tips-row-text">${escapeHtml(item.text)}</span>
-                  <span class="tips-row-refs">
-                    ${(item.refs || []).map(ref => `
-                      <button class="tips-ref-link" data-os-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
-                    `).join("")}
-                  </span>
+            <div class="tips-topics-grid">
+              ${(cat.topics || []).map((topic) => `
+                <div class="tips-topic-card">
+                  <div class="tips-topic-header">
+                    <h3 class="tips-topic-title">${escapeHtml(topic.name)}</h3>
+                    <span class="tips-topic-count">${(topic.items || []).length}件</span>
+                  </div>
+                  <div class="tips-topic-table">
+                    <table class="tips-table">
+                      <thead>
+                        <tr>
+                          <th class="tips-table-num">#</th>
+                          <th class="tips-table-text">処世術</th>
+                          <th class="tips-table-refs">関連カード</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${(topic.items || []).map((item, idx) => `
+                          <tr class="tips-table-row">
+                            <td class="tips-table-num">${idx + 1}</td>
+                            <td class="tips-table-text">${escapeHtml(item.text)}</td>
+                            <td class="tips-table-refs">
+                              ${(item.refs || []).map(ref => `
+                                <button class="tips-card-link" data-card-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
+                              `).join("")}
+                            </td>
+                          </tr>
+                        `).join("")}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               `).join("")}
             </div>
           </div>
-        ` : `
-          <div class="tips-empty">
-            <div class="tips-empty-icon">📝</div>
-            <div class="tips-empty-text">カテゴリを選択してください</div>
-          </div>
-        `}
+        `).join("")}
       </div>
     </div>
   `;
 
-  // Category click handler
-  view.querySelectorAll("[data-cat]").forEach((btn) => {
+  // カードIDクリックハンドラ - カード詳細を開く
+  view.querySelectorAll("[data-card-ref]").forEach((btn) => {
     btn.onclick = () => {
-      const catId = btn.getAttribute("data-cat");
-      nav(`#tips?cat=${encodeURIComponent(catId)}`);
+      const cardId = btn.getAttribute("data-card-ref");
+      nav(`#detail?id=${encodeURIComponent(cardId)}`);
     };
   });
 
-  // OS ref click handler - navigate to OS page with focus
-  view.querySelectorAll("[data-os-ref]").forEach((btn) => {
-    btn.onclick = () => {
-      const osRef = btn.getAttribute("data-os-ref");
-      nav(`#list?focus=${encodeURIComponent(osRef)}`);
+  // ナビゲーションリンクのスムーズスクロール
+  view.querySelectorAll(".tips-index-nav-item[href^='#tips-']").forEach((link) => {
+    link.onclick = (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute("href").substring(1);
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     };
   });
-
-  // Go to OS link
-  const goToOS = $("#goToOS");
-  if (goToOS) {
-    goToOS.onclick = () => nav("#list?os=life");
-  }
 }
 
 // ========== シチュエーション別ページ ==========
@@ -1420,14 +1437,13 @@ async function boot() {
     }
 
     if (hash.startsWith("#tips")) {
-      const q = parseQuery(hash.split("?")[1] || "");
-      return renderSituationTips(q.cat || null);
+      return renderSituationTips();
     }
 
     if (hash.startsWith("#my")) return renderMy();
 
     // Default: redirect to tips (状況別処世術)
-    renderSituationTips(null);
+    renderSituationTips();
   };
 
   window.addEventListener("hashchange", onRoute);
