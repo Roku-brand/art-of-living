@@ -1826,6 +1826,9 @@ input:focus-visible, textarea:focus-visible{
   color: rgba(8,14,16,.68);
   line-height: 1.6;
 }
+.tips-simple-items[hidden]{
+  display: none;
+}
 .tips-simple-item{
   display: flex;
   align-items: flex-start;
