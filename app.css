@@ -27,6 +27,12 @@
   --r-lg: 4px;
   --r-md: 3px;
 
+  /* Shared hero styling */
+  --hero-bg: linear-gradient(135deg, rgba(122,31,42,.18), rgba(99,102,241,.12));
+  --hero-border: rgba(122,31,42,.22);
+  --hero-title: rgba(122,31,42,.95);
+  --hero-subtitle: rgba(8,14,16,.68);
+
   /* Sidebar compact */
   --sb-accent: #7a1f2a;
   --sb-border: rgba(122,31,42,0.25);
@@ -436,8 +442,8 @@ a:hover{ text-decoration: underline; }
 
 /* ---------- List Head ---------- */
 .list-hero{
-  background: rgba(255,255,255,.42);
-  border: 1px solid rgba(11,143,101,.18);
+  background: var(--hero-bg);
+  border: 1px solid var(--hero-border);
   border-radius: var(--r-xl);
   padding: 16px 18px;
   margin-bottom: 14px;
@@ -446,13 +452,13 @@ a:hover{ text-decoration: underline; }
 .list-hero-title{
   font-size: 20px;
   font-weight: 900;
-  color: rgba(11,143,101,.95);
+  color: var(--hero-title);
   margin-bottom: 8px;
 }
 .list-hero-subtitle{
   font-size: 13px;
   line-height: 1.6;
-  color: rgba(8,14,16,.72);
+  color: var(--hero-subtitle);
 }
 
 .list-headline{
@@ -997,8 +1003,8 @@ input:focus-visible, textarea:focus-visible{
   gap: 16px;
   padding: 20px 18px;
   margin-bottom: 14px;
-  background: linear-gradient(135deg, rgba(11,143,101,.18), rgba(59,130,246,.12));
-  border: 1px solid rgba(11,143,101,.22);
+  background: var(--hero-bg);
+  border: 1px solid var(--hero-border);
   border-radius: var(--r-xl);
   box-shadow: var(--shadow0);
 }
@@ -1019,12 +1025,12 @@ input:focus-visible, textarea:focus-visible{
   margin: 0;
   font-size: 20px;
   font-weight: 900;
-  color: rgba(11,143,101,.95);
+  color: var(--hero-title);
 }
 .mypage-hero-subtitle{
   margin: 4px 0 0;
   font-size: 13px;
-  color: rgba(8,14,16,.62);
+  color: var(--hero-subtitle);
 }
 
 /* 統計カード */
@@ -1982,10 +1988,15 @@ input:focus-visible, textarea:focus-visible{
   gap: 28px;
 }
 .tips-simple-hero{
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 900;
-  color: rgba(8,14,16,.9);
+  color: var(--hero-title);
   letter-spacing: .02em;
+  background: var(--hero-bg);
+  border: 1px solid var(--hero-border);
+  border-radius: var(--r-xl);
+  padding: 18px 20px;
+  box-shadow: var(--shadow0);
 }
 .tips-simple-title{
   font-size: 20px;
