@@ -270,12 +270,11 @@ function renderShell(activeTab) {
               <span class="hamburger-line"></span>
               <span class="hamburger-line"></span>
             </button>
-            <h1>処世術禄―自己啓発・心理学・行動科学・対人術などを集約した「処世術の体系書」。</h1>
+            <h1>処世術禄</h1>
           </div>
         </div>
         <p class="header-subtitle">
-          情報の洪水に惑わされないためには、点在する情報ではなく“構造化された知恵”が必要。<br>
-          自己啓発・心理学・行動科学・対人術・キャリア論などを集約した「処世術の体系書」。
+          ケース別処世術と体系処世術をシンプルに整理。
         </p>
 
       </div>
@@ -588,7 +587,7 @@ function renderList(osKey, focusOsId = null) {
   ];
 
   // ★重要：DOM順を「sidebar → main」にして grid(320px / 1fr) と一致させる
-  const heroSubtitle = "自己啓発・心理学・行動科学・対人術・キャリア論などを ７つのOS・200の項目に集約した「処世術の体系書」";
+  const heroSubtitle = "行き方・心の扱い・対人関係などを7つのOSで整理した処世術一覧。";
 
   view.innerHTML = `
     <div class="list-layout has-mobile-sidebar">
@@ -1177,129 +1176,43 @@ function renderSituationTips() {
   const situationTipsData = DATA.situationTips || {};
   const categories = situationTipsData.categories || [];
 
-  const totalTopics = categories.reduce((sum, cat) => sum + (cat.topics || []).length, 0);
-  const totalItems = categories.reduce(
-    (sum, cat) => sum + (cat.topics || []).reduce((acc, topic) => acc + (topic.items || []).length, 0),
-    0
-  );
+  const sectionMap = [
+    { title: "思考術", categoryIds: ["C-MENTAL", "C-ADAPT"] },
+    { title: "対人術", categoryIds: ["C-RELATION"] },
+    { title: "仕事術", categoryIds: ["C-BUSINESS"] },
+    { title: "成功術", categoryIds: ["C-GOAL"] },
+    { title: "人生術", categoryIds: ["C-LIFE"] }
+  ];
+
+  const buildSectionTopics = (ids) =>
+    categories
+      .filter((cat) => ids.includes(cat.categoryId))
+      .flatMap((cat) => cat.topics || []);
 
   view.innerHTML = `
-    <div class="tips-index-layout">
-      <div class="tips-index-hero">
-        <div class="tips-index-hero-badge">ケース別処世術</div>
-        <div class="tips-index-hero-title">すべての処世術を一覧で確認</div>
-        <div class="tips-index-hero-subtitle">
-          分類分けを維持しつつ、全ての処世術をトップページで見渡せる構成にしました。
-        </div>
-        <div class="tips-index-stats">
-          <div class="tips-index-stat-item">
-            <span class="tips-index-stat-num">${categories.length}</span>
-            <span class="tips-index-stat-label">Categories</span>
-          </div>
-          <span class="tips-index-stat-divider"></span>
-          <div class="tips-index-stat-item">
-            <span class="tips-index-stat-num">${totalTopics}</span>
-            <span class="tips-index-stat-label">Topics</span>
-          </div>
-          <span class="tips-index-stat-divider"></span>
-          <div class="tips-index-stat-item">
-            <span class="tips-index-stat-num">${totalItems}</span>
-            <span class="tips-index-stat-label">Tips</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="tips-index-nav">
-        ${categories.map((cat) => `
-          <button class="tips-index-nav-item" data-scroll="tips-${escapeHtml(cat.categoryId)}">
-            <span class="tips-index-nav-icon">${escapeHtml(cat.icon || "📁")}</span>
-            <span>${escapeHtml(cat.name)}</span>
-          </button>
-        `).join("")}
-      </div>
-
-      <div class="tips-index-content">
-        ${categories.map((cat) => {
-          const topics = cat.topics || [];
-          const categoryItemCount = topics.reduce((sum, topic) => sum + (topic.items || []).length, 0);
-          return `
-            <section class="tips-category-section" id="tips-${escapeHtml(cat.categoryId)}">
-              <div class="tips-category-header">
-                <span class="tips-category-icon">${escapeHtml(cat.icon || "📁")}</span>
-                <div class="tips-category-info">
-                  <h2 class="tips-category-title">${escapeHtml(cat.name)}</h2>
-                  <span class="tips-category-count">${categoryItemCount}件</span>
-                </div>
-              </div>
-              <div class="tips-topics-list">
-                ${topics.map((topic, topicIdx) => {
-                  const items = topic.items || [];
-                  const preview = items[0]?.text || "";
-                  return `
-                    <div class="tips-accordion" data-accordion>
-                      <button class="tips-accordion-header" data-accordion-toggle>
-                        <div class="tips-accordion-icon-wrap">
-                          <span class="tips-accordion-chevron">▶</span>
-                        </div>
-                        <div class="tips-accordion-title-wrap">
-                          <div class="tips-accordion-title">${escapeHtml(topic.name || `テーマ ${topicIdx + 1}`)}</div>
-                          <div class="tips-accordion-preview">${escapeHtml(preview)}</div>
-                        </div>
-                        <span class="tips-accordion-count">${items.length}件</span>
-                      </button>
-                      <div class="tips-accordion-body">
-                        <ul class="tips-items-list">
-                          ${items.map((item, idx) => `
-                            <li class="tips-item">
-                              <span class="tips-item-num">${idx + 1}</span>
-                              <span class="tips-item-text">${escapeHtml(item.text)}</span>
-                              <div class="tips-item-refs">
-                                ${(item.refs || []).map((ref) => `
-                                  <button class="tips-card-link" data-card-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
-                                `).join("")}
-                              </div>
-                            </li>
-                          `).join("")}
-                        </ul>
-                      </div>
-                    </div>
-                  `;
-                }).join("")}
-              </div>
-            </section>
-          `;
-        }).join("")}
-      </div>
+    <div class="tips-simple-layout">
+      ${sectionMap.map((section) => {
+        const topics = buildSectionTopics(section.categoryIds);
+        return `
+          <section class="tips-simple-section">
+            <h2 class="tips-simple-title">≪${escapeHtml(section.title)}≫</h2>
+            <ul class="tips-simple-topics">
+              ${topics.map((topic) => `
+                <li class="tips-simple-topic">
+                  <div class="tips-simple-topic-name">${escapeHtml(topic.name)}</div>
+                  <ul class="tips-simple-items">
+                    ${(topic.items || []).map((item) => `
+                      <li>${escapeHtml(item.text)}</li>
+                    `).join("")}
+                  </ul>
+                </li>
+              `).join("")}
+            </ul>
+          </section>
+        `;
+      }).join("")}
     </div>
   `;
-
-  view.querySelectorAll("[data-scroll]").forEach((btn) => {
-    btn.onclick = () => {
-      const targetId = btn.getAttribute("data-scroll");
-      const target = view.querySelector(`#${CSS.escape(targetId)}`);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    };
-  });
-
-  view.querySelectorAll("[data-accordion-toggle]").forEach((btn) => {
-    btn.onclick = () => {
-      const accordion = btn.closest("[data-accordion]");
-      const body = accordion?.querySelector(".tips-accordion-body");
-      if (!accordion || !body) return;
-      const isOpen = accordion.classList.toggle("is-open");
-      body.style.maxHeight = isOpen ? `${body.scrollHeight}px` : "0";
-    };
-  });
-
-  view.querySelectorAll("[data-card-ref]").forEach((btn) => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const cardId = btn.getAttribute("data-card-ref");
-      nav(`#detail?id=${encodeURIComponent(cardId)}`);
-    };
-  });
 }
 
 // ========== ケース別処世術 カテゴリ詳細ページ ==========

@@ -1745,6 +1745,45 @@ input:focus-visible, textarea:focus-visible{
   .tips-layout{ grid-template-columns: 1fr; }
 }
 
+/* ========== ケース別処世術（シンプル表示） ========== */
+.tips-simple-layout{
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.tips-simple-title{
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 12px;
+  color: rgba(8,14,16,.86);
+}
+.tips-simple-topics{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.tips-simple-topic-name{
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: rgba(8,14,16,.78);
+}
+.tips-simple-items{
+  margin: 0 0 0 18px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: rgba(8,14,16,.68);
+  line-height: 1.6;
+}
+
 /* サイドパネル */
 .tips-side{
   position: sticky;
