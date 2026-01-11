@@ -441,6 +441,17 @@ a:hover{ text-decoration: underline; }
 }
 
 /* ---------- List Head ---------- */
+/* Full-width hero for 体系処世術 */
+.list-hero-fullwidth{
+  background: var(--hero-bg);
+  border: 1px solid var(--hero-border);
+  border-radius: var(--r-xl);
+  padding: 20px 24px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow0);
+  width: 100%;
+}
+
 .list-hero{
   background: var(--hero-bg);
   border: 1px solid var(--hero-border);
@@ -2073,8 +2084,15 @@ input:focus-visible, textarea:focus-visible{
 .tips-simple-item{
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.tips-simple-item-num{
+  flex: 0 0 auto;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(8,14,16,.55);
+  min-width: 24px;
 }
 .tips-simple-item-text{
   flex: 1 1 auto;
@@ -2093,8 +2111,16 @@ input:focus-visible, textarea:focus-visible{
   padding: 2px 6px;
   border-radius: 999px;
   background: rgba(59,130,246,.12);
-  color: rgba(8,14,16,.72);
-  border: 1px solid rgba(59,130,246,.2);
+  color: rgba(59,130,246,.85);
+  border: 1px solid rgba(59,130,246,.25);
+  cursor: pointer;
+  transition: transform .12s ease, background-color .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+.tips-simple-item-tag:hover{
+  transform: translateY(-1px);
+  background: rgba(59,130,246,.22);
+  border-color: rgba(59,130,246,.45);
+  box-shadow: 0 4px 10px rgba(59,130,246,.18);
 }
 @media (max-width: 800px){
   .tips-simple-topics{

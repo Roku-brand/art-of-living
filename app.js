@@ -274,9 +274,6 @@ function renderShell(activeTab) {
           </div>
         </div>
         <div class="header-right">
-          <p class="header-subtitle">
-            ケース別処世術と体系処世術をシンプルに整理。
-          </p>
           <button class="header-account-btn" id="headerAccountBtn" aria-label="アカウント">
             ${loggedIn ? `<span class="header-account-icon logged-in">👤</span>` : `<span class="header-account-icon">👤</span>`}
           </button>
@@ -628,17 +625,17 @@ function renderList(osKey, focusOsId = null) {
   const heroDescription = showSystemHero ? "" : (meta?.desc || heroSubtitle);
 
   view.innerHTML = `
+    <div class="list-hero-fullwidth ${focusOsId ? 'list-hero-focused' : ''}">
+      <div class="list-hero-title">${escapeHtml(heroTitle)}</div>
+      ${heroDescription ? `<div class="list-hero-subtitle">${escapeHtml(heroDescription)}</div>` : ""}
+    </div>
+
     <div class="list-layout has-mobile-sidebar">
       <div class="list-side">
         ${renderCompactSidebar(currentOS, false, focusOsId)}
       </div>
 
       <div class="list-main">
-        <div class="list-hero ${focusOsId ? 'list-hero-focused' : ''}">
-          <div class="list-hero-title">${escapeHtml(heroTitle)}</div>
-          ${heroDescription ? `<div class="list-hero-subtitle">${escapeHtml(heroDescription)}</div>` : ""}
-        </div>
-
         <div class="list-headline">
           <div class="title">${escapeHtml(meta?.title || currentOS)} の処世術一覧</div>
           <div class="count">
@@ -1213,12 +1210,13 @@ function renderSituationTips() {
                     </span>
                   </button>
                   <ul class="tips-simple-items" hidden>
-                    ${(topic.items || []).map((item) => {
+                    ${(topic.items || []).map((item, idx) => {
                       const refs = (item.refs || []).map((ref) => `
-                        <span class="tips-simple-item-tag">${escapeHtml(ref)}</span>
+                        <button class="tips-simple-item-tag" data-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
                       `).join("");
                       return `
                         <li class="tips-simple-item">
+                          <span class="tips-simple-item-num">${idx + 1}．</span>
                           <span class="tips-simple-item-text">${escapeHtml(item.text)}</span>
                           <span class="tips-simple-item-refs">${refs}</span>
                         </li>
@@ -1256,6 +1254,17 @@ function renderSituationTips() {
         items.setAttribute("hidden", "");
       }
       btn.setAttribute("aria-expanded", String(isHidden));
+    };
+  });
+
+  // Handle click on ref tags to navigate to the corresponding card
+  view.querySelectorAll(".tips-simple-item-tag[data-ref]").forEach((tag) => {
+    tag.onclick = (e) => {
+      e.stopPropagation();
+      const ref = tag.getAttribute("data-ref");
+      if (ref) {
+        nav(`#detail?id=${encodeURIComponent(ref)}`);
+      }
     };
   });
 }
