@@ -230,11 +230,6 @@ function renderShell(activeTab) {
           <h1>処世術禄</h1>
         </div>
 
-        <div class="header-actions">
-          <button class="btn ghost ${activeTab === "tips" ? "active" : ""}" id="btnTips">ケース別処世術</button>
-          <button class="btn ghost ${activeTab === "list" ? "active" : ""}" id="btnList">体系処世術</button>
-          <button class="btn ghost ${activeTab === "my" ? "active" : ""}" id="btnMy">マイページ</button>
-        </div>
       </div>
     </div>
 
@@ -290,10 +285,6 @@ function renderShell(activeTab) {
 
     <div class="container" id="view"></div>
   `;
-
-  $("#btnTips").onclick = () => nav("#tips");
-  $("#btnList").onclick = () => nav("#list?os=life");
-  $("#btnMy").onclick = () => nav("#my");
 
   // ログインモーダルの開閉（マイページから呼び出される）
   const loginOverlay = $("#loginModalOverlay");

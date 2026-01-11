@@ -7,15 +7,15 @@
 
 :root{
   /* Base */
-  --ink: rgba(10,18,20,.92);
-  --muted: rgba(10,18,20,.58);
-  --subtle: rgba(10,18,20,.42);
+  --ink: rgba(32,12,14,.94);
+  --muted: rgba(32,12,14,.60);
+  --subtle: rgba(32,12,14,.42);
 
-  --line: rgba(10,18,20,.10);
-  --line2: rgba(10,18,20,.08);
+  --line: rgba(70,18,26,.18);
+  --line2: rgba(70,18,26,.12);
 
-  --glass: rgba(255,255,255,.62);
-  --glass2: rgba(255,255,255,.46);
+  --glass: rgba(255,255,255,.66);
+  --glass2: rgba(255,255,255,.48);
 
   --shadow0: 0 14px 34px rgba(0,0,0,.12);
   --shadow1: 0 22px 52px rgba(0,0,0,.16);
@@ -28,10 +28,10 @@
   --r-md: 3px;
 
   /* Sidebar compact */
-  --sb-accent: #0b8f65;
-  --sb-border: rgba(11,143,101,0.20);
-  --sb-panel: rgba(255,255,255,0.60);
-  --sb-panel-hover: rgba(255,255,255,0.72);
+  --sb-accent: #7a1f2a;
+  --sb-border: rgba(122,31,42,0.25);
+  --sb-panel: rgba(255,255,255,0.68);
+  --sb-panel-hover: rgba(255,255,255,0.82);
   --sb-shadow: 0 16px 42px rgba(0,0,0,.12);
   --sb-shadow-soft: 0 8px 18px rgba(0,0,0,.10);
 
@@ -45,7 +45,7 @@
   --os-extra:    #64748b; /* slate */
 
   /* UI colors */
-  --color-amber: #f59e0b;
+  --color-amber: #d97706;
 }
 
 *{ box-sizing:border-box; }
@@ -59,10 +59,10 @@ body{
   line-height: 1.65;
 
   background:
-    radial-gradient(1400px 900px at 10% -10%, rgba(34,197,94,.18), transparent 55%),
-    radial-gradient(1200px 900px at 90% 10%, rgba(59,130,246,.18), transparent 60%),
-    radial-gradient(900px 700px at 55% 115%, rgba(20,184,166,.16), transparent 55%),
-    linear-gradient(180deg, #dff7f0 0%, #cfeee6 55%, #bfe6dd 100%);
+    radial-gradient(1400px 900px at 10% -10%, rgba(122,31,42,.22), transparent 55%),
+    radial-gradient(1200px 900px at 90% 10%, rgba(84,20,30,.20), transparent 60%),
+    radial-gradient(900px 700px at 55% 115%, rgba(140,52,62,.18), transparent 55%),
+    linear-gradient(180deg, #f5e6e9 0%, #e6c7cc 55%, #d1a6ad 100%);
   overflow-x: hidden;
 }
 
@@ -76,9 +76,10 @@ a:hover{ text-decoration: underline; }
   z-index: 10;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  background: rgba(255,255,255,.32);
-  border-bottom: 1px solid var(--line2);
-  box-shadow: 0 10px 24px rgba(0,0,0,.10);
+  background: rgba(54,12,20,.86);
+  border-bottom: 1px solid rgba(248,237,240,.18);
+  box-shadow: 0 12px 28px rgba(20,4,8,.26);
+  color: #f8eef0;
 }
 .header-inner{
   width: 100%;
@@ -94,6 +95,7 @@ a:hover{ text-decoration: underline; }
   font-size: 18px;
   font-weight: 900;
   letter-spacing: .04em;
+  color: inherit;
 }
 .brand small{ display:none; }
 
@@ -117,31 +119,31 @@ a:hover{ text-decoration: underline; }
   padding: 7px 11px;
   border-radius: var(--r-md);
   cursor: pointer;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.22);
+  border: 1px solid rgba(122,31,42,.30);
+  background: rgba(122,31,42,.12);
   color: var(--ink);
-  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+  box-shadow: 0 10px 22px rgba(20,4,8,.12);
   transition: transform .18s ease, box-shadow .18s ease, filter .18s ease, border-color .18s ease, background-color .18s ease;
 }
-.btn.ghost{ background: rgba(255,255,255,.16); }
+.btn.ghost{ background: rgba(122,31,42,.08); }
 .btn.primary{
-  background: linear-gradient(180deg, rgba(11,143,101,.22), rgba(11,143,101,.10));
-  border-color: rgba(11,143,101,.28);
+  background: linear-gradient(180deg, rgba(122,31,42,.35), rgba(122,31,42,.18));
+  border-color: rgba(122,31,42,.45);
 }
 .btn.danger{
   background: rgba(255,80,80,.14);
   border-color: rgba(255,80,80,.22);
 }
 .btn.ghost.active{
-  background: rgba(11,143,101,.12);
-  border-color: rgba(11,143,101,.30);
+  background: rgba(122,31,42,.16);
+  border-color: rgba(122,31,42,.40);
 }
 @media (hover:hover){
   .btn:hover{
     transform: translateY(-2px);
     box-shadow: var(--shadow1);
     filter: brightness(1.02) contrast(1.01);
-    border-color: rgba(11,143,101,.26);
+    border-color: rgba(122,31,42,.45);
   }
 }
 .btn:active{
@@ -735,8 +737,8 @@ textarea{ min-height: 84px; resize: vertical; }
 .btn:focus-visible, .tabbtn:focus-visible, .tagbtn:focus-visible, .tagchip:focus-visible,
 input:focus-visible, textarea:focus-visible{
   outline: none;
-  box-shadow: 0 0 0 3px rgba(11,143,101,.20), 0 14px 34px rgba(0,0,0,.12);
-  border-color: rgba(11,143,101,.30);
+  box-shadow: 0 0 0 3px rgba(122,31,42,.22), 0 14px 34px rgba(20,4,8,.16);
+  border-color: rgba(122,31,42,.45);
 }
 
 /* 下タブは非表示（現状維持） */
@@ -744,35 +746,31 @@ input:focus-visible, textarea:focus-visible{
 
 /* ========== ハンバーガーメニュー（モバイル専用） ========== */
 .hamburger-btn{
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 36px;
   height: 36px;
   padding: 6px;
-  border: 1px solid rgba(10,18,20,.12);
+  border: 1px solid rgba(248,237,240,.30);
   border-radius: var(--r-md);
-  background: rgba(255,255,255,.38);
+  background: rgba(122,31,42,.18);
   cursor: pointer;
   gap: 4px;
   flex-shrink: 0;
   transition: background-color .15s ease, transform .15s ease;
 }
 .hamburger-btn:hover{
-  background: rgba(255,255,255,.55);
+  background: rgba(122,31,42,.28);
   transform: scale(1.04);
 }
 .hamburger-line{
   display: block;
   width: 18px;
   height: 2px;
-  background: rgba(11,143,101,.85);
+  background: rgba(248,237,240,.92);
   border-radius: 2px;
-}
-
-@media (max-width: 920px){
-  .hamburger-btn{ display: flex; }
 }
 
 /* モバイルメニューオーバーレイ */
@@ -798,8 +796,8 @@ input:focus-visible, textarea:focus-visible{
   width: 85%;
   max-width: 320px;
   height: 100%;
-  background: linear-gradient(180deg, #eafaf5 0%, #d8f4eb 100%);
-  box-shadow: 8px 0 32px rgba(0,0,0,.18);
+  background: linear-gradient(180deg, #2b0b12 0%, #4d141e 100%);
+  box-shadow: 8px 0 32px rgba(20,4,8,.35);
   transform: translateX(-100%);
   transition: transform .28s cubic-bezier(.22,1,.36,1);
   display: flex;
@@ -815,32 +813,32 @@ input:focus-visible, textarea:focus-visible{
   align-items: center;
   justify-content: space-between;
   padding: 16px 18px;
-  border-bottom: 1px solid rgba(11,143,101,.18);
-  background: rgba(255,255,255,.42);
+  border-bottom: 1px solid rgba(248,237,240,.18);
+  background: rgba(248,237,240,.08);
 }
 .mobile-menu-title{
   font-size: 16px;
   font-weight: 900;
-  color: rgba(11,143,101,.95);
+  color: rgba(248,237,240,.92);
   letter-spacing: .02em;
 }
 .mobile-menu-close{
   width: 34px;
   height: 34px;
-  border: 1px solid rgba(10,18,20,.12);
+  border: 1px solid rgba(248,237,240,.22);
   border-radius: var(--r-md);
-  background: rgba(255,255,255,.55);
+  background: rgba(248,237,240,.12);
   font-size: 20px;
   line-height: 1;
   cursor: pointer;
-  color: rgba(8,14,16,.65);
+  color: rgba(248,237,240,.86);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color .15s ease;
 }
 .mobile-menu-close:hover{
-  background: rgba(255,255,255,.75);
+  background: rgba(248,237,240,.22);
 }
 
 .mobile-menu-list{
@@ -855,22 +853,22 @@ input:focus-visible, textarea:focus-visible{
 .mobile-menu-item{
   width: 100%;
   text-align: left;
-  border: 1px solid rgba(10,18,20,.10);
-  background: rgba(255,255,255,.68);
+  border: 1px solid rgba(248,237,240,.14);
+  background: rgba(248,237,240,.08);
   border-radius: var(--r-lg);
   padding: 12px 14px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 3px;
-  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+  box-shadow: 0 6px 14px rgba(20,4,8,.18);
   transition: transform .12s ease, background-color .15s ease, border-color .15s ease;
 }
 .mobile-menu-item:hover,
 .mobile-menu-item:focus{
   transform: translateY(-2px);
-  background: rgba(255,255,255,.88);
-  border-color: rgba(11,143,101,.28);
+  background: rgba(248,237,240,.16);
+  border-color: rgba(248,237,240,.30);
 }
 .mobile-menu-item:active{
   transform: translateY(0);
@@ -878,16 +876,16 @@ input:focus-visible, textarea:focus-visible{
 .mobile-menu-subtitle{
   font-size: 11px;
   font-weight: 700;
-  color: rgba(8,14,16,.52);
+  color: rgba(248,237,240,.62);
 }
 .mobile-menu-main{
   font-size: 15px;
   font-weight: 900;
-  color: rgba(8,14,16,.90);
+  color: rgba(248,237,240,.95);
 }
 .mobile-menu-desc{
   font-size: 11px;
-  color: rgba(8,14,16,.55);
+  color: rgba(248,237,240,.68);
   line-height: 1.4;
   margin-top: 2px;
 }
