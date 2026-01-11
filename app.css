@@ -86,7 +86,7 @@ a:hover{ text-decoration: underline; }
   margin: 0;
   padding: 10px 14px;
   display:flex;
-  gap:12px;
+  gap:16px;
   align-items:flex-start;
   justify-content:space-between;
 }
@@ -107,14 +107,26 @@ a:hover{ text-decoration: underline; }
   letter-spacing: .04em;
   color: inherit;
 }
-.brand-subtitle{
+.header-subtitle{
   margin:0;
   font-size: 12px;
   line-height: 1.5;
   color: rgba(248,237,240,.82);
-  max-width: 640px;
+  max-width: 520px;
+  text-align: right;
 }
 .brand small{ display:none; }
+
+@media (max-width: 600px){
+  .header-inner{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header-subtitle{
+    max-width: none;
+    text-align: left;
+  }
+}
 
 .header-actions{
   display:flex;
