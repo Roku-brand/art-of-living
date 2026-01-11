@@ -1205,9 +1205,17 @@ function renderSituationTips() {
                     <span class="tips-simple-topic-count">${(topic.items || []).length}件</span>
                   </button>
                   <ul class="tips-simple-items" hidden>
-                    ${(topic.items || []).map((item) => `
-                      <li>${escapeHtml(item.text)}</li>
-                    `).join("")}
+                    ${(topic.items || []).map((item) => {
+                      const refs = (item.refs || []).map((ref) => `
+                        <span class="tips-simple-item-tag">${escapeHtml(ref)}</span>
+                      `).join("");
+                      return `
+                        <li class="tips-simple-item">
+                          <span class="tips-simple-item-text">${escapeHtml(item.text)}</span>
+                          <span class="tips-simple-item-refs">${refs}</span>
+                        </li>
+                      `;
+                    }).join("")}
                   </ul>
                 </li>
               `).join("")}
