@@ -1995,8 +1995,11 @@ input:focus-visible, textarea:focus-visible{
   background: var(--hero-bg);
   border: 1px solid var(--hero-border);
   border-radius: var(--r-xl);
-  padding: 18px 20px;
+  padding: 20px 24px;
   box-shadow: var(--shadow0);
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 .tips-simple-title{
   font-size: 20px;

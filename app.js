@@ -623,6 +623,9 @@ function renderList(osKey, focusOsId = null) {
 
   // ★重要：DOM順を「sidebar → main」にして grid(320px / 1fr) と一致させる
   const heroSubtitle = "行き方・心の扱い・対人関係などを7つのOSで整理した処世術一覧。";
+  const showSystemHero = osKey === "life" && !focusOsId;
+  const heroTitle = showSystemHero ? "体系処世術" : (meta?.title || currentOS);
+  const heroDescription = showSystemHero ? "" : (meta?.desc || heroSubtitle);
 
   view.innerHTML = `
     <div class="list-layout has-mobile-sidebar">
@@ -632,8 +635,8 @@ function renderList(osKey, focusOsId = null) {
 
       <div class="list-main">
         <div class="list-hero ${focusOsId ? 'list-hero-focused' : ''}">
-          <div class="list-hero-title">${escapeHtml(meta?.title || currentOS)}</div>
-          <div class="list-hero-subtitle">${escapeHtml(meta?.desc || heroSubtitle)}</div>
+          <div class="list-hero-title">${escapeHtml(heroTitle)}</div>
+          ${heroDescription ? `<div class="list-hero-subtitle">${escapeHtml(heroDescription)}</div>` : ""}
         </div>
 
         <div class="list-headline">
