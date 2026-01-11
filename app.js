@@ -295,14 +295,9 @@ function renderShell(activeTab) {
   $("#btnList").onclick = () => nav("#list?os=life");
   $("#btnMy").onclick = () => nav("#my");
 
-  // ログインモーダルの開閉
+  // ログインモーダルの開閉（マイページから呼び出される）
   const loginOverlay = $("#loginModalOverlay");
   const loginModal = $("#loginModal");
-
-  const openLoginModal = () => {
-    loginOverlay.classList.add("is-open");
-    loginModal.classList.add("is-open");
-  };
 
   const closeLoginModal = () => {
     loginOverlay.classList.remove("is-open");
@@ -310,9 +305,6 @@ function renderShell(activeTab) {
     $("#loginUsername").value = "";
     $("#loginInfo").textContent = "";
   };
-
-  const btnLogin = $("#btnLogin");
-  if (btnLogin) btnLogin.onclick = openLoginModal;
 
   const loginModalClose = $("#loginModalClose");
   if (loginModalClose) loginModalClose.onclick = closeLoginModal;
@@ -332,15 +324,6 @@ function renderShell(activeTab) {
       }
       login(username);
       closeLoginModal();
-      refreshPage();
-    };
-  }
-
-  // ログアウト処理
-  const btnLogout = $("#btnLogout");
-  if (btnLogout) {
-    btnLogout.onclick = () => {
-      logout();
       refreshPage();
     };
   }
