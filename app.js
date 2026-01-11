@@ -8,14 +8,18 @@
 
 // ========== 設定 ==========
 const OS_META = [
-  { key: "life",      title: "人生OS",       subtitle: "①迷わない行き方", desc: "判断基準（方向性・価値観・決断・意味）。", file: "./data/life.json" },
-  { key: "internal",  title: "内部心理OS",   subtitle: "②心の扱い方",     desc: "不安・自己否定・怒り・疲れ・回復。",       file: "./data/internal.json" },
-  { key: "relation",  title: "対人関係OS",   subtitle: "③人との関わり方", desc: "印象・距離感・信頼・境界線。",             file: "./data/relation.json" },
-  { key: "operation", title: "環境操作OS",   subtitle: "④影響力を行使する技術", desc: "報告・会議・交渉・評価・根回し。",         file: "./data/operation.json" },
-  { key: "exection",  title: "行動OS",       subtitle: "⑤行動・習慣の技術", desc: "着手・集中・習慣化・継続・仕組み化。",     file: "./data/exection.json" },
-  { key: "adapt",     title: "適応OS",       subtitle: "⑥キャッチアップの極意", desc: "変化察知・AI・キャリア・資産・撤退。",     file: "./data/adapt.json" },
-  { key: "extra",     title: "追加OS（仮）", subtitle: "⑦追加・実験枠",   desc: "調整枠・実験枠。",                          file: "./data/extra.json" }
+  { key: "life",      osId: "OS-01", title: "人生OS",       subtitle: "①迷わない行き方", desc: "判断基準（方向性・価値観・決断・意味）。", file: "./data/life.json" },
+  { key: "internal",  osId: "OS-02", title: "内部心理OS",   subtitle: "②心の扱い方",     desc: "不安・自己否定・怒り・疲れ・回復。",       file: "./data/internal.json" },
+  { key: "relation",  osId: "OS-03", title: "対人関係OS",   subtitle: "③人との関わり方", desc: "印象・距離感・信頼・境界線。",             file: "./data/relation.json" },
+  { key: "operation", osId: "OS-04", title: "環境操作OS",   subtitle: "④影響力を行使する技術", desc: "報告・会議・交渉・評価・根回し。",         file: "./data/operation.json" },
+  { key: "exection",  osId: "OS-05", title: "行動OS",       subtitle: "⑤行動・習慣の技術", desc: "着手・集中・習慣化・継続・仕組み化。",     file: "./data/exection.json" },
+  { key: "adapt",     osId: "OS-06", title: "適応OS",       subtitle: "⑥キャッチアップの極意", desc: "変化察知・AI・キャリア・資産・撤退。",     file: "./data/adapt.json" },
+  { key: "extra",     osId: "OS-07", title: "追加OS（仮）", subtitle: "⑦追加・実験枠",   desc: "調整枠・実験枠。",                          file: "./data/extra.json" }
 ];
+
+// OS-ID to OS key mapping
+const OS_ID_MAP = {};
+OS_META.forEach(m => { OS_ID_MAP[m.osId] = m.key; });
 
 const LS_FAV = "shoseijutsu:favorites";
 const LS_PERSONAL = "shoseijutsu:personalCards";
@@ -152,7 +156,7 @@ function osClass(osKey) {
 }
 
 // ========== データ読み込み ==========
-let DATA = { byOS: {}, all: [], situations: [] };
+let DATA = { byOS: {}, all: [], situations: [], situationTips: [] };
 
 async function fetchOS(osKey) {
   const meta = OS_META.find((x) => x.key === osKey);
@@ -195,6 +199,17 @@ async function loadAll() {
     console.error("fetchSituations error:", e);
     DATA.situations = [];
   }
+
+  // 状況別処世術データを読み込み
+  try {
+    const tipsRes = await fetch("./data/situation-tips.json", { cache: "no-store" });
+    if (tipsRes.ok) {
+      DATA.situationTips = await tipsRes.json();
+    }
+  } catch (e) {
+    console.error("fetchSituationTips error:", e);
+    DATA.situationTips = [];
+  }
 }
 
 // ========== UI シェル ==========
@@ -216,7 +231,8 @@ function renderShell(activeTab) {
         </div>
 
         <div class="header-actions">
-          <button class="btn ghost ${activeTab === "list" ? "active" : ""}" id="btnList">処世術一覧</button>
+          <button class="btn ghost ${activeTab === "tips" ? "active" : ""}" id="btnTips">状況別処世術</button>
+          <button class="btn ghost ${activeTab === "list" ? "active" : ""}" id="btnList">OS処世術</button>
           <button class="btn ghost ${activeTab === "my" ? "active" : ""}" id="btnMy">マイページ</button>
           ${loggedIn ? `
             <div class="header-user">
@@ -258,10 +274,15 @@ function renderShell(activeTab) {
     <div class="mobile-menu-overlay" id="mobileMenuOverlay">
       <div class="mobile-menu-panel" id="mobileMenuPanel">
         <div class="mobile-menu-header">
-          <span class="mobile-menu-title">処世術OS</span>
+          <span class="mobile-menu-title">メニュー</span>
           <button class="mobile-menu-close" id="mobileMenuClose" aria-label="閉じる">×</button>
         </div>
         <div class="mobile-menu-list">
+          <button class="mobile-menu-item mobile-menu-tips" id="mobileMenuTips">
+            <span class="mobile-menu-subtitle">即効性・具体論</span>
+            <span class="mobile-menu-main">状況別処世術</span>
+            <span class="mobile-menu-desc">すぐに使える箇条書きの処世術</span>
+          </button>
           ${OS_META.map((m) => `
             <button class="mobile-menu-item" data-os-nav="${escapeHtml(m.key)}">
               <span class="mobile-menu-subtitle">${escapeHtml(m.subtitle)}</span>
@@ -287,6 +308,7 @@ function renderShell(activeTab) {
     <div class="container" id="view"></div>
   `;
 
+  $("#btnTips").onclick = () => nav("#tips");
   $("#btnList").onclick = () => nav("#list?os=life");
   $("#btnMy").onclick = () => nav("#my");
 
@@ -358,6 +380,15 @@ function renderShell(activeTab) {
   overlay.onclick = (e) => {
     if (e.target === overlay) closeMenu();
   };
+
+  // 状況別処世術
+  const mobileMenuTips = $("#mobileMenuTips");
+  if (mobileMenuTips) {
+    mobileMenuTips.onclick = () => {
+      closeMenu();
+      nav("#tips");
+    };
+  }
 
   // OS選択
   overlay.querySelectorAll("[data-os-nav]").forEach((btn) => {
@@ -457,24 +488,29 @@ function osSubtitle(osKey) {
   return meta ? meta.subtitle : "";
 }
 
-function renderCompactSidebar(currentOS, activeSituation = false) {
+function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = null) {
   const items = [
     "life", "internal", "relation", "operation", "exection", "adapt", "extra"
   ];
+  
+  // If focusOsId is provided, highlight that OS in the sidebar
+  const focusedKey = focusOsId && OS_ID_MAP[focusOsId] ? OS_ID_MAP[focusOsId] : null;
 
   return `
     <div class="sidebarCompact">
       <div class="sidebarCompactTitle">処世術OS</div>
 
       <div class="sidebarCompactList" id="osbar">
-        ${items.map((k) => `
-          <div class="sidebarCompactItem ${k === currentOS && !activeSituation ? "isActive" : ""}" data-os="${escapeHtml(k)}">
+        ${items.map((k) => {
+          const isActive = (k === currentOS || k === focusedKey) && !activeSituation;
+          return `
+          <div class="sidebarCompactItem ${isActive ? "isActive" : ""}" data-os="${escapeHtml(k)}">
             <div class="sidebarCompactLeft">
               <div class="sidebarCompactSub">${escapeHtml(osSubtitle(k))}</div>
               <div class="sidebarCompactMain">${escapeHtml(osLabel(k))}</div>
             </div>
           </div>
-        `).join("")}
+        `;}).join("")}
       </div>
 
       <div class="sidebarCompactSection">
@@ -506,11 +542,18 @@ function bindSidebarActions(container) {
   if (goSituations) goSituations.onclick = () => nav(`#situations`);
 }
 
-function renderList(osKey) {
+function renderList(osKey, focusOsId = null) {
   renderShell("list");
   const view = $("#view");
 
-  const currentOS = OS_META.find((m) => m.key === osKey) ? osKey : "life";
+  // If focus is provided, navigate to the corresponding OS
+  let currentOS = OS_META.find((m) => m.key === osKey) ? osKey : "life";
+  
+  // If focusOsId is provided, find the corresponding OS
+  if (focusOsId && OS_ID_MAP[focusOsId]) {
+    currentOS = OS_ID_MAP[focusOsId];
+  }
+  
   const meta = OS_META.find((m) => m.key === currentOS);
 
   const allCards = sortById(DATA.byOS[currentOS] ?? []);
@@ -548,13 +591,13 @@ function renderList(osKey) {
   view.innerHTML = `
     <div class="list-layout has-mobile-sidebar">
       <div class="list-side">
-        ${renderCompactSidebar(currentOS)}
+        ${renderCompactSidebar(currentOS, false, focusOsId)}
       </div>
 
       <div class="list-main">
-        <div class="list-hero">
-          <div class="list-hero-title">人生の処世術200</div>
-          <div class="list-hero-subtitle">${escapeHtml(heroSubtitle)}</div>
+        <div class="list-hero ${focusOsId ? 'list-hero-focused' : ''}">
+          <div class="list-hero-title">${escapeHtml(meta?.title || currentOS)}</div>
+          <div class="list-hero-subtitle">${escapeHtml(meta?.desc || heroSubtitle)}</div>
         </div>
 
         <div class="list-headline">
@@ -599,6 +642,19 @@ function renderList(osKey) {
 
   // card events
   bindCardEvents();
+
+  // If focus was provided, scroll to highlight the hero and remove focus class after animation
+  if (focusOsId) {
+    const hero = view.querySelector(".list-hero-focused");
+    if (hero) {
+      setTimeout(() => {
+        hero.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+      setTimeout(() => {
+        hero.classList.remove("list-hero-focused");
+      }, 3000);
+    }
+  }
 }
 
 function renderCard(c) {
@@ -1034,6 +1090,103 @@ function renderMy() {
   bindCardEvents();
 }
 
+// ========== 状況別処世術ページ（新規） ==========
+// 箇条書きUIで即効性・具体論を提供
+
+function renderSituationTips(selectedCat) {
+  renderShell("tips");
+  const view = $("#view");
+
+  const situationTips = DATA.situationTips || [];
+  
+  // デフォルトで最初のカテゴリを選択
+  const activeCat = selectedCat || (situationTips.length > 0 ? situationTips[0].situationId : null);
+  const activeCategory = situationTips.find(s => s.situationId === activeCat) || situationTips[0];
+
+  view.innerHTML = `
+    <div class="tips-layout">
+      <div class="tips-side">
+        <div class="tips-side-header">
+          <span class="tips-side-icon">📋</span>
+          <span class="tips-side-title">状況カテゴリ</span>
+        </div>
+        <div class="tips-categories" id="tipsCategories">
+          ${situationTips.map((cat) => `
+            <button class="tips-category-item ${cat.situationId === activeCat ? 'is-active' : ''}" 
+                    data-cat="${escapeHtml(cat.situationId)}">
+              <span class="tips-category-name">${escapeHtml(cat.name)}</span>
+              <span class="tips-category-count">${cat.items.length}件</span>
+            </button>
+          `).join("")}
+        </div>
+        <div class="tips-side-footer">
+          <button class="tips-os-link" id="goToOS">
+            <span class="tips-os-link-icon">🔗</span>
+            <span>OS処世術へ</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="tips-main">
+        <div class="tips-hero">
+          <div class="tips-hero-title">状況別処世術</div>
+          <div class="tips-hero-subtitle">すぐに使える具体的な行動指針。OSを理解しなくても実践できます。</div>
+        </div>
+
+        ${activeCategory ? `
+          <div class="tips-content">
+            <div class="tips-content-header">
+              <h2 class="tips-content-title">${escapeHtml(activeCategory.name)}</h2>
+              <span class="tips-content-count">${activeCategory.items.length}件</span>
+            </div>
+
+            <div class="tips-list" id="tipsList">
+              ${activeCategory.items.map((item, idx) => `
+                <div class="tips-row">
+                  <span class="tips-row-num">${idx + 1}</span>
+                  <span class="tips-row-text">${escapeHtml(item.text)}</span>
+                  <span class="tips-row-refs">
+                    ${(item.refs || []).map(ref => `
+                      <button class="tips-ref-link" data-os-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
+                    `).join("")}
+                  </span>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        ` : `
+          <div class="tips-empty">
+            <div class="tips-empty-icon">📝</div>
+            <div class="tips-empty-text">カテゴリを選択してください</div>
+          </div>
+        `}
+      </div>
+    </div>
+  `;
+
+  // Category click handler
+  view.querySelectorAll("[data-cat]").forEach((btn) => {
+    btn.onclick = () => {
+      const catId = btn.getAttribute("data-cat");
+      nav(`#tips?cat=${encodeURIComponent(catId)}`);
+    };
+  });
+
+  // OS ref click handler - navigate to OS page with focus
+  view.querySelectorAll("[data-os-ref]").forEach((btn) => {
+    btn.onclick = () => {
+      const osRef = btn.getAttribute("data-os-ref");
+      nav(`#list?focus=${encodeURIComponent(osRef)}`);
+    };
+  });
+
+  // Go to OS link
+  const goToOS = $("#goToOS");
+  if (goToOS) {
+    goToOS.onclick = () => nav("#list?os=life");
+  }
+}
+
 // ========== シチュエーション別ページ ==========
 // カテゴリ順序と表示設定
 const SITUATION_CATEGORIES = [
@@ -1241,12 +1394,12 @@ async function boot() {
   await loadAll();
 
   const onRoute = () => {
-    const hash = location.hash || "#list?os=life";
+    const hash = location.hash || "#tips";
 
     if (hash.startsWith("#list")) {
       const q = parseQuery(hash.split("?")[1] || "");
       const os = q.os || "life";
-      return renderList(os);
+      return renderList(os, q.focus || null);
     }
 
     if (hash.startsWith("#search")) {
@@ -1266,10 +1419,15 @@ async function boot() {
       return renderSituationDetail(q.id || "");
     }
 
+    if (hash.startsWith("#tips")) {
+      const q = parseQuery(hash.split("?")[1] || "");
+      return renderSituationTips(q.cat || null);
+    }
+
     if (hash.startsWith("#my")) return renderMy();
 
-    // Default: redirect to list
-    renderList("life");
+    // Default: redirect to tips (状況別処世術)
+    renderSituationTips(null);
   };
 
   window.addEventListener("hashchange", onRoute);
