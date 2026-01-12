@@ -1168,8 +1168,17 @@ function renderMy() {
   bindCardEvents();
 }
 
-// ========== 状況別処世術ページ（新規） ==========
-// インデックススタイルで分類ごとに表示、長方形カードのグリッド形式
+// ========== 状況別処世術ページ（ページ遷移型） ==========
+// セクションを選択するとそのセクションの全トピックを表示するページに遷移
+
+// セクションマッピング（メタデータ）
+const TIPS_SECTIONS = [
+  { key: "shikou", title: "思考術", subtitle: "心と適応力を鍛える", icon: "🧠", categoryIds: ["C-MENTAL", "C-ADAPT"], color: "var(--os-internal)" },
+  { key: "taijin", title: "対人術", subtitle: "人間関係を築く", icon: "🤝", categoryIds: ["C-RELATION"], color: "var(--os-relation)" },
+  { key: "shigoto", title: "仕事術", subtitle: "仕事力を高める", icon: "💼", categoryIds: ["C-BUSINESS"], color: "var(--os-operation)" },
+  { key: "seiko", title: "成功術", subtitle: "目標を達成する", icon: "🎯", categoryIds: ["C-GOAL"], color: "var(--os-exection)" },
+  { key: "jinsei", title: "人生術", subtitle: "人生を設計する", icon: "🧭", categoryIds: ["C-LIFE"], color: "var(--os-life)" }
+];
 
 function renderSituationTips() {
   renderShell("tips");
@@ -1178,93 +1187,258 @@ function renderSituationTips() {
   const situationTipsData = DATA.situationTips || {};
   const categories = situationTipsData.categories || [];
 
-  const sectionMap = [
-    { title: "思考術", categoryIds: ["C-MENTAL", "C-ADAPT"] },
-    { title: "対人術", categoryIds: ["C-RELATION"] },
-    { title: "仕事術", categoryIds: ["C-BUSINESS"] },
-    { title: "成功術", categoryIds: ["C-GOAL"] },
-    { title: "人生術", categoryIds: ["C-LIFE"] }
-  ];
-
   const buildSectionTopics = (ids) =>
     categories
       .filter((cat) => ids.includes(cat.categoryId))
       .flatMap((cat) => cat.topics || []);
 
+  // Calculate total topics count per section
+  const sectionStats = TIPS_SECTIONS.map((section) => {
+    const topics = buildSectionTopics(section.categoryIds);
+    const totalItems = topics.reduce((sum, t) => sum + (t.items || []).length, 0);
+    return { ...section, topicCount: topics.length, itemCount: totalItems };
+  });
+
+  const totalTopics = sectionStats.reduce((sum, s) => sum + s.topicCount, 0);
+  const totalItems = sectionStats.reduce((sum, s) => sum + s.itemCount, 0);
+
   view.innerHTML = `
-    <div class="tips-simple-layout">
-      <div class="tips-simple-hero">ケース別処世術</div>
-      ${sectionMap.map((section) => {
-        const topics = buildSectionTopics(section.categoryIds);
-        return `
-          <section class="tips-simple-section">
-            <h2 class="tips-simple-title">≪${escapeHtml(section.title)}≫</h2>
-            <ul class="tips-simple-topics">
-              ${topics.map((topic) => `
-                <li class="tips-simple-topic">
-                  <button class="tips-simple-topic-toggle" type="button" aria-expanded="false">
-                    <span class="tips-simple-topic-name">${escapeHtml(topic.name)}</span>
-                    <span class="tips-simple-topic-meta">
-                      <span class="tips-simple-topic-count">${(topic.items || []).length}件</span>
-                      <span class="tips-simple-topic-toggle-icon" aria-hidden="true">⌄</span>
-                    </span>
-                  </button>
-                  <ul class="tips-simple-items" hidden>
-                    ${(topic.items || []).map((item, idx) => {
-                      const refs = (item.refs || []).map((ref) => `
-                        <button class="tips-simple-item-tag" data-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
-                      `).join("");
-                      return `
-                        <li class="tips-simple-item">
-                          <span class="tips-simple-item-num">${idx + 1}．</span>
-                          <span class="tips-simple-item-text">${escapeHtml(item.text)}</span>
-                          <span class="tips-simple-item-refs">${refs}</span>
-                        </li>
-                      `;
-                    }).join("")}
-                  </ul>
-                </li>
-              `).join("")}
-            </ul>
-          </section>
-        `;
-      }).join("")}
+    <div class="tips-nav-layout">
+      <div class="tips-nav-hero">
+        <div class="tips-nav-hero-badge">📚 実践的な処世術集</div>
+        <h1 class="tips-nav-hero-title">ケース別処世術</h1>
+        <p class="tips-nav-hero-subtitle">5つのカテゴリに分類された処世術を、具体的な行動指針として学べます。<br>カテゴリを選択して、詳細な処世術を確認しましょう。</p>
+        <div class="tips-nav-hero-stats">
+          <div class="tips-nav-hero-stat">
+            <span class="tips-nav-hero-stat-num">${sectionStats.length}</span>
+            <span class="tips-nav-hero-stat-label">カテゴリ</span>
+          </div>
+          <div class="tips-nav-hero-stat-divider"></div>
+          <div class="tips-nav-hero-stat">
+            <span class="tips-nav-hero-stat-num">${totalTopics}</span>
+            <span class="tips-nav-hero-stat-label">テーマ</span>
+          </div>
+          <div class="tips-nav-hero-stat-divider"></div>
+          <div class="tips-nav-hero-stat">
+            <span class="tips-nav-hero-stat-num">${totalItems}</span>
+            <span class="tips-nav-hero-stat-label">処世術</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tips-nav-grid">
+        ${sectionStats.map((section) => `
+          <button class="tips-nav-card" data-section="${escapeHtml(section.key)}" style="--section-color: ${section.color}">
+            <div class="tips-nav-card-icon">${section.icon}</div>
+            <div class="tips-nav-card-content">
+              <div class="tips-nav-card-title">${escapeHtml(section.title)}</div>
+              <div class="tips-nav-card-subtitle">${escapeHtml(section.subtitle)}</div>
+            </div>
+            <div class="tips-nav-card-meta">
+              <span class="tips-nav-card-count">${section.topicCount}テーマ・${section.itemCount}件</span>
+              <span class="tips-nav-card-arrow">→</span>
+            </div>
+          </button>
+        `).join("")}
+      </div>
+
+      <div class="tips-nav-footer">
+        <button class="tips-nav-footer-link" id="goToSystemTips">
+          <span class="tips-nav-footer-link-icon">📖</span>
+          <span>体系処世術で深く学ぶ</span>
+        </button>
+      </div>
     </div>
   `;
 
-  const toggles = [...view.querySelectorAll(".tips-simple-topic-toggle")];
-  toggles.forEach((btn) => {
+  // Section card click navigation
+  view.querySelectorAll("[data-section]").forEach((btn) => {
     btn.onclick = () => {
-      const items = btn.parentElement?.querySelector(".tips-simple-items");
-      if (!items) return;
-      const isHidden = items.hasAttribute("hidden");
-
-      toggles.forEach((otherBtn) => {
-        if (otherBtn === btn) return;
-        const otherItems = otherBtn.parentElement?.querySelector(".tips-simple-items");
-        if (otherItems) {
-          otherItems.setAttribute("hidden", "");
-        }
-        otherBtn.setAttribute("aria-expanded", "false");
-      });
-
-      if (isHidden) {
-        items.removeAttribute("hidden");
-      } else {
-        items.setAttribute("hidden", "");
-      }
-      btn.setAttribute("aria-expanded", String(isHidden));
+      const sectionKey = btn.getAttribute("data-section");
+      nav(`#tips-section?key=${encodeURIComponent(sectionKey)}`);
     };
   });
 
-  // Handle click on ref tags to navigate to the corresponding card
-  view.querySelectorAll(".tips-simple-item-tag[data-ref]").forEach((tag) => {
-    tag.onclick = (e) => {
+  // Footer link to system tips
+  const goToSystemTips = $("#goToSystemTips");
+  if (goToSystemTips) {
+    goToSystemTips.onclick = () => nav("#list?os=life");
+  }
+}
+
+// ========== ケース別処世術 セクション詳細ページ ==========
+function renderTipsSectionDetail(sectionKey) {
+  renderShell("tips");
+  const view = $("#view");
+
+  const section = TIPS_SECTIONS.find((s) => s.key === sectionKey);
+  if (!section) {
+    view.innerHTML = `
+      <div class="card section">
+        <div class="title" style="font-weight:900;">セクションが見つかりません</div>
+        <div style="margin-top:10px;"><button class="btn" id="back">戻る</button></div>
+      </div>
+    `;
+    $("#back").onclick = () => nav("#tips");
+    return;
+  }
+
+  const situationTipsData = DATA.situationTips || {};
+  const categories = situationTipsData.categories || [];
+  const topics = categories
+    .filter((cat) => section.categoryIds.includes(cat.categoryId))
+    .flatMap((cat) => cat.topics || []);
+
+  const totalItems = topics.reduce((sum, t) => sum + (t.items || []).length, 0);
+
+  view.innerHTML = `
+    <div class="tips-section-layout" style="--section-color: ${section.color}">
+      <div class="tips-section-header">
+        <button class="tips-section-back" id="backToTips">
+          <span class="tips-section-back-arrow">←</span>
+          <span>カテゴリ一覧</span>
+        </button>
+        <div class="tips-section-hero">
+          <div class="tips-section-hero-icon">${section.icon}</div>
+          <div class="tips-section-hero-content">
+            <h1 class="tips-section-hero-title">${escapeHtml(section.title)}</h1>
+            <p class="tips-section-hero-subtitle">${escapeHtml(section.subtitle)}</p>
+            <div class="tips-section-hero-meta">
+              <span class="tips-section-hero-stat">${topics.length}テーマ</span>
+              <span class="tips-section-hero-stat-sep">・</span>
+              <span class="tips-section-hero-stat">${totalItems}件の処世術</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tips-section-topics">
+        ${topics.map((topic, topicIdx) => `
+          <button class="tips-section-topic-card" data-topic-nav="${escapeHtml(sectionKey)}:${escapeHtml(topic.topicId || topicIdx)}">
+            <div class="tips-section-topic-num">${topicIdx + 1}</div>
+            <div class="tips-section-topic-content">
+              <div class="tips-section-topic-title">${escapeHtml(topic.name)}</div>
+              <div class="tips-section-topic-preview">${(topic.items || []).slice(0, 2).map((item) => escapeHtml(item.text)).join(" / ")}</div>
+            </div>
+            <div class="tips-section-topic-meta">
+              <span class="tips-section-topic-count">${(topic.items || []).length}件</span>
+              <span class="tips-section-topic-arrow">→</span>
+            </div>
+          </button>
+        `).join("")}
+      </div>
+    </div>
+  `;
+
+  // Back button
+  $("#backToTips").onclick = () => nav("#tips");
+
+  // Topic card click navigation
+  view.querySelectorAll("[data-topic-nav]").forEach((btn) => {
+    btn.onclick = () => {
+      const navId = btn.getAttribute("data-topic-nav");
+      nav(`#tips-topic?id=${encodeURIComponent(navId)}`);
+    };
+  });
+}
+
+// ========== ケース別処世術 トピック詳細ページ ==========
+function renderTipsTopicPage(topicNavId) {
+  renderShell("tips");
+  const view = $("#view");
+
+  const [sectionKey, topicId] = (topicNavId || "").split(":");
+  const section = TIPS_SECTIONS.find((s) => s.key === sectionKey);
+
+  if (!section) {
+    view.innerHTML = `
+      <div class="card section">
+        <div class="title" style="font-weight:900;">セクションが見つかりません</div>
+        <div style="margin-top:10px;"><button class="btn" id="back">戻る</button></div>
+      </div>
+    `;
+    $("#back").onclick = () => nav("#tips");
+    return;
+  }
+
+  const situationTipsData = DATA.situationTips || {};
+  const categories = situationTipsData.categories || [];
+  const topics = categories
+    .filter((cat) => section.categoryIds.includes(cat.categoryId))
+    .flatMap((cat) => cat.topics || []);
+
+  // Find topic by ID or index
+  let topic = topics.find((t) => t.topicId === topicId);
+  if (!topic && !isNaN(parseInt(topicId))) {
+    topic = topics[parseInt(topicId)];
+  }
+
+  if (!topic) {
+    view.innerHTML = `
+      <div class="card section">
+        <div class="title" style="font-weight:900;">トピックが見つかりません</div>
+        <div style="margin-top:10px;"><button class="btn" id="back">戻る</button></div>
+      </div>
+    `;
+    $("#back").onclick = () => nav(`#tips-section?key=${encodeURIComponent(sectionKey)}`);
+    return;
+  }
+
+  const items = topic.items || [];
+
+  view.innerHTML = `
+    <div class="tips-topic-layout" style="--section-color: ${section.color}">
+      <div class="tips-topic-header">
+        <button class="tips-topic-back" id="backToSection">
+          <span class="tips-topic-back-arrow">←</span>
+          <span>${escapeHtml(section.title)}</span>
+        </button>
+        <div class="tips-topic-hero">
+          <div class="tips-topic-hero-badge">
+            <span class="tips-topic-hero-badge-icon">${section.icon}</span>
+            <span>${escapeHtml(section.title)}</span>
+          </div>
+          <h1 class="tips-topic-hero-title">${escapeHtml(topic.name)}</h1>
+          <p class="tips-topic-hero-count">${items.length}件の処世術</p>
+        </div>
+      </div>
+
+      <div class="tips-topic-list">
+        ${items.map((item, idx) => {
+          const refs = (item.refs || []).map((ref) => `
+            <button class="tips-topic-ref-btn" data-card-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
+          `).join("");
+          return `
+            <div class="tips-topic-item">
+              <div class="tips-topic-item-num">${idx + 1}</div>
+              <div class="tips-topic-item-content">
+                <div class="tips-topic-item-text">${escapeHtml(item.text)}</div>
+                <div class="tips-topic-item-refs">${refs}</div>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+
+      <div class="tips-topic-footer">
+        <button class="tips-topic-footer-btn" id="backToSectionFooter">
+          <span>←</span>
+          <span>${escapeHtml(section.title)}一覧に戻る</span>
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Back buttons
+  $("#backToSection").onclick = () => nav(`#tips-section?key=${encodeURIComponent(sectionKey)}`);
+  $("#backToSectionFooter").onclick = () => nav(`#tips-section?key=${encodeURIComponent(sectionKey)}`);
+
+  // Card reference click handler
+  view.querySelectorAll("[data-card-ref]").forEach((btn) => {
+    btn.onclick = (e) => {
       e.stopPropagation();
-      const ref = tag.getAttribute("data-ref");
-      if (ref) {
-        nav(`#detail?id=${encodeURIComponent(ref)}`);
-      }
+      const cardId = btn.getAttribute("data-card-ref");
+      nav(`#detail?id=${encodeURIComponent(cardId)}`);
     };
   });
 }
@@ -1650,6 +1824,16 @@ async function boot() {
     if (hash.startsWith("#tips-detail")) {
       const q = parseQuery(hash.split("?")[1] || "");
       return renderTipsTopicDetail(q.id || "");
+    }
+
+    if (hash.startsWith("#tips-section")) {
+      const q = parseQuery(hash.split("?")[1] || "");
+      return renderTipsSectionDetail(q.key || "");
+    }
+
+    if (hash.startsWith("#tips-topic")) {
+      const q = parseQuery(hash.split("?")[1] || "");
+      return renderTipsTopicPage(q.id || "");
     }
 
     if (hash.startsWith("#tips")) {
