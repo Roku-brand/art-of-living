@@ -1370,7 +1370,10 @@ function renderTipsTopicPage(topicNavId) {
   // Find topic by ID or index
   let topic = topics.find((t) => t.topicId === topicId);
   if (!topic && !isNaN(parseInt(topicId))) {
-    topic = topics[parseInt(topicId)];
+    const index = parseInt(topicId);
+    if (index >= 0 && index < topics.length) {
+      topic = topics[index];
+    }
   }
 
   if (!topic) {
