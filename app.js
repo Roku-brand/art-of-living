@@ -993,8 +993,8 @@ function renderHome() {
   `;
 
   // 入口ボタンのイベント
-  $("#entryRelation").onclick = () => nav("#tips");
-  $("#entryMental").onclick = () => nav("#tips");
+  $("#entryRelation").onclick = () => nav("#tips?section=interpersonal");
+  $("#entryMental").onclick = () => nav("#tips?section=mental");
   $("#entryOS").onclick = () => nav("#list?os=life");
 }
 
@@ -1285,11 +1285,11 @@ function renderSituationTips() {
   const categories = situationTipsData.categories || [];
 
   const sectionMap = [
-    { title: "思考術", categoryIds: ["C-MENTAL", "C-ADAPT"] },
-    { title: "対人術", categoryIds: ["C-RELATION"] },
-    { title: "仕事術", categoryIds: ["C-BUSINESS"] },
-    { title: "成功術", categoryIds: ["C-GOAL"] },
-    { title: "人生術", categoryIds: ["C-LIFE"] }
+    { id: "mental", title: "思考術", categoryIds: ["C-MENTAL", "C-ADAPT"] },
+    { id: "interpersonal", title: "対人術", categoryIds: ["C-RELATION"] },
+    { id: "business", title: "仕事術", categoryIds: ["C-BUSINESS"] },
+    { id: "success", title: "成功術", categoryIds: ["C-GOAL"] },
+    { id: "life", title: "人生術", categoryIds: ["C-LIFE"] }
   ];
 
   const buildSectionTopics = (ids) =>
@@ -1303,7 +1303,7 @@ function renderSituationTips() {
       ${sectionMap.map((section) => {
         const topics = buildSectionTopics(section.categoryIds);
         return `
-          <section class="tips-simple-section">
+          <section class="tips-simple-section" id="${escapeHtml(section.id)}">
             <h2 class="tips-simple-title">≪${escapeHtml(section.title)}≫</h2>
             <ul class="tips-simple-topics">
               ${topics.map((topic) => `
@@ -1333,6 +1333,17 @@ function renderSituationTips() {
       }
     };
   });
+
+  // Handle scroll to section if hash has a section parameter
+  const q = parseQuery(location.hash.split("?")[1] || "");
+  if (q.section) {
+    const targetSection = document.getElementById(q.section);
+    if (targetSection) {
+      setTimeout(() => {
+        targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }
 }
 
 // ========== 処世術群詳細ページ ==========
