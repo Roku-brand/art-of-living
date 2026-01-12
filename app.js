@@ -1169,7 +1169,7 @@ function renderMy() {
 }
 
 // ========== 状況別処世術ページ（新規） ==========
-// インデックススタイルで分類ごとに表示、長方形カードのグリッド形式
+// インデックススタイルで分類ごとに表示、処世術群ごとにページ遷移
 
 function renderSituationTips() {
   renderShell("tips");
@@ -1202,27 +1202,13 @@ function renderSituationTips() {
             <ul class="tips-simple-topics">
               ${topics.map((topic) => `
                 <li class="tips-simple-topic">
-                  <button class="tips-simple-topic-toggle" type="button" aria-expanded="false">
+                  <button class="tips-simple-topic-link" type="button" data-topic-id="${escapeHtml(topic.topicId)}">
                     <span class="tips-simple-topic-name">${escapeHtml(topic.name)}</span>
                     <span class="tips-simple-topic-meta">
                       <span class="tips-simple-topic-count">${(topic.items || []).length}件</span>
-                      <span class="tips-simple-topic-toggle-icon" aria-hidden="true">⌄</span>
+                      <span class="tips-simple-topic-arrow" aria-hidden="true">→</span>
                     </span>
                   </button>
-                  <ul class="tips-simple-items" hidden>
-                    ${(topic.items || []).map((item, idx) => {
-                      const refs = (item.refs || []).map((ref) => `
-                        <button class="tips-simple-item-tag" data-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
-                      `).join("");
-                      return `
-                        <li class="tips-simple-item">
-                          <span class="tips-simple-item-num">${idx + 1}．</span>
-                          <span class="tips-simple-item-text">${escapeHtml(item.text)}</span>
-                          <span class="tips-simple-item-refs">${refs}</span>
-                        </li>
-                      `;
-                    }).join("")}
-                  </ul>
                 </li>
               `).join("")}
             </ul>
@@ -1232,39 +1218,83 @@ function renderSituationTips() {
     </div>
   `;
 
-  const toggles = [...view.querySelectorAll(".tips-simple-topic-toggle")];
-  toggles.forEach((btn) => {
+  // Handle click on topic links to navigate to the topic group page
+  view.querySelectorAll(".tips-simple-topic-link[data-topic-id]").forEach((btn) => {
     btn.onclick = () => {
-      const items = btn.parentElement?.querySelector(".tips-simple-items");
-      if (!items) return;
-      const isHidden = items.hasAttribute("hidden");
-
-      toggles.forEach((otherBtn) => {
-        if (otherBtn === btn) return;
-        const otherItems = otherBtn.parentElement?.querySelector(".tips-simple-items");
-        if (otherItems) {
-          otherItems.setAttribute("hidden", "");
-        }
-        otherBtn.setAttribute("aria-expanded", "false");
-      });
-
-      if (isHidden) {
-        items.removeAttribute("hidden");
-      } else {
-        items.setAttribute("hidden", "");
+      const topicId = btn.getAttribute("data-topic-id");
+      if (topicId) {
+        nav(`#topic-group?id=${encodeURIComponent(topicId)}`);
       }
-      btn.setAttribute("aria-expanded", String(isHidden));
     };
   });
+}
 
-  // Handle click on ref tags to navigate to the corresponding card
-  view.querySelectorAll(".tips-simple-item-tag[data-ref]").forEach((tag) => {
-    tag.onclick = (e) => {
+// ========== 処世術群詳細ページ ==========
+function renderTopicGroupPage(topicId) {
+  renderShell("tips");
+  const view = $("#view");
+
+  const situationTipsData = DATA.situationTips || {};
+  const categories = situationTipsData.categories || [];
+
+  // Find the topic by topicId
+  let topic = null;
+  let parentCategory = null;
+  for (const cat of categories) {
+    const found = (cat.topics || []).find((t) => t.topicId === topicId);
+    if (found) {
+      topic = found;
+      parentCategory = cat;
+      break;
+    }
+  }
+
+  if (!topic) {
+    view.innerHTML = `
+      <div class="card section">
+        <div class="title" style="font-weight:900;">処世術群が見つかりません</div>
+        <div style="margin-top:10px;"><button class="btn" id="back">戻る</button></div>
+      </div>
+    `;
+    $("#back").onclick = () => nav("#tips");
+    return;
+  }
+
+  const items = topic.items || [];
+
+  view.innerHTML = `
+    <div class="topic-group-page">
+      <div class="topic-group-header">
+        <button class="btn ghost topic-group-back" id="backToTips">← ケース別処世術</button>
+        <div class="topic-group-title-wrap">
+          <h1 class="topic-group-title">${escapeHtml(topic.name)}</h1>
+          <span class="topic-group-count">${items.length}件</span>
+        </div>
+      </div>
+      <div class="topic-group-list">
+        ${items.map((item, idx) => `
+          <div class="topic-group-item">
+            <span class="topic-group-item-num">${idx + 1}</span>
+            <span class="topic-group-item-text">${escapeHtml(item.text)}</span>
+            <div class="topic-group-item-refs">
+              ${(item.refs || []).map(ref => `
+                <button class="topic-group-ref-btn" data-card-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
+              `).join("")}
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+
+  $("#backToTips").onclick = () => nav("#tips");
+
+  // Handle card reference clicks
+  view.querySelectorAll("[data-card-ref]").forEach((btn) => {
+    btn.onclick = (e) => {
       e.stopPropagation();
-      const ref = tag.getAttribute("data-ref");
-      if (ref) {
-        nav(`#detail?id=${encodeURIComponent(ref)}`);
-      }
+      const cardId = btn.getAttribute("data-card-ref");
+      nav(`#detail?id=${encodeURIComponent(cardId)}`);
     };
   });
 }
@@ -1650,6 +1680,11 @@ async function boot() {
     if (hash.startsWith("#tips-detail")) {
       const q = parseQuery(hash.split("?")[1] || "");
       return renderTipsTopicDetail(q.id || "");
+    }
+
+    if (hash.startsWith("#topic-group")) {
+      const q = parseQuery(hash.split("?")[1] || "");
+      return renderTopicGroupPage(q.id || "");
     }
 
     if (hash.startsWith("#tips")) {

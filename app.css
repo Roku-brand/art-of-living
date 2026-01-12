@@ -2086,6 +2086,31 @@ input:focus-visible, textarea:focus-visible{
   text-align: left;
   cursor: pointer;
 }
+.tips-simple-topic-link{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+.tips-simple-topic-link:hover{
+  background: rgba(99,102,241,.08);
+  transform: translateX(4px);
+}
+.tips-simple-topic-arrow{
+  font-size: 14px;
+  color: rgba(99,102,241,.70);
+  transition: transform 0.2s ease;
+}
+.tips-simple-topic-link:hover .tips-simple-topic-arrow{
+  transform: translateX(4px);
+}
 .tips-simple-topic-meta{
   display: inline-flex;
   align-items: center;
@@ -3302,5 +3327,135 @@ input:focus-visible, textarea:focus-visible{
     grid-column: 2;
     justify-content: flex-start;
     margin-top: 4px;
+  }
+}
+
+/* ========== 処世術群詳細ページ ========== */
+.topic-group-page{
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 16px 80px;
+}
+.topic-group-header{
+  text-align: center;
+  margin-bottom: 24px;
+}
+.topic-group-back{
+  margin-bottom: 16px;
+}
+.topic-group-title-wrap{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.topic-group-title{
+  font-size: 24px;
+  font-weight: 900;
+  color: rgba(8,14,16,.92);
+  margin: 0;
+}
+.topic-group-count{
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(99,102,241,.85);
+  padding: 6px 14px;
+  background: rgba(99,102,241,.12);
+  border-radius: var(--r-md);
+}
+.topic-group-list{
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: rgba(255,255,255,.68);
+  border: 1px solid rgba(10,18,20,.10);
+  border-radius: var(--r-xl);
+  padding: 8px 0;
+  box-shadow: 0 16px 40px rgba(0,0,0,.10);
+}
+.topic-group-item{
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(10,18,20,.06);
+  transition: background-color 0.12s ease;
+}
+.topic-group-item:last-child{
+  border-bottom: none;
+}
+.topic-group-item:hover{
+  background: rgba(255,255,255,.60);
+}
+.topic-group-item-num{
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(99,102,241,.16), rgba(139,92,246,.10));
+  border: 1px solid rgba(99,102,241,.20);
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(99,102,241,.88);
+}
+.topic-group-item-text{
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.55;
+  color: rgba(8,14,16,.88);
+}
+.topic-group-item-refs{
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.topic-group-ref-btn{
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  background: linear-gradient(135deg, rgba(11,143,101,.14), rgba(11,143,101,.08));
+  border: 1px solid rgba(11,143,101,.28);
+  border-radius: var(--r-md);
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(11,143,101,.85);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform .15s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.topic-group-ref-btn:hover{
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(11,143,101,.22), rgba(11,143,101,.14));
+  border-color: rgba(11,143,101,.45);
+  box-shadow: 0 6px 14px rgba(11,143,101,.18);
+}
+
+@media (max-width: 600px){
+  .topic-group-title{
+    font-size: 20px;
+  }
+  .topic-group-item{
+    grid-template-columns: 32px 1fr;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+  .topic-group-item-refs{
+    grid-column: 2;
+    justify-content: flex-start;
+    margin-top: 4px;
+  }
+  .topic-group-item-num{
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  .topic-group-item-text{
+    font-size: 14px;
   }
 }
