@@ -270,7 +270,7 @@ function renderShell(activeTab) {
               <span class="hamburger-line"></span>
               <span class="hamburger-line"></span>
             </button>
-            <h1>処世術禄</h1>
+            <h1 id="brandTitle" style="cursor: pointer;">処世術禄</h1>
           </div>
         </div>
         <div class="header-right">
@@ -331,6 +331,11 @@ function renderShell(activeTab) {
           <button class="mobile-menu-close" id="mobileMenuClose" aria-label="閉じる">×</button>
         </div>
         <div class="mobile-menu-list">
+          <button class="mobile-menu-item" id="mobileMenuHome">
+            <span class="mobile-menu-subtitle">トップページ</span>
+            <span class="mobile-menu-main">ホーム</span>
+            <span class="mobile-menu-desc">処世術禄の入口</span>
+          </button>
           <button class="mobile-menu-item" id="mobileMenuTips">
             <span class="mobile-menu-subtitle">即効性・具体論</span>
             <span class="mobile-menu-main">ケース別処世術</span>
@@ -418,6 +423,12 @@ function renderShell(activeTab) {
     panel.classList.add("is-open");
   };
 
+  // ブランドタイトルをクリックでホームへ
+  const brandTitle = $("#brandTitle");
+  if (brandTitle) {
+    brandTitle.onclick = () => nav("#home");
+  }
+
   const closeMenu = () => {
     overlay.classList.remove("is-open");
     panel.classList.remove("is-open");
@@ -427,6 +438,15 @@ function renderShell(activeTab) {
   overlay.onclick = (e) => {
     if (e.target === overlay) closeMenu();
   };
+
+  // ホーム
+  const mobileMenuHome = $("#mobileMenuHome");
+  if (mobileMenuHome) {
+    mobileMenuHome.onclick = () => {
+      closeMenu();
+      nav("#home");
+    };
+  }
 
   // ケース別処世術
   const mobileMenuTips = $("#mobileMenuTips");
@@ -892,6 +912,92 @@ function renderDetail(id) {
   $("#back").onclick = () => history.back();
 }
 
+// ========== トップページ（入口ハブ） ==========
+function renderHome() {
+  renderShell("home");
+  const view = $("#view");
+
+  // 統計情報を計算
+  const totalCards = DATA.all.length;
+  const situationTipsData = DATA.situationTips || {};
+  const categories = situationTipsData.categories || [];
+  const totalTopics = categories.reduce((sum, cat) => sum + (cat.topics || []).length, 0);
+  const totalOS = OS_META.length;
+
+  view.innerHTML = `
+    <div class="home-container">
+      <!-- ヘッダーセクション（思想提示） -->
+      <div class="home-header">
+        <h1 class="home-header-title">処世術禄</h1>
+        <p class="home-header-subtitle">社会科学と心理学を束ね、情報過多の時代に判断を構造化する</p>
+      </div>
+
+      <!-- 規模感セクション（数値による信頼形成） -->
+      <div class="home-stats">
+        <div class="home-stat-card">
+          <span class="home-stat-value">${totalCards}</span>
+          <span class="home-stat-label">処世術カード</span>
+        </div>
+        <div class="home-stat-card">
+          <span class="home-stat-value">${totalTopics}</span>
+          <span class="home-stat-label">ケース別テーマ</span>
+        </div>
+        <div class="home-stat-card">
+          <span class="home-stat-value">${totalOS}</span>
+          <span class="home-stat-label">体系OS</span>
+        </div>
+      </div>
+
+      <!-- 入口選択セクション（最重要） -->
+      <div class="home-entries">
+        <button class="home-entry-card" id="entryRelation">
+          <span class="home-entry-icon">🤝</span>
+          <div class="home-entry-content">
+            <h2 class="home-entry-title">人間関係で悩んでいる</h2>
+            <p class="home-entry-desc">好かれる／なめられない／信頼される</p>
+          </div>
+          <span class="home-entry-arrow">→</span>
+        </button>
+
+        <button class="home-entry-card" id="entryMental">
+          <span class="home-entry-icon">💭</span>
+          <div class="home-entry-content">
+            <h2 class="home-entry-title">自分を強くしたい</h2>
+            <p class="home-entry-desc">メンタル・思考・変化対応</p>
+          </div>
+          <span class="home-entry-arrow">→</span>
+        </button>
+
+        <button class="home-entry-card" id="entryOS">
+          <span class="home-entry-icon">📚</span>
+          <div class="home-entry-content">
+            <h2 class="home-entry-title">全体構造を知りたい</h2>
+            <p class="home-entry-desc">判断の仕組み・OS</p>
+          </div>
+          <span class="home-entry-arrow">→</span>
+        </button>
+      </div>
+
+      <!-- 補助説明セクション -->
+      <div class="home-supplement">
+        <div class="home-supplement-card">
+          <h3 class="home-supplement-title">ケース別処世術</h3>
+          <p class="home-supplement-desc">今すぐ使う立ち回り</p>
+        </div>
+        <div class="home-supplement-card">
+          <h3 class="home-supplement-title">体系処世術</h3>
+          <p class="home-supplement-desc">判断の裏にある構造</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // 入口ボタンのイベント
+  $("#entryRelation").onclick = () => nav("#tips?section=interpersonal");
+  $("#entryMental").onclick = () => nav("#tips?section=mental");
+  $("#entryOS").onclick = () => nav("#list?os=life");
+}
+
 // ========== マイページ ==========
 function renderMy() {
   renderShell("my");
@@ -1179,11 +1285,11 @@ function renderSituationTips() {
   const categories = situationTipsData.categories || [];
 
   const sectionMap = [
-    { title: "思考術", categoryIds: ["C-MENTAL", "C-ADAPT"] },
-    { title: "対人術", categoryIds: ["C-RELATION"] },
-    { title: "仕事術", categoryIds: ["C-BUSINESS"] },
-    { title: "成功術", categoryIds: ["C-GOAL"] },
-    { title: "人生術", categoryIds: ["C-LIFE"] }
+    { id: "mental", title: "思考術", categoryIds: ["C-MENTAL", "C-ADAPT"] },
+    { id: "interpersonal", title: "対人術", categoryIds: ["C-RELATION"] },
+    { id: "business", title: "仕事術", categoryIds: ["C-BUSINESS"] },
+    { id: "success", title: "成功術", categoryIds: ["C-GOAL"] },
+    { id: "life", title: "人生術", categoryIds: ["C-LIFE"] }
   ];
 
   const buildSectionTopics = (ids) =>
@@ -1197,7 +1303,7 @@ function renderSituationTips() {
       ${sectionMap.map((section) => {
         const topics = buildSectionTopics(section.categoryIds);
         return `
-          <section class="tips-simple-section">
+          <section class="tips-simple-section" id="${escapeHtml(section.id)}">
             <h2 class="tips-simple-title">≪${escapeHtml(section.title)}≫</h2>
             <ul class="tips-simple-topics">
               ${topics.map((topic) => `
@@ -1227,6 +1333,17 @@ function renderSituationTips() {
       }
     };
   });
+
+  // Handle scroll to section if hash has a section parameter
+  const q = parseQuery(location.hash.split("?")[1] || "");
+  if (q.section) {
+    const targetSection = document.getElementById(q.section);
+    if (targetSection) {
+      setTimeout(() => {
+        targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }
 }
 
 // ========== 処世術群詳細ページ ==========
@@ -1647,7 +1764,7 @@ async function boot() {
   await loadAll();
 
   const onRoute = () => {
-    const hash = location.hash || "#tips";
+    const hash = location.hash || "#home";
 
     if (hash.startsWith("#list")) {
       const q = parseQuery(hash.split("?")[1] || "");
@@ -1693,8 +1810,12 @@ async function boot() {
 
     if (hash.startsWith("#my")) return renderMy();
 
-    // Default: redirect to tips (ケース別処世術)
-    renderSituationTips();
+    if (hash.startsWith("#home") || hash === "#" || hash === "") {
+      return renderHome();
+    }
+
+    // Default: show home page (entry hub)
+    renderHome();
   };
 
   window.addEventListener("hashchange", onRoute);
