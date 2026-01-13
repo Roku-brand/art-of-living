@@ -103,6 +103,27 @@
             { "text": "相手の立場で考える（共感力）", "refs": ["R-007", "R-037"] },
             { "text": "沈黙を恐れない（考える間を与える）", "refs": ["R-037"] }
           ]
+        },
+        {
+          "topicId": "T-NEGOTIATION",
+          "name": "交渉を極める人の処世術",
+          "items": [
+            { "text": "即断しない（ディレイ・タクティクス / Decision Deferral）", "refs": ["O-001"] },
+            { "text": "最初の提示で基準を作る（アンカリング効果 / Anchoring Effect）", "refs": ["O-001"] },
+            { "text": "大きく振ってから本命を出す（ドア・イン・ザ・フェイス）", "refs": ["O-001"] },
+            { "text": "小さな合意を積み重ねる（フット・イン・ザ・ドア）", "refs": ["O-001"] },
+            { "text": "要求ではなく利害を見る（ポジションとインタレストの分離）", "refs": ["O-001"] },
+            { "text": "条件に優先順位をつける（条件階層化 / Priority Structuring）", "refs": ["O-001"] },
+            { "text": "譲歩は必ず交換にする（相互譲歩原理 / Reciprocity）", "refs": ["O-001"] },
+            { "text": "代替案を常に確保する（BATNA / Best Alternative to a Negotiated Agreement）", "refs": ["O-001"] },
+            { "text": "情報は順番で出す（情報の非対称性管理）", "refs": ["O-001"] },
+            { "text": "沈黙を圧力として使う（サイレント・パワー）", "refs": ["O-001"] },
+            { "text": "急がされても急がない（時間圧力耐性 / Time Pressure Resistance）", "refs": ["O-001"] },
+            { "text": "希少性を過信しない（希少性バイアス / Scarcity Bias）", "refs": ["O-001"] },
+            { "text": "言い方で意味を変える（フレーミング効果 / Framing Effect）", "refs": ["O-001"] },
+            { "text": "合意は文脈ごと固定する（コミットメント固定化）", "refs": ["O-001"] },
+            { "text": "悪い合意より撤退を選ぶ（合理的撤退 / Strategic Exit）", "refs": ["O-001"] }
+          ]
         }
       ]
     },
