@@ -224,7 +224,7 @@ a:hover{ text-decoration: underline; }
 
 /* Page End Band */
 .page-end-band{
-  height: 18px;
+  height: 36px;
   background: #6b1421;
   box-shadow: 0 -1px 0 rgba(255,255,255,.2) inset;
 }
