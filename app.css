@@ -3576,6 +3576,40 @@ input:focus-visible, textarea:focus-visible{
   text-align: center;
   margin-bottom: 24px;
 }
+.topic-group-nav{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.topic-group-nav-btn{
+  flex: 1;
+  max-width: 200px;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topic-group-nav-center{
+  flex-shrink: 0;
+}
+.topic-group-nav-placeholder{
+  flex: 1;
+  max-width: 200px;
+}
+@media (max-width: 600px){
+  .topic-group-nav{
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  .topic-group-nav-btn{
+    font-size: 11px;
+    max-width: 140px;
+    padding: 6px 8px;
+  }
+}
 .topic-group-back{
   margin-bottom: 16px;
 }
@@ -3651,7 +3685,7 @@ input:focus-visible, textarea:focus-visible{
   font-size: 13px;
   font-weight: 500;
   line-height: 1.5;
-  color: rgba(99,102,241,.80);
+  color: var(--wine-700);
   margin-left: 38px;
   margin-top: 2px;
 }
