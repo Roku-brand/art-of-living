@@ -1468,9 +1468,11 @@ function renderTopicGroupPage(topicId) {
       <div class="topic-group-list">
         ${items.map((item, idx) => `
           <div class="topic-group-item">
-            <span class="topic-group-item-num">${idx + 1}</span>
-            <span class="topic-group-item-text">${escapeHtml(item.text)}</span>
-            ${item.term ? `<span class="topic-group-item-term">（${escapeHtml(extractJapaneseTerm(item.term))}）</span>` : ""}
+            <div class="topic-group-item-main">
+              <span class="topic-group-item-num">${idx + 1}</span>
+              <span class="topic-group-item-text">${escapeHtml(item.text)}</span>
+              ${item.term ? `<span class="topic-group-item-term">（${escapeHtml(extractJapaneseTerm(item.term))}）</span>` : ""}
+            </div>
             ${(item.refs && item.refs.length) ? `
               <div class="topic-group-item-refs">
                 ${item.refs.map((ref) => `<a class="topic-group-ref-tag" href="#" data-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</a>`).join("")}
