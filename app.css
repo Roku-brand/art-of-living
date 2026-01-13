@@ -4015,6 +4015,9 @@ input:focus-visible, textarea:focus-visible{
   color: var(--ink-500);
   line-height: 1.7;
 }
+.top-panel-principles .top-panel-note{
+  color: #000;
+}
 .top-panel-note p{
   margin: 0 0 8px;
 }
