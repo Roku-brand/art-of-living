@@ -3675,6 +3675,60 @@ input:focus-visible, textarea:focus-visible{
     font-size: 12px;
     margin-left: 32px;
   }
+  .topic-group-item-refs{
+    margin-left: 32px;
+    gap: 6px;
+  }
+  .topic-group-ref-tag{
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+}
+
+/* Ref tags for topic group items - linking to systematic wisdom */
+.topic-group-item-refs{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: 38px;
+  margin-top: 6px;
+}
+.topic-group-ref-tag{
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, rgba(215,177,90,.18), rgba(215,177,90,.10));
+  border: 1px solid rgba(215,177,90,.35);
+  border-radius: var(--r-md);
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(153,115,43,.92);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.topic-group-ref-tag:hover{
+  background: linear-gradient(135deg, rgba(215,177,90,.32), rgba(215,177,90,.22));
+  border-color: rgba(215,177,90,.55);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(215,177,90,.18);
+}
+.topic-group-ref-tag:active{
+  transform: translateY(0);
+}
+
+/* Focused card highlight animation */
+.scard-focused{
+  animation: scard-pulse 0.6s ease-in-out 3;
+  box-shadow: 0 0 0 3px rgba(215,177,90,.45), var(--shadow0);
+}
+@keyframes scard-pulse{
+  0%, 100%{
+    box-shadow: 0 0 0 3px rgba(215,177,90,.45), var(--shadow0);
+  }
+  50%{
+    box-shadow: 0 0 0 6px rgba(215,177,90,.25), var(--shadow1);
+  }
 }
 
 /* ========== トップページ（入口・俯瞰ハブ） ========== */
