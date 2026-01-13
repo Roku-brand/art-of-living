@@ -74,21 +74,20 @@ body{
   color: var(--ink);
   line-height: 1.65;
 
-  /* 
+  /*
    * 統合デザイン: 和風×ダークファンタジー×上品なUI
-   * ベース: 深いえんじ〜暗赤（ワインレッド〜ボルドー）
+   * ベース: 白（柔らかなトーン）
    */
   background:
     /* 四隅ビネット（中央に視線誘導） */
-    radial-gradient(ellipse 140% 100% at 50% 50%, transparent 55%, rgba(28,8,12,.35) 100%),
+    radial-gradient(ellipse 140% 100% at 50% 50%, rgba(255,255,255,.85) 0%, rgba(0,0,0,.08) 100%),
     /* 極薄の幾何学パターン（背景に溶け込む） */
     url("./assets/bg/pattern-subtle.svg"),
-    /* グラデーション：下部に向かって暗く重く */
+    /* グラデーション：ごく薄いグレイに */
     linear-gradient(180deg,
-      #4a1420 0%,
-      #3d1119 35%,
-      #30101a 70%,
-      #240c14 100%
+      #ffffff 0%,
+      #f6f6f8 40%,
+      #f0f1f4 100%
     );
   /* scroll for all layers - better mobile performance */
   background-attachment: scroll, scroll, scroll;
