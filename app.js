@@ -1710,12 +1710,10 @@ function renderTopPage() {
   renderShell("home");
   const view = $("#view");
 
-  // 数値データの計算
-  const totalCards = DATA.all.length;
-  const situationTipsData = DATA.situationTips || {};
-  const categories = situationTipsData.categories || [];
-  const totalCategories = categories.reduce((sum, cat) => sum + (cat.topics || []).length, 0);
-  const osCount = OS_META.length;
+  // 数値データ（固定表示）
+  const totalCases = 17;
+  const totalTips = 203;
+  const osCount = 7;
 
   view.innerHTML = `
     <div class="top-page top-page-classic">
@@ -1729,13 +1727,13 @@ function renderTopPage() {
 
       <section class="top-stats-section classic">
         <div class="top-stat-item">
-          <span class="top-stat-num">${totalCards}</span>
-          <span class="top-stat-label">処世術カード</span>
+          <span class="top-stat-num">${totalCases}</span>
+          <span class="top-stat-label">ケース</span>
         </div>
         <div class="top-stat-divider"></div>
         <div class="top-stat-item">
-          <span class="top-stat-num">${totalCategories}</span>
-          <span class="top-stat-label">カテゴリ</span>
+          <span class="top-stat-num">${totalTips}</span>
+          <span class="top-stat-label">処世術</span>
         </div>
         <div class="top-stat-divider"></div>
         <div class="top-stat-item">
