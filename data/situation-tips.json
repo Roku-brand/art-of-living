@@ -18,7 +18,7 @@
             { "text": "小さな頼み事をする", "term": "ベンジャミン・フランクリン効果 / Ben Franklin Effect" },
             { "text": "相手の言葉を繰り返す", "term": "ミラーリング / Mirroring" },
             { "text": "沈黙で相手に話させる", "term": "沈黙の誘導 / Silence Prompting" },
-            { "text": "第三者を通じて褒める", "term": "ウィンザー効果 / Winsor Effect" },
+            { "text": "第三者を通じて褒める", "term": "ウィンザー効果 / Windsor Effect" },
             { "text": "相手の利益を先に出す", "term": "返報性の原理 / Reciprocity Norm" },
             { "text": "期待を少し下回らせておく", "term": "期待値コントロール / Expectation Management" }
           ]
@@ -69,7 +69,7 @@
             { "text": "悪口を言わない", "term": "ネガティビティ回避 / Negativity Avoidance" },
             { "text": "相談には真剣に向き合う", "term": "傾聴姿勢 / Active Listening Posture" },
             { "text": "できないことは正直に言う", "term": "自己限界開示 / Self-Limitation Disclosure" },
-            { "text": "小さな約束を守る", "term": "マイクロ・コミットメント / Micro-Commitment" },
+            { "text": "小さな約束を守る", "term": "信頼の漸進的構築 / Incremental Trust Building" },
             { "text": "期待を超える成果を出す", "term": "期待超過効果 / Expectation Exceeded Effect" },
             { "text": "報告は悪い話から先に出す", "term": "悪材料先出し / Bad News First" },
             { "text": "言い訳より対策を述べる", "term": "解決志向 / Solution-Oriented Approach" },
@@ -198,7 +198,7 @@
             { "text": "「今」に意識を戻す", "term": "マインドフルネス / Mindfulness" },
             { "text": "身体の緊張を緩める", "term": "筋弛緩法 / Progressive Muscle Relaxation" },
             { "text": "状況を俯瞰する", "term": "認知的距離化 / Cognitive Distancing" },
-            { "text": "感情に名前をつける", "term": "感情ラベリング / Affect Labeling" },
+            { "text": "感情に名前をつける", "term": "情動名称化 / Emotion Naming" },
             { "text": "自分の思考を観察する", "term": "脱中心化 / Decentering" },
             { "text": "判断を保留にする", "term": "判断の延期 / Judgment Deferral" },
             { "text": "過去の成功対処を参照する", "term": "対処資源の活用 / Coping Resources Utilization" }
@@ -243,7 +243,7 @@
             { "text": "決断を先延ばしにしない", "term": "決断速度 / Decision Speed" },
             { "text": "行動を先に起こす", "term": "行動優先 / Action Bias" },
             { "text": "成果を可視化する", "term": "進捗の可視化 / Progress Visualization" },
-            { "text": "環境を成功に寄せる", "term": "環境設計 / Environmental Design" },
+            { "text": "環境を成功に寄せる", "term": "成功環境の構築 / Success Environment Structuring" },
             { "text": "目標を公言する", "term": "公開コミットメント / Public Commitment" }
           ]
         },
@@ -316,7 +316,7 @@
             { "text": "休日は完全にオフにする", "term": "心理的デタッチメント / Psychological Detachment" },
             { "text": "仕事以外の居場所を持つ", "term": "多領域アイデンティティ / Multi-Domain Identity" },
             { "text": "NOを言う", "term": "境界線防衛 / Boundary Defense" },
-            { "text": "完璧主義を手放す", "term": "最適化志向 / Satisficing" },
+            { "text": "完璧主義を手放す", "term": "完璧主義の放棄 / Perfectionism Release" },
             { "text": "自分の時間を予定に入れる", "term": "セルフ・アポイントメント / Self-Appointment" },
             { "text": "通勤時間を自己投資に使う", "term": "移動時間の価値化 / Commute Optimization" },
             { "text": "睡眠時間を確保する", "term": "睡眠衛生 / Sleep Hygiene" },
