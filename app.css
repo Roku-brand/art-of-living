@@ -3649,11 +3649,17 @@ input:focus-visible, textarea:focus-visible{
 }
 .topic-group-item{
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
   padding: 14px 18px;
   border-bottom: 1px solid rgba(10,18,20,.06);
   transition: background-color 0.12s ease;
+}
+.topic-group-item-main{
+  flex: 1;
+  min-width: 0;
 }
 .topic-group-item:last-child{
   border-bottom: none;
@@ -3699,6 +3705,8 @@ input:focus-visible, textarea:focus-visible{
   }
   .topic-group-item{
     padding: 12px 14px;
+    flex-direction: column;
+    gap: 8px;
   }
   .topic-group-item-num{
     width: 24px;
@@ -3715,6 +3723,7 @@ input:focus-visible, textarea:focus-visible{
   }
   .topic-group-item-refs{
     margin-left: 32px;
+    justify-content: flex-start;
     gap: 6px;
   }
   .topic-group-ref-tag{
@@ -3727,9 +3736,10 @@ input:focus-visible, textarea:focus-visible{
 .topic-group-item-refs{
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-left: 38px;
-  margin-top: 6px;
+  gap: 6px;
+  flex-shrink: 0;
+  align-items: flex-start;
+  justify-content: flex-end;
 }
 .topic-group-ref-tag{
   display: inline-flex;
