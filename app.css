@@ -215,6 +215,13 @@ a:hover{ text-decoration: underline; }
 }
 .brand small{ display: none; }
 
+/* Page End Band */
+.page-end-band{
+  height: 18px;
+  background: #6b1421;
+  box-shadow: 0 -1px 0 rgba(255,255,255,.2) inset;
+}
+
 @media (max-width: 768px){
   .header{
     height: 48px;
