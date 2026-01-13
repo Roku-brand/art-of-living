@@ -372,6 +372,186 @@
               ]
             }
           ]
+        },
+        {
+          "topicId": "T-RENAI",
+          "name": "恋愛の処世術（12）",
+          "items": [
+            {
+              "text": "追いかけすぎない",
+              "term": "追求の抑制 / Pursuit Moderation",
+              "refs": [
+                "R-001"
+              ]
+            },
+            {
+              "text": "自分の時間を確保する",
+              "term": "自己領域の維持 / Personal Space Preservation",
+              "refs": [
+                "R-013"
+              ]
+            },
+            {
+              "text": "相手を変えようとしない",
+              "term": "受容の姿勢 / Acceptance Stance",
+              "refs": [
+                "R-024"
+              ]
+            },
+            {
+              "text": "期待を言葉にする",
+              "term": "期待の言語化 / Expectation Verbalization",
+              "refs": [
+                "R-011"
+              ]
+            },
+            {
+              "text": "違和感を放置しない",
+              "term": "違和感の即時処理 / Immediate Discomfort Addressing",
+              "refs": [
+                "R-010"
+              ]
+            },
+            {
+              "text": "依存と好意を区別する",
+              "term": "感情の分離 / Emotional Differentiation",
+              "refs": [
+                "R-015"
+              ]
+            },
+            {
+              "text": "相手のペースを尊重する",
+              "term": "ペース同調 / Pace Synchronization",
+              "refs": [
+                "R-002"
+              ]
+            },
+            {
+              "text": "嫉妬を相手にぶつけない",
+              "term": "感情の内部処理 / Internal Emotion Processing",
+              "refs": [
+                "I-007"
+              ]
+            },
+            {
+              "text": "沈黙を恐れない",
+              "term": "沈黙の許容 / Silence Tolerance",
+              "refs": [
+                "R-008"
+              ]
+            },
+            {
+              "text": "相手の話を最後まで聞く",
+              "term": "傾聴 / Active Listening",
+              "refs": [
+                "R-007"
+              ]
+            },
+            {
+              "text": "記念日より日常を大切にする",
+              "term": "日常の価値化 / Everyday Appreciation",
+              "refs": [
+                "R-027"
+              ]
+            },
+            {
+              "text": "感謝を言葉で伝える",
+              "term": "感謝表出 / Gratitude Expression",
+              "refs": [
+                "R-018"
+              ]
+            }
+          ]
+        },
+        {
+          "topicId": "T-KAIWA",
+          "name": "会話・雑談の処世術（12）",
+          "items": [
+            {
+              "text": "相手が話したいことを聞く",
+              "term": "話題の引き出し / Topic Elicitation",
+              "refs": [
+                "R-032"
+              ]
+            },
+            {
+              "text": "相槌は大げさにする",
+              "term": "リアクション強調 / Reaction Amplification",
+              "refs": [
+                "R-007"
+              ]
+            },
+            {
+              "text": "自分の話は短くする",
+              "term": "発言量調整 / Speaking Time Control",
+              "refs": [
+                "R-037"
+              ]
+            },
+            {
+              "text": "質問で会話を広げる",
+              "term": "オープンクエスチョン / Open-Ended Questions",
+              "refs": [
+                "R-032"
+              ]
+            },
+            {
+              "text": "否定から入らない",
+              "term": "イエス・アンド / Yes-And Technique",
+              "refs": [
+                "R-024"
+              ]
+            },
+            {
+              "text": "相手の言葉を繰り返す",
+              "term": "バックトラッキング / Backtracking",
+              "refs": [
+                "R-007"
+              ]
+            },
+            {
+              "text": "話題を相手の関心に寄せる",
+              "term": "関心適応 / Interest Adaptation",
+              "refs": [
+                "R-032"
+              ]
+            },
+            {
+              "text": "沈黙を埋めようとしない",
+              "term": "沈黙耐性 / Silence Tolerance",
+              "refs": [
+                "R-008"
+              ]
+            },
+            {
+              "text": "共通点を見つける",
+              "term": "類似性の強調 / Similarity Emphasis",
+              "refs": [
+                "R-031"
+              ]
+            },
+            {
+              "text": "相手の名前を呼ぶ",
+              "term": "名前効果 / Name Effect",
+              "refs": [
+                "R-003"
+              ]
+            },
+            {
+              "text": "話のオチを求めない",
+              "term": "プロセス重視 / Process Focus",
+              "refs": [
+                "R-031"
+              ]
+            },
+            {
+              "text": "知っていても聞く",
+              "term": "戦略的無知 / Strategic Ignorance",
+              "refs": [
+                "R-041"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -1044,6 +1224,96 @@
               ]
             }
           ]
+        },
+        {
+          "topicId": "T-YOYUU",
+          "name": "余裕あふれる処世術（12）",
+          "items": [
+            {
+              "text": "反応を急がない",
+              "term": "反応遅延戦略 / Response Delay Strategy",
+              "refs": [
+                "I-007"
+              ]
+            },
+            {
+              "text": "最悪のシナリオを先に受け入れる",
+              "term": "事前受容 / Pre-Acceptance",
+              "refs": [
+                "I-004"
+              ]
+            },
+            {
+              "text": "完璧を求めない",
+              "term": "十分主義 / Satisficing",
+              "refs": [
+                "I-008"
+              ]
+            },
+            {
+              "text": "他人の評価に一喜一憂しない",
+              "term": "評価の相対化 / Evaluation Relativization",
+              "refs": [
+                "I-006"
+              ]
+            },
+            {
+              "text": "予定に余白を作る",
+              "term": "バッファタイム / Buffer Time",
+              "refs": [
+                "A-007"
+              ]
+            },
+            {
+              "text": "自分の機嫌を自分で取る",
+              "term": "自己調整 / Self-Regulation",
+              "refs": [
+                "I-009"
+              ]
+            },
+            {
+              "text": "比較対象を過去の自分にする",
+              "term": "自己比較 / Self-Comparison",
+              "refs": [
+                "I-006"
+              ]
+            },
+            {
+              "text": "「どうにかなる」を根拠なく信じる",
+              "term": "楽観的帰属 / Optimistic Attribution",
+              "refs": [
+                "I-003"
+              ]
+            },
+            {
+              "text": "困っても表情に出さない",
+              "term": "表情管理 / Facial Composure",
+              "refs": [
+                "R-004"
+              ]
+            },
+            {
+              "text": "選択肢を多めに持つ",
+              "term": "心理的安全網 / Psychological Safety Net",
+              "refs": [
+                "AD-004"
+              ]
+            },
+            {
+              "text": "深呼吸で間を作る",
+              "term": "呼吸調整 / Breathing Regulation",
+              "refs": [
+                "I-016"
+              ]
+            },
+            {
+              "text": "できないことを早めに認める",
+              "term": "限界認識 / Limit Recognition",
+              "refs": [
+                "R-014"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -1321,6 +1591,96 @@
               ]
             }
           ]
+        },
+        {
+          "topicId": "T-JIKAN",
+          "name": "時間の処世術（12）",
+          "items": [
+            {
+              "text": "朝の時間を死守する",
+              "term": "朝時間確保 / Morning Time Protection",
+              "refs": [
+                "A-006"
+              ]
+            },
+            {
+              "text": "重要なことを先にやる",
+              "term": "優先順位実行 / Priority Execution",
+              "refs": [
+                "A-009"
+              ]
+            },
+            {
+              "text": "予定に余白を入れる",
+              "term": "バッファ設計 / Buffer Design",
+              "refs": [
+                "A-007"
+              ]
+            },
+            {
+              "text": "断る基準を持つ",
+              "term": "拒否基準 / Rejection Criteria",
+              "refs": [
+                "R-014"
+              ]
+            },
+            {
+              "text": "締め切りを前倒しにする",
+              "term": "前倒し習慣 / Early Deadline Habit",
+              "refs": [
+                "A-003"
+              ]
+            },
+            {
+              "text": "マルチタスクを避ける",
+              "term": "シングルタスク集中 / Single-Tasking Focus",
+              "refs": [
+                "A-006"
+              ]
+            },
+            {
+              "text": "移動時間を活用する",
+              "term": "隙間時間活用 / Commute Optimization",
+              "refs": [
+                "A-006"
+              ]
+            },
+            {
+              "text": "通知をオフにする",
+              "term": "割り込み排除 / Interruption Blocking",
+              "refs": [
+                "A-005"
+              ]
+            },
+            {
+              "text": "同じ種類の作業をまとめる",
+              "term": "バッチ処理 / Batching",
+              "refs": [
+                "A-006"
+              ]
+            },
+            {
+              "text": "完璧を求めず終わらせる",
+              "term": "完了優先 / Completion Priority",
+              "refs": [
+                "A-002"
+              ]
+            },
+            {
+              "text": "振り返りの時間を確保する",
+              "term": "レトロスペクティブ / Retrospective",
+              "refs": [
+                "A-011"
+              ]
+            },
+            {
+              "text": "休息を予定に入れる",
+              "term": "休息スケジューリング / Rest Scheduling",
+              "refs": [
+                "I-009"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -1508,6 +1868,96 @@
               ]
             }
           ]
+        },
+        {
+          "topicId": "T-JINSEI",
+          "name": "人生設計の処世術（12）",
+          "items": [
+            {
+              "text": "5年後を言語化する",
+              "term": "長期ビジョン設定 / Long-Term Vision Setting",
+              "refs": [
+                "A-025"
+              ]
+            },
+            {
+              "text": "価値観を定期的に棚卸す",
+              "term": "価値観レビュー / Value Review",
+              "refs": [
+                "I-023"
+              ]
+            },
+            {
+              "text": "選択の軸を3つに絞る",
+              "term": "判断基準の限定 / Criteria Limitation",
+              "refs": [
+                "A-009"
+              ]
+            },
+            {
+              "text": "やらないことを決める",
+              "term": "否定リスト / Not-To-Do List",
+              "refs": [
+                "A-009"
+              ]
+            },
+            {
+              "text": "お金より時間を優先する",
+              "term": "時間資本思考 / Time Capital Thinking",
+              "refs": [
+                "A-006"
+              ]
+            },
+            {
+              "text": "リスクは分散する",
+              "term": "リスク分散 / Risk Diversification",
+              "refs": [
+                "AD-005"
+              ]
+            },
+            {
+              "text": "転職可能な状態を維持する",
+              "term": "キャリア流動性 / Career Fluidity",
+              "refs": [
+                "AD-003"
+              ]
+            },
+            {
+              "text": "健康を投資対象にする",
+              "term": "健康資本投資 / Health Capital Investment",
+              "refs": [
+                "I-016"
+              ]
+            },
+            {
+              "text": "人間関係を定期的に見直す",
+              "term": "関係棚卸し / Relationship Review",
+              "refs": [
+                "R-027"
+              ]
+            },
+            {
+              "text": "後悔のパターンを知る",
+              "term": "後悔予防 / Regret Prevention",
+              "refs": [
+                "I-024"
+              ]
+            },
+            {
+              "text": "小さく試して決める",
+              "term": "仮説検証 / Hypothesis Testing",
+              "refs": [
+                "AD-004"
+              ]
+            },
+            {
+              "text": "撤退条件を先に決める",
+              "term": "撤退基準設定 / Exit Criteria Setting",
+              "refs": [
+                "AD-008"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -1692,6 +2142,96 @@
               "term": "実行可能性優先 / Actionability Focus",
               "refs": [
                 "A-002"
+              ]
+            }
+          ]
+        },
+        {
+          "topicId": "T-TACHIMAWARI",
+          "name": "立ち回りの処世術（12）",
+          "items": [
+            {
+              "text": "相手より先に動かない",
+              "term": "後出しの優位 / Second-Mover Advantage",
+              "refs": [
+                "O-014"
+              ]
+            },
+            {
+              "text": "敵を作らずに意見を通す",
+              "term": "対立回避交渉 / Non-Confrontational Negotiation",
+              "refs": [
+                "O-016"
+              ]
+            },
+            {
+              "text": "キーパーソンを早期に特定する",
+              "term": "ステークホルダー分析 / Stakeholder Analysis",
+              "refs": [
+                "O-001"
+              ]
+            },
+            {
+              "text": "恩は売っておく",
+              "term": "互恵性の先行投資 / Reciprocity Priming",
+              "refs": [
+                "R-011"
+              ]
+            },
+            {
+              "text": "弱みを見せる場面を選ぶ",
+              "term": "戦略的自己開示 / Strategic Self-Disclosure",
+              "refs": [
+                "R-001"
+              ]
+            },
+            {
+              "text": "功績を相手に渡す",
+              "term": "功績の譲渡 / Credit Sharing",
+              "refs": [
+                "O-010"
+              ]
+            },
+            {
+              "text": "情報は出すタイミングで価値が変わる",
+              "term": "情報の時間価値 / Information Timing",
+              "refs": [
+                "O-015"
+              ]
+            },
+            {
+              "text": "複数の選択肢を常に持つ",
+              "term": "オプション確保 / Option Preservation",
+              "refs": [
+                "AD-004"
+              ]
+            },
+            {
+              "text": "撤退ラインを先に決める",
+              "term": "損切り基準 / Stop-Loss Criteria",
+              "refs": [
+                "AD-008"
+              ]
+            },
+            {
+              "text": "味方を増やしてから動く",
+              "term": "多数派形成 / Coalition Building",
+              "refs": [
+                "O-016"
+              ]
+            },
+            {
+              "text": "沈黙で相手の出方を見る",
+              "term": "受動的情報収集 / Passive Intelligence Gathering",
+              "refs": [
+                "R-008"
+              ]
+            },
+            {
+              "text": "自分の立場を固定しすぎない",
+              "term": "立場の柔軟性 / Positional Flexibility",
+              "refs": [
+                "AD-007"
               ]
             }
           ]
