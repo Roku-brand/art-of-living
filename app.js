@@ -280,6 +280,14 @@ function renderShell(activeTab) {
           <button class="header-nav-item ${activeTab === 'my' ? 'active' : ''}" data-nav="#my">マイページ</button>
         </nav>
         <div class="header-right">
+          <div class="header-search" id="headerSearch">
+            <span class="header-search-icon" aria-hidden="true">🔍</span>
+            <input class="header-search-input" id="headerSearchInput" type="text" placeholder="検索..." aria-label="検索" />
+          </div>
+          <button class="header-notification-btn" id="headerNotificationBtn" aria-label="通知">
+            <span class="header-notification-icon">🔔</span>
+            <span class="header-notification-badge" id="notificationBadge">3</span>
+          </button>
           <button class="header-account-btn" id="headerAccountBtn" aria-label="アカウント">
             ${loggedIn ? `<span class="header-account-icon logged-in">👤</span>` : `<span class="header-account-icon">👤</span>`}
           </button>
@@ -417,6 +425,27 @@ function renderShell(activeTab) {
       login(username);
       closeLoginModal();
       refreshPage();
+    };
+  }
+
+  // ヘッダー検索機能
+  const headerSearchInput = $("#headerSearchInput");
+  if (headerSearchInput) {
+    headerSearchInput.onkeydown = (e) => {
+      if (e.key === "Enter") {
+        const query = headerSearchInput.value.trim();
+        nav(`#search?q=${encodeURIComponent(query)}`);
+      }
+    };
+  }
+
+  // 通知ボタン（将来の機能拡張用）
+  const headerNotificationBtn = $("#headerNotificationBtn");
+  if (headerNotificationBtn) {
+    headerNotificationBtn.onclick = () => {
+      // 将来的に通知一覧を表示する機能を追加予定
+      // 現時点では、この機能はプレースホルダーとして実装されています
+      console.info("通知機能は準備中です。");
     };
   }
 
@@ -1822,7 +1851,7 @@ function renderTopPage() {
       <footer class="top-footer">
         <div class="top-footer-links">
           <a href="#" class="top-footer-link">プライバシー</a>
-          <a href="#" class="top-footer-link">利用規約</a>
+          <a href="#" class="top-footer-link">再頒布</a>
           <a href="#" class="top-footer-link">お問い合わせ</a>
         </div>
         <div class="top-footer-copy">© 処世術禄</div>
