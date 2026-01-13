@@ -92,7 +92,7 @@ a:hover{ text-decoration: underline; }
   z-index: 10;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  background: var(--wine-900);
+  background: rgba(59,15,22,.92);
   border-bottom: 1px solid rgba(248,237,240,.18);
   box-shadow: 0 12px 28px rgba(20,4,8,.26);
   color: #f8eef0;
