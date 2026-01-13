@@ -242,6 +242,88 @@ a:hover{ text-decoration: underline; }
   align-items: center;
   gap: 12px;
 }
+
+/* Header Search */
+.header-search{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid rgba(248,238,240,.25);
+  border-radius: var(--r-md);
+  background: rgba(248,238,240,.10);
+  transition: border-color .15s ease, background-color .15s ease;
+}
+.header-search:focus-within{
+  border-color: rgba(248,238,240,.45);
+  background: rgba(248,238,240,.18);
+}
+.header-search-icon{
+  font-size: 14px;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+.header-search-input{
+  width: 120px;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  padding: 0;
+  box-shadow: none;
+}
+.header-search-input::placeholder{
+  color: rgba(248,238,240,.55);
+}
+@media (max-width: 768px){
+  .header-search{
+    display: none;
+  }
+}
+
+/* Header Notification */
+.header-notification-btn{
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(248,238,240,.30);
+  border-radius: var(--r-md);
+  background: rgba(248,238,240,.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .15s ease, transform .15s ease;
+  flex-shrink: 0;
+}
+.header-notification-btn:hover{
+  background: rgba(248,238,240,.22);
+  transform: scale(1.05);
+}
+.header-notification-icon{
+  font-size: 16px;
+}
+.header-notification-badge{
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border: 2px solid var(--wine-900);
+  font-size: 10px;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(239,68,68,.35);
+}
+
 .header-account-btn{
   width: 38px;
   height: 38px;
@@ -271,8 +353,16 @@ a:hover{ text-decoration: underline; }
   .header-right{
     flex-direction: row;
     align-items: center;
-    width: 100%;
-    justify-content: space-between;
+    width: auto;
+    justify-content: flex-end;
+  }
+  .header-notification-btn{
+    width: 34px;
+    height: 34px;
+  }
+  .header-account-btn{
+    width: 34px;
+    height: 34px;
   }
 }
 
