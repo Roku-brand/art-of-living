@@ -578,22 +578,25 @@ a:hover{ text-decoration: underline; }
   gap: 2px;
   min-width: 0;
 }
+.sidebarCompactLabel{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  line-height: 1.2;
+  max-height: 2.4em;
+  overflow: hidden;
+}
 .sidebarCompactMain{
   font-weight: 900;
   font-size: 14px;
-  line-height: 1.12;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.2;
   color: rgba(248,238,240,.90);
 }
 .sidebarCompactSub{
   font-weight: 800;
   font-size: 12px;
-  line-height: 1.12;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.2;
   color: rgba(248,238,240,.58);
 }
 .sidebarCompactItem.isActive{
