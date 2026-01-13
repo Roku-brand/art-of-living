@@ -1766,7 +1766,7 @@ function renderTopPage() {
 
       <section class="top-content-grid">
         <div class="top-content-main">
-          <div class="top-panel">
+          <div class="top-panel top-panel-principles">
             <div class="top-panel-header">
               <span class="top-panel-icon">🧭</span>
               <span class="top-panel-title">忘れるな「基本原則」</span>
