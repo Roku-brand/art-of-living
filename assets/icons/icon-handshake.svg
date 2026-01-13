@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="握手アイコン">
+  <path d="M11 17a1 1 0 0 1-1-1v-4.586L7.707 9.121A1 1 0 0 0 6.293 9.121L3 12.414V16a1 1 0 0 0 1 1h7Z"/>
+  <path d="M13 17a1 1 0 0 0 1-1v-4.586l2.293-2.293a1 1 0 0 1 1.414 0L21 12.414V16a1 1 0 0 1-1 1h-7Z"/>
+  <path d="M12 7L8 11"/>
+  <path d="M12 7l4 4"/>
+  <circle cx="12" cy="6" r="1"/>
+</svg>

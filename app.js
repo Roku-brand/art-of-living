@@ -270,10 +270,15 @@ function renderShell(activeTab) {
               <span class="hamburger-line"></span>
               <span class="hamburger-line"></span>
             </button>
-            <img class="brand-icon" src="./icons/icon.svg" alt="処世術禄の羅針盤アイコン" />
+            <img class="brand-icon" src="./assets/icons/logo-compass-circuit.svg" alt="処世術禄の羅針盤アイコン" />
             <h1 class="brand-title" id="brandTitle">処世術禄</h1>
           </div>
         </div>
+        <nav class="header-nav">
+          <button class="header-nav-item ${activeTab === 'tips' ? 'active' : ''}" data-nav="#tips">ケース別処世術</button>
+          <button class="header-nav-item ${activeTab === 'list' ? 'active' : ''}" data-nav="#list?os=life">体系処世術・OS</button>
+          <button class="header-nav-item ${activeTab === 'my' ? 'active' : ''}" data-nav="#my">マイページ</button>
+        </nav>
         <div class="header-right">
           <button class="header-account-btn" id="headerAccountBtn" aria-label="アカウント">
             ${loggedIn ? `<span class="header-account-icon logged-in">👤</span>` : `<span class="header-account-icon">👤</span>`}
@@ -344,7 +349,7 @@ function renderShell(activeTab) {
           </button>
           <button class="mobile-menu-item" id="mobileMenuList">
             <span class="mobile-menu-subtitle">体系的に学ぶ</span>
-            <span class="mobile-menu-main">体系処世術</span>
+            <span class="mobile-menu-main">体系処世術・OS</span>
             <span class="mobile-menu-desc">7つのOSで構成された処世術体系</span>
           </button>
           <button class="mobile-menu-item" id="mobileMenuMy">
@@ -429,6 +434,14 @@ function renderShell(activeTab) {
   if (brandTitle) {
     brandTitle.onclick = () => nav("#home");
   }
+
+  // ヘッダーナビゲーション
+  document.querySelectorAll(".header-nav-item[data-nav]").forEach((el) => {
+    el.onclick = () => {
+      const target = el.getAttribute("data-nav");
+      if (target) nav(target);
+    };
+  });
 
   const closeMenu = () => {
     overlay.classList.remove("is-open");
@@ -1681,10 +1694,7 @@ function renderTopPage() {
         <div class="top-hero-inner">
           <p class="top-hero-eyebrow">判断・立ち回りに特化した</p>
           <h1 class="top-hero-title">構造化ポータル</h1>
-          <p class="top-hero-desc">社会科学と心理学を束ね、判断を構造化する。迷わない立ち回りを、今ここから。</p>
-        </div>
-        <div class="top-hero-emblem" aria-hidden="true">
-          <img src="./icons/icon.svg" alt="" />
+          <p class="top-hero-desc">社会科学と心理学を束ね、情報過多の時代に判断を構造化する。</p>
         </div>
       </section>
 
@@ -1694,7 +1704,7 @@ function renderTopPage() {
             <span class="top-entry-icon">🤝</span>
             <div class="top-entry-content">
               <span class="top-entry-name">人間関係で悩んでいる</span>
-              <span class="top-entry-desc">好かれる・なめられない・信頼される</span>
+              <span class="top-entry-desc">好かれる／なめられない／信頼される</span>
             </div>
           </button>
           <button class="top-entry-card classic" data-nav="#tips">
@@ -1722,7 +1732,7 @@ function renderTopPage() {
         <div class="top-stat-divider"></div>
         <div class="top-stat-item">
           <span class="top-stat-num">${totalCategories}</span>
-          <span class="top-stat-label">ケース別テーマ</span>
+          <span class="top-stat-label">カテゴリ</span>
         </div>
         <div class="top-stat-divider"></div>
         <div class="top-stat-item">
@@ -1735,18 +1745,22 @@ function renderTopPage() {
         <div class="top-content-main">
           <div class="top-panel">
             <div class="top-panel-header">
-              <span class="top-panel-icon">🧭</span>
+              <span class="top-panel-icon">📋</span>
               <span class="top-panel-title">ケース別処世術</span>
               <button class="top-panel-link" data-nav="#tips">一覧へ →</button>
             </div>
             <div class="top-panel-grid">
               <button class="top-panel-card" data-nav="#tips">
-                <span class="top-panel-card-title">なぜか好かれる</span>
+                <span class="top-panel-card-title">なぜか好かれる<span class="top-panel-card-arrow">→</span></span>
                 <span class="top-panel-card-meta">対人印象・信頼</span>
               </button>
               <button class="top-panel-card" data-nav="#tips">
-                <span class="top-panel-card-title">冷静でいられる</span>
+                <span class="top-panel-card-title">冷静でいられる<span class="top-panel-card-arrow">→</span></span>
                 <span class="top-panel-card-meta">メンタル・思考</span>
+              </button>
+              <button class="top-panel-card" data-nav="#tips">
+                <span class="top-panel-card-title">なめられない<span class="top-panel-card-arrow">→</span></span>
+                <span class="top-panel-card-meta">対人・境界線</span>
               </button>
             </div>
           </div>
@@ -1757,22 +1771,17 @@ function renderTopPage() {
               <span class="top-panel-title">体系処世術・OS</span>
               <button class="top-panel-link" data-nav="#list?os=life">OS一覧 →</button>
             </div>
+            <div class="top-panel-note">
+              <p>OSとは、判断・行動を支える「処世術のフレームワーク」です。7つのOS体系で、迷わず動ける自分を構築します。</p>
+            </div>
             <div class="top-panel-grid">
-              <button class="top-panel-card" data-nav="#list?os=life">
-                <span class="top-panel-card-title">OS-01 人生OS</span>
-                <span class="top-panel-card-meta">迷わない行き方</span>
-              </button>
               <button class="top-panel-card" data-nav="#list?os=internal">
-                <span class="top-panel-card-title">OS-02 内部心理OS</span>
+                <span class="top-panel-card-title">OS-02 内部心理OS<span class="top-panel-card-arrow">→</span></span>
                 <span class="top-panel-card-meta">心の扱い方</span>
               </button>
-              <button class="top-panel-card" data-nav="#list?os=relation">
-                <span class="top-panel-card-title">OS-03 対人関係OS</span>
-                <span class="top-panel-card-meta">人との関わり方</span>
-              </button>
-              <button class="top-panel-card" data-nav="#list?os=operation">
-                <span class="top-panel-card-title">OS-04 環境操作OS</span>
-                <span class="top-panel-card-meta">影響力の技術</span>
+              <button class="top-panel-card" data-nav="#list?os=adapt">
+                <span class="top-panel-card-title">OS-06 適応OS<span class="top-panel-card-arrow">→</span></span>
+                <span class="top-panel-card-meta">キャッチアップの極意</span>
               </button>
             </div>
           </div>
@@ -1797,12 +1806,21 @@ function renderTopPage() {
               <span class="top-panel-title">処世術禄について</span>
             </div>
             <div class="top-panel-note">
-              <p>ケース別に「立ち回り」を整理し、体系処世術で判断の構造を学べるポータル。</p>
+              <p>ケース別に「立ち回り」を整理し、体系処世術で判断の構造を学べるポータルです。情報過多の時代に、迷わない判断軸を提供します。</p>
               <button class="top-panel-link inline" data-nav="#list?os=life">体系処世術を読む →</button>
             </div>
           </div>
         </div>
       </section>
+
+      <footer class="top-footer">
+        <div class="top-footer-links">
+          <a href="#" class="top-footer-link">プライバシー</a>
+          <a href="#" class="top-footer-link">利用規約</a>
+          <a href="#" class="top-footer-link">お問い合わせ</a>
+        </div>
+        <div class="top-footer-copy">© 処世術禄</div>
+      </footer>
     </div>
   `;
 

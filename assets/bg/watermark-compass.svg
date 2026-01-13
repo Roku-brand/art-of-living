@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="コンパス透かし">
+  <defs>
+    <radialGradient id="compassPulse" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#d7b15a" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#d7b15a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Outer glow -->
+  <circle cx="200" cy="200" r="180" fill="url(#compassPulse)"/>
+  <!-- Main ring -->
+  <circle cx="200" cy="200" r="150" fill="none" stroke="#d7b15a" stroke-opacity="0.12" stroke-width="4"/>
+  <!-- Inner ring -->
+  <circle cx="200" cy="200" r="100" fill="none" stroke="#d7b15a" stroke-opacity="0.08" stroke-width="2"/>
+  <!-- Cardinal lines -->
+  <g stroke="#d7b15a" stroke-opacity="0.1" stroke-width="3" stroke-linecap="round">
+    <path d="M200 50 L200 90"/>
+    <path d="M200 310 L200 350"/>
+    <path d="M50 200 L90 200"/>
+    <path d="M310 200 L350 200"/>
+  </g>
+  <!-- Needle -->
+  <g>
+    <polygon points="200,80 230,190 200,200" fill="#d7b15a" fill-opacity="0.1"/>
+    <polygon points="200,320 170,210 200,200" fill="#d7b15a" fill-opacity="0.06"/>
+  </g>
+  <!-- Center dot -->
+  <circle cx="200" cy="200" r="8" fill="#d7b15a" fill-opacity="0.1"/>
+</svg>
