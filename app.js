@@ -1675,15 +1675,42 @@ function renderTopPage() {
   const osCount = OS_META.length;
 
   view.innerHTML = `
-    <div class="top-page">
-      <!-- ヘッダーセクション（思想提示） -->
-      <section class="top-header-section">
-        <h1 class="top-service-name">処世術禄</h1>
-        <p class="top-subtitle">社会科学と心理学を束ね、情報過多の時代に判断を構造化する</p>
+    <div class="top-page top-page-classic">
+      <section class="top-hero">
+        <div class="top-hero-inner">
+          <p class="top-hero-eyebrow">判断・立ち回りに特化した</p>
+          <h1 class="top-hero-title">構造化ポータル</h1>
+          <p class="top-hero-desc">社会科学と心理学を束ね、判断を構造化する。迷わない立ち回りを、今ここから。</p>
+        </div>
       </section>
 
-      <!-- 規模感セクション（数値による信頼形成） -->
-      <section class="top-stats-section">
+      <section class="top-entry-section">
+        <div class="top-entry-cards classic">
+          <button class="top-entry-card classic" data-nav="#tips">
+            <span class="top-entry-icon">🤝</span>
+            <div class="top-entry-content">
+              <span class="top-entry-name">人間関係で悩んでいる</span>
+              <span class="top-entry-desc">好かれる・なめられない・信頼される</span>
+            </div>
+          </button>
+          <button class="top-entry-card classic" data-nav="#tips">
+            <span class="top-entry-icon">💡</span>
+            <div class="top-entry-content">
+              <span class="top-entry-name">自分を強くしたい</span>
+              <span class="top-entry-desc">メンタル・思考・変化対応</span>
+            </div>
+          </button>
+          <button class="top-entry-card classic" data-nav="#list?os=life">
+            <span class="top-entry-icon">🧩</span>
+            <div class="top-entry-content">
+              <span class="top-entry-name">全体の仕組みを知りたい</span>
+              <span class="top-entry-desc">判断の仕組み・OS</span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <section class="top-stats-section classic">
         <div class="top-stat-item">
           <span class="top-stat-num">${totalCards}</span>
           <span class="top-stat-label">処世術カード</span>
@@ -1696,59 +1723,92 @@ function renderTopPage() {
         <div class="top-stat-divider"></div>
         <div class="top-stat-item">
           <span class="top-stat-num">${osCount}</span>
-          <span class="top-stat-label">OS（体系）</span>
+          <span class="top-stat-label">OS</span>
         </div>
       </section>
 
-      <!-- 入口選択セクション（最重要） -->
-      <section class="top-entry-section">
-        <h2 class="top-entry-title">どこから始めますか？</h2>
-        <div class="top-entry-cards">
-          <button class="top-entry-card" id="entryInterpersonal">
-            <span class="top-entry-icon">🤝</span>
-            <div class="top-entry-content">
-              <span class="top-entry-name">人間関係で悩んでいる</span>
-              <span class="top-entry-desc">好かれる・なめられない・信頼される</span>
+      <section class="top-content-grid">
+        <div class="top-content-main">
+          <div class="top-panel">
+            <div class="top-panel-header">
+              <span class="top-panel-icon">🧭</span>
+              <span class="top-panel-title">ケース別処世術</span>
+              <button class="top-panel-link" data-nav="#tips">一覧へ →</button>
             </div>
-            <span class="top-entry-arrow">→</span>
-          </button>
-          <button class="top-entry-card" id="entryMental">
-            <span class="top-entry-icon">🧠</span>
-            <div class="top-entry-content">
-              <span class="top-entry-name">自分を強くしたい</span>
-              <span class="top-entry-desc">メンタル・思考・変化対応</span>
+            <div class="top-panel-grid">
+              <button class="top-panel-card" data-nav="#tips">
+                <span class="top-panel-card-title">なぜか好かれる</span>
+                <span class="top-panel-card-meta">対人印象・信頼</span>
+              </button>
+              <button class="top-panel-card" data-nav="#tips">
+                <span class="top-panel-card-title">冷静でいられる</span>
+                <span class="top-panel-card-meta">メンタル・思考</span>
+              </button>
             </div>
-            <span class="top-entry-arrow">→</span>
-          </button>
-          <button class="top-entry-card" id="entryOS">
-            <span class="top-entry-icon">🗂️</span>
-            <div class="top-entry-content">
-              <span class="top-entry-name">全体構造を知りたい</span>
-              <span class="top-entry-desc">判断の仕組み・OS</span>
-            </div>
-            <span class="top-entry-arrow">→</span>
-          </button>
-        </div>
-      </section>
+          </div>
 
-      <!-- 補助説明セクション（任意・最小） -->
-      <section class="top-supplement-section">
-        <div class="top-supplement-item">
-          <span class="top-supplement-label">ケース別処世術</span>
-          <span class="top-supplement-desc">今すぐ使う立ち回り</span>
+          <div class="top-panel">
+            <div class="top-panel-header">
+              <span class="top-panel-icon">🧩</span>
+              <span class="top-panel-title">体系処世術・OS</span>
+              <button class="top-panel-link" data-nav="#list?os=life">OS一覧 →</button>
+            </div>
+            <div class="top-panel-grid">
+              <button class="top-panel-card" data-nav="#list?os=life">
+                <span class="top-panel-card-title">OS-01 人生OS</span>
+                <span class="top-panel-card-meta">迷わない行き方</span>
+              </button>
+              <button class="top-panel-card" data-nav="#list?os=internal">
+                <span class="top-panel-card-title">OS-02 内部心理OS</span>
+                <span class="top-panel-card-meta">心の扱い方</span>
+              </button>
+              <button class="top-panel-card" data-nav="#list?os=relation">
+                <span class="top-panel-card-title">OS-03 対人関係OS</span>
+                <span class="top-panel-card-meta">人との関わり方</span>
+              </button>
+              <button class="top-panel-card" data-nav="#list?os=operation">
+                <span class="top-panel-card-title">OS-04 環境操作OS</span>
+                <span class="top-panel-card-meta">影響力の技術</span>
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="top-supplement-item">
-          <span class="top-supplement-label">OS処世術</span>
-          <span class="top-supplement-desc">判断の裏にある構造</span>
+
+        <div class="top-content-side">
+          <div class="top-panel">
+            <div class="top-panel-header">
+              <span class="top-panel-icon">📌</span>
+              <span class="top-panel-title">今週の注目処世術</span>
+            </div>
+            <div class="top-panel-list">
+              <button class="top-panel-list-item" data-nav="#tips">なめられない人の処世術</button>
+              <button class="top-panel-list-item" data-nav="#tips">変化に強い人の処世術</button>
+              <button class="top-panel-list-item" data-nav="#tips">自信がある人の処世術</button>
+            </div>
+          </div>
+
+          <div class="top-panel">
+            <div class="top-panel-header">
+              <span class="top-panel-icon">📘</span>
+              <span class="top-panel-title">処世術禄について</span>
+            </div>
+            <div class="top-panel-note">
+              <p>ケース別に「立ち回り」を整理し、体系処世術で判断の構造を学べるポータル。</p>
+              <button class="top-panel-link inline" data-nav="#list?os=life">体系処世術を読む →</button>
+            </div>
+          </div>
         </div>
       </section>
     </div>
   `;
 
-  // 入口ボタンのクリックイベント
-  $("#entryInterpersonal").onclick = () => nav("#tips");
-  $("#entryMental").onclick = () => nav("#tips");
-  $("#entryOS").onclick = () => nav("#list?os=life");
+  // クリックナビゲーション
+  view.querySelectorAll("[data-nav]").forEach((el) => {
+    el.onclick = () => {
+      const target = el.getAttribute("data-nav");
+      if (target) nav(target);
+    };
+  });
 }
 
 // ========== ルーティング ==========
