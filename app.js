@@ -1361,11 +1361,7 @@ function renderTopicGroupPage(topicId) {
           <div class="topic-group-item">
             <span class="topic-group-item-num">${idx + 1}</span>
             <span class="topic-group-item-text">${escapeHtml(item.text)}</span>
-            <div class="topic-group-item-refs">
-              ${(item.refs || []).map(ref => `
-                <button class="topic-group-ref-btn" data-card-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
-              `).join("")}
-            </div>
+            ${item.term ? `<span class="topic-group-item-term">（${escapeHtml(item.term)}）</span>` : ""}
           </div>
         `).join("")}
       </div>
@@ -1373,15 +1369,6 @@ function renderTopicGroupPage(topicId) {
   `;
 
   $("#backToTips").onclick = () => nav("#tips");
-
-  // Handle card reference clicks
-  view.querySelectorAll("[data-card-ref]").forEach((btn) => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const cardId = btn.getAttribute("data-card-ref");
-      nav(`#detail?id=${encodeURIComponent(cardId)}`);
-    };
-  });
 }
 
 // ========== ケース別処世術 カテゴリ詳細ページ ==========
@@ -1486,11 +1473,7 @@ function renderTipsTopicDetail(topicNavId) {
           <div class="tips-detail-item">
             <span class="tips-detail-item-num">${idx + 1}</span>
             <span class="tips-detail-item-text">${escapeHtml(item.text)}</span>
-            <div class="tips-detail-item-refs">
-              ${(item.refs || []).map(ref => `
-                <button class="tips-ref-btn" data-card-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</button>
-              `).join("")}
-            </div>
+            ${item.term ? `<span class="tips-detail-item-term">（${escapeHtml(item.term)}）</span>` : ""}
           </div>
         `).join("")}
       </div>
@@ -1498,15 +1481,6 @@ function renderTipsTopicDetail(topicNavId) {
   `;
 
   $("#backToCategory").onclick = () => nav(`#tips-category?id=${encodeURIComponent(categoryId)}`);
-
-  // カードIDクリックハンドラ - カード詳細を開く
-  view.querySelectorAll("[data-card-ref]").forEach((btn) => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const cardId = btn.getAttribute("data-card-ref");
-      nav(`#detail?id=${encodeURIComponent(cardId)}`);
-    };
-  });
 
   const detailToggle = view.querySelector(".tips-detail-toggle");
   const detailList = view.querySelector(".tips-detail-list");
