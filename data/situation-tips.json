@@ -7,56 +7,75 @@
       "topics": [
         {
           "topicId": "T-LIKED",
-          "name": "人たらしの処世術",
+          "name": "人たらしの処世術（12）",
           "items": [
-            { "text": "相手の話を遮らない（アクティブ・リスニング）", "refs": ["I-012", "I-025"] },
-            { "text": "評価せずに受け取る（無条件の肯定的関心）", "refs": ["R-004"] },
-            { "text": "無条件の肯定的関心（承認欲求充足）", "refs": ["R-007"] },
-            { "text": "名前と文脈を覚える（パーソナライゼーション効果）", "refs": ["R-037", "R-041"] },
-            { "text": "共通点を拾って広げる（類似性の法則）", "refs": ["R-011"] },
-            { "text": "適度に自己開示する（自己開示の返報性）", "refs": ["R-005", "R-006"] },
-            { "text": "感情にラベルを貼る（感情ラベリング）", "refs": ["R-003"] },
-            { "text": "期待をかけすぎない（期待値コントロール）", "refs": ["R-003", "R-004"] }
+            { "text": "相手の話を遮らない", "term": "アクティブ・リスニング / Active Listening" },
+            { "text": "評価せずに受け取る", "term": "無条件の肯定的関心 / Unconditional Positive Regard" },
+            { "text": "名前と文脈を覚える", "term": "パーソナライゼーション効果 / Personalization Effect" },
+            { "text": "共通点を拾って広げる", "term": "類似性の法則 / Similarity-Attraction Effect" },
+            { "text": "適度に自己開示する", "term": "自己開示の返報性 / Self-Disclosure Reciprocity" },
+            { "text": "感情にラベルを貼る", "term": "感情ラベリング / Affect Labeling" },
+            { "text": "小さな頼み事をする", "term": "ベンジャミン・フランクリン効果 / Ben Franklin Effect" },
+            { "text": "相手の言葉を繰り返す", "term": "ミラーリング / Mirroring" },
+            { "text": "沈黙で相手に話させる", "term": "沈黙の誘導 / Silence Prompting" },
+            { "text": "第三者を通じて褒める", "term": "ウィンザー効果 / Windsor Effect" },
+            { "text": "相手の利益を先に出す", "term": "返報性の原理 / Reciprocity Norm" },
+            { "text": "期待を少し下回らせておく", "term": "期待値コントロール / Expectation Management" }
           ]
         },
         {
           "topicId": "T-IMPRESSION",
-          "name": "印象がいい人の処世術",
+          "name": "印象がいい人の処世術（12）",
           "items": [
-            { "text": "清潔感を保つ（第一印象の8割）", "refs": ["R-034"] },
-            { "text": "姿勢を正す（自信に見える）", "refs": ["R-034"] },
-            { "text": "声のトーンを意識する（落ち着いた声）", "refs": ["R-033"] },
-            { "text": "アイコンタクトを取る（信頼の基盤）", "refs": ["R-003"] },
-            { "text": "笑顔を忘れない（安心感を与える）", "refs": ["R-004"] },
-            { "text": "身だしなみに気を配る（細部が勝負）", "refs": ["R-034"] },
-            { "text": "時間を守る（約束の第一歩）", "refs": ["A-001"] },
-            { "text": "言葉遣いを丁寧にする（敬意を示す）", "refs": ["R-033"] }
+            { "text": "最初の7秒で勝負する", "term": "初頭効果 / Primacy Effect" },
+            { "text": "清潔感を設計する", "term": "ハロー効果 / Halo Effect" },
+            { "text": "声のトーンを意識する", "term": "パラ言語 / Paralanguage" },
+            { "text": "姿勢を正す", "term": "姿勢フィードバック / Postural Feedback" },
+            { "text": "視線を適度に合わせる", "term": "アイコンタクト / Eye Contact" },
+            { "text": "相手より少し遅く話す", "term": "発話速度調整 / Speech Rate Adaptation" },
+            { "text": "名前を呼びながら話す", "term": "カクテルパーティー効果 / Cocktail Party Effect" },
+            { "text": "最後の印象を操作する", "term": "親近効果 / Recency Effect" },
+            { "text": "笑顔を戦略的に使う", "term": "表情フィードバック / Facial Feedback Hypothesis" },
+            { "text": "接触頻度を高める", "term": "単純接触効果 / Mere Exposure Effect" },
+            { "text": "言葉より態度を揃える", "term": "非言語一貫性 / Nonverbal Congruence" },
+            { "text": "別れ際を丁寧にする", "term": "ピーク・エンドの法則 / Peak-End Rule" }
           ]
         },
         {
           "topicId": "T-RESPECT",
-          "name": "なめられない人の処世術",
+          "name": "なめられない人の処世術（13）",
           "items": [
-            { "text": "境界線を明確にする（譲れないラインを持つ）", "refs": ["R-013", "R-036"] },
-            { "text": "発言に一貫性を持つ（ブレない軸）", "refs": ["R-026"] },
-            { "text": "感情的にならない（冷静さが武器）", "refs": ["I-007"] },
-            { "text": "不当な要求は断る（NOを言える）", "refs": ["R-014", "R-020"] },
-            { "text": "言い訳をしない（責任を取る姿勢）", "refs": ["I-012"] },
-            { "text": "自分の意見を持つ（根拠とともに）", "refs": ["R-024"] },
-            { "text": "実績で信頼を積む（口より行動）", "refs": ["R-005", "R-035"] },
-            { "text": "相手を尊重しつつ主張する（対等な関係）", "refs": ["R-036", "R-038"] }
+            { "text": "境界線を明確にする", "term": "バウンダリー設定 / Boundary Setting" },
+            { "text": "発言に一貫性を持つ", "term": "認知的一貫性 / Cognitive Consistency" },
+            { "text": "反応を遅らせる", "term": "反応遅延効果 / Response Delay Effect" },
+            { "text": "不当な要求は断る", "term": "アサーション / Assertion" },
+            { "text": "言い訳をしない", "term": "責任帰属 / Responsibility Attribution" },
+            { "text": "自分の意見を持つ", "term": "態度の明確化 / Attitude Clarity" },
+            { "text": "実績で信頼を積む", "term": "信頼性蓄積 / Credibility Accumulation" },
+            { "text": "相手を尊重しつつ主張する", "term": "対等コミュニケーション / Assertive Communication" },
+            { "text": "譲る領域を事前に決める", "term": "譲歩範囲の設計 / Concession Zone Design" },
+            { "text": "沈黙で圧をかけない", "term": "サイレント・プレゼンス / Silent Presence" },
+            { "text": "視線を外さない", "term": "凝視効果 / Gaze Effect" },
+            { "text": "声量を落とさない", "term": "発声コントロール / Voice Projection" },
+            { "text": "焦りを見せない", "term": "感情制御 / Emotional Regulation" }
           ]
         },
         {
           "topicId": "T-TRUST",
-          "name": "信頼される人の処世術",
+          "name": "信頼される人の処世術（12）",
           "items": [
-            { "text": "言ったことを必ずやる（有言実行）", "refs": ["R-005", "R-006"] },
-            { "text": "秘密を絶対に漏らさない（口が堅い）", "refs": ["R-013"] },
-            { "text": "悪口を言わない（誰に対しても）", "refs": ["R-007"] },
-            { "text": "困っている人を助ける（見て見ぬふりしない）", "refs": ["R-004"] },
-            { "text": "相談には真剣に向き合う（軽く扱わない）", "refs": ["R-037"] },
-            { "text": "できないことは正直に言う（嘘をつかない）", "refs": ["R-020"] }
+            { "text": "言ったことを必ずやる", "term": "コミットメント履行 / Commitment Fulfillment" },
+            { "text": "秘密を絶対に漏らさない", "term": "守秘義務遵守 / Confidentiality Compliance" },
+            { "text": "悪口を言わない", "term": "ネガティビティ回避 / Negativity Avoidance" },
+            { "text": "相談には真剣に向き合う", "term": "傾聴姿勢 / Active Listening Posture" },
+            { "text": "できないことは正直に言う", "term": "自己限界開示 / Self-Limitation Disclosure" },
+            { "text": "小さな約束を守る", "term": "信頼の漸進的構築 / Incremental Trust Building" },
+            { "text": "期待を超える成果を出す", "term": "期待超過効果 / Expectation Exceeded Effect" },
+            { "text": "報告は悪い話から先に出す", "term": "悪材料先出し / Bad News First" },
+            { "text": "言い訳より対策を述べる", "term": "解決志向 / Solution-Oriented Approach" },
+            { "text": "同じ失敗を繰り返さない", "term": "学習曲線遵守 / Learning Curve Compliance" },
+            { "text": "予定を変えるなら早めに連絡する", "term": "変更予告 / Change Notification" },
+            { "text": "助けを求めたら必ず結果を報告する", "term": "フィードバック・ループ / Feedback Loop" }
           ]
         }
       ]
@@ -68,61 +87,78 @@
       "topics": [
         {
           "topicId": "T-WORK",
-          "name": "仕事ができる人の処世術",
+          "name": "仕事ができる人の処世術（13）",
           "items": [
-            { "text": "報告は結論から（PREP法）", "refs": ["O-001"] },
-            { "text": "期限を自分で決める（受け身にならない）", "refs": ["A-001", "A-002"] },
-            { "text": "完璧より完了を優先する（80点で出す）", "refs": ["A-002"] },
-            { "text": "メールは即レスする（24時間以内）", "refs": ["A-001"] },
-            { "text": "ノーと言える勇気を持つ（抱え込まない）", "refs": ["R-014", "R-020"] },
-            { "text": "優先順位を明確にする（重要×緊急で判断）", "refs": ["A-001"] },
-            { "text": "小さく始めて早く失敗する（アジャイル思考）", "refs": ["AD-001", "A-002"] },
-            { "text": "会議は目的を明確にする（ゴールを決めて始める）", "refs": ["O-001", "O-008"] }
+            { "text": "報告は結論から述べる", "term": "PREP法 / PREP Method" },
+            { "text": "期限を自分で設定する", "term": "自己締切設定 / Self-Imposed Deadline" },
+            { "text": "完璧より完了を優先する", "term": "完了主義 / Done is Better than Perfect" },
+            { "text": "優先順位を明確にする", "term": "アイゼンハワー・マトリクス / Eisenhower Matrix" },
+            { "text": "依頼は即座に着手する", "term": "2分ルール / Two-Minute Rule" },
+            { "text": "タスクを細分化する", "term": "チャンキング / Chunking" },
+            { "text": "会議は目的を明示して始める", "term": "アジェンダ設定 / Agenda Setting" },
+            { "text": "進捗は聞かれる前に報告する", "term": "先行報告 / Proactive Reporting" },
+            { "text": "判断材料を揃えてから相談する", "term": "情報整備 / Information Preparation" },
+            { "text": "抱え込まずに早めに相談する", "term": "エスカレーション / Escalation" },
+            { "text": "完成前に方向確認をする", "term": "中間チェック / Checkpoint Review" },
+            { "text": "曖昧な依頼は確認してから動く", "term": "認識整合 / Clarification Confirmation" },
+            { "text": "終わらせた仕事は振り返る", "term": "レトロスペクティブ / Retrospective" }
           ]
         },
         {
           "topicId": "T-LEADER",
-          "name": "リーダーシップがある人の処世術",
+          "name": "リーダーシップがある人の処世術（12）",
           "items": [
-            { "text": "責任を自分で取る（部下のせいにしない）", "refs": ["I-012", "O-001"] },
-            { "text": "ビジョンを語れる（目指す姿を示す）", "refs": ["L-001"] },
-            { "text": "人を活かす（適材適所）", "refs": ["O-008"] },
-            { "text": "フィードバックを恐れない（言いにくいことも言う）", "refs": ["O-001", "R-036"] },
-            { "text": "自ら動く（率先垂範）", "refs": ["A-001"] },
-            { "text": "感謝を伝える（チームの成果を認める）", "refs": ["R-011"] }
+            { "text": "責任を自分で取る", "term": "責任帰属の引き受け / Responsibility Attribution" },
+            { "text": "ビジョンを言葉にする", "term": "ビジョン・コミュニケーション / Vision Communication" },
+            { "text": "人を役割で活かす", "term": "役割最適配置 / Role Optimization" },
+            { "text": "フィードバックを具体的に伝える", "term": "行動フィードバック / Behavioral Feedback" },
+            { "text": "自ら先に動く", "term": "率先垂範 / Leading by Example" },
+            { "text": "感謝を言葉で伝える", "term": "言語的報酬 / Verbal Reward" },
+            { "text": "失敗を責めずに原因を探る", "term": "心理的安全性 / Psychological Safety" },
+            { "text": "意思決定の理由を共有する", "term": "意思決定透明性 / Decision Transparency" },
+            { "text": "権限を委譲する", "term": "エンパワーメント / Empowerment" },
+            { "text": "悪い報告ほど早く受け取る", "term": "オープンドア・ポリシー / Open Door Policy" },
+            { "text": "部下の成長機会を設計する", "term": "発達的リーダーシップ / Developmental Leadership" },
+            { "text": "一貫した判断基準を持つ", "term": "判断基準の一貫性 / Consistency of Criteria" }
           ]
         },
         {
           "topicId": "T-COMMUNICATION",
-          "name": "コミュニケーション上手な人の処世術",
+          "name": "コミュニケーション上手な人の処世術（12）",
           "items": [
-            { "text": "相手の話を8割聞く（自分は2割）", "refs": ["R-037", "R-041"] },
-            { "text": "質問で会話を広げる（興味を示す）", "refs": ["R-003"] },
-            { "text": "相手の名前を呼ぶ（距離を縮める）", "refs": ["R-003"] },
-            { "text": "結論から話す（わかりやすさ重視）", "refs": ["O-001"] },
-            { "text": "相手の立場で考える（共感力）", "refs": ["R-007", "R-037"] },
-            { "text": "沈黙を恐れない（考える間を与える）", "refs": ["R-037"] }
+            { "text": "相手の話を8割聞く", "term": "傾聴比率 / Listening Ratio" },
+            { "text": "質問で会話を広げる", "term": "オープンクエスチョン / Open-Ended Questions" },
+            { "text": "相手の名前を呼ぶ", "term": "名前効果 / Name Effect" },
+            { "text": "結論から話す", "term": "トップダウン・コミュニケーション / Top-Down Communication" },
+            { "text": "相手の立場で話を組み立てる", "term": "パースペクティブ・テイキング / Perspective-Taking" },
+            { "text": "沈黙を恐れない", "term": "沈黙の許容 / Silence Tolerance" },
+            { "text": "感情に名前をつけて返す", "term": "感情の反射 / Reflection of Feeling" },
+            { "text": "要約して確認する", "term": "パラフレーズ / Paraphrasing" },
+            { "text": "相手の発言を遮らない", "term": "ターンテイキング / Turn-Taking" },
+            { "text": "話題を相手の関心に寄せる", "term": "関心適応 / Interest Adaptation" },
+            { "text": "否定から入らない", "term": "イエス・アンド法 / Yes-And Technique" },
+            { "text": "相手の言葉を借りて説明する", "term": "バックトラッキング / Backtracking" }
           ]
         },
         {
           "topicId": "T-NEGOTIATION",
-          "name": "交渉を極める人の処世術",
+          "name": "交渉の処世術（15）",
           "items": [
-            { "text": "即断しない（ディレイ・タクティクス / Decision Deferral）", "refs": ["O-001"] },
-            { "text": "最初の提示で基準を作る（アンカリング効果 / Anchoring Effect）", "refs": ["O-001"] },
-            { "text": "大きく振ってから本命を出す（ドア・イン・ザ・フェイス）", "refs": ["O-001"] },
-            { "text": "小さな合意を積み重ねる（フット・イン・ザ・ドア）", "refs": ["O-001"] },
-            { "text": "要求ではなく利害を見る（ポジションとインタレストの分離）", "refs": ["O-001"] },
-            { "text": "条件に優先順位をつける（条件階層化 / Priority Structuring）", "refs": ["O-001"] },
-            { "text": "譲歩は必ず交換にする（相互譲歩原理 / Reciprocity）", "refs": ["O-001"] },
-            { "text": "代替案を常に確保する（BATNA / Best Alternative to a Negotiated Agreement）", "refs": ["O-001"] },
-            { "text": "情報は順番で出す（情報の非対称性管理）", "refs": ["O-001"] },
-            { "text": "沈黙を圧力として使う（サイレント・パワー）", "refs": ["O-001"] },
-            { "text": "急がされても急がない（時間圧力耐性 / Time Pressure Resistance）", "refs": ["O-001"] },
-            { "text": "希少性を過信しない（希少性バイアス / Scarcity Bias）", "refs": ["O-001"] },
-            { "text": "言い方で意味を変える（フレーミング効果 / Framing Effect）", "refs": ["O-001"] },
-            { "text": "合意は文脈ごと固定する（コミットメント固定化）", "refs": ["O-001"] },
-            { "text": "悪い合意より撤退を選ぶ（合理的撤退 / Strategic Exit）", "refs": ["O-001"] }
+            { "text": "即断しない", "term": "ディレイ・タクティクス / Decision Deferral" },
+            { "text": "最初の提示で基準を作る", "term": "アンカリング効果 / Anchoring Effect" },
+            { "text": "大きく振ってから本命を出す", "term": "ドア・イン・ザ・フェイス / Door-in-the-Face" },
+            { "text": "小さな合意を積み重ねる", "term": "フット・イン・ザ・ドア / Foot-in-the-Door" },
+            { "text": "要求ではなく利害を見る", "term": "ポジションとインタレストの分離 / Position vs Interest" },
+            { "text": "条件に優先順位をつける", "term": "条件階層化 / Priority Structuring" },
+            { "text": "譲歩は必ず交換にする", "term": "相互譲歩原理 / Reciprocal Concession" },
+            { "text": "代替案を常に確保する", "term": "BATNA / Best Alternative to Negotiated Agreement" },
+            { "text": "情報は順番で出す", "term": "情報の非対称性管理 / Information Asymmetry Management" },
+            { "text": "沈黙を圧力として使う", "term": "サイレント・プレッシャー / Silent Pressure" },
+            { "text": "急がされても急がない", "term": "時間圧力耐性 / Time Pressure Resistance" },
+            { "text": "希少性を過信しない", "term": "希少性バイアス / Scarcity Bias" },
+            { "text": "言い方で意味を変える", "term": "フレーミング効果 / Framing Effect" },
+            { "text": "合意は文脈ごと固定する", "term": "コミットメント固定化 / Commitment Anchoring" },
+            { "text": "悪い合意より撤退を選ぶ", "term": "合理的撤退 / Strategic Exit" }
           ]
         }
       ]
@@ -134,40 +170,56 @@
       "topics": [
         {
           "topicId": "T-MENTAL",
-          "name": "メンタルが強い人の処世術",
+          "name": "メンタルが強い人の処世術（12）",
           "items": [
-            { "text": "感情をそのまま受け入れる（否定しない）", "refs": ["I-001", "I-007"] },
-            { "text": "過去を引きずらない（学びに変える）", "refs": ["I-012"] },
-            { "text": "他人と比較しない（自分軸で生きる）", "refs": ["I-012"] },
-            { "text": "完璧を求めない（7割でOK）", "refs": ["I-012", "A-002"] },
-            { "text": "休むことに罪悪感を持たない（回復も仕事）", "refs": ["I-007"] },
-            { "text": "不安を行動で解消する（動けば変わる）", "refs": ["I-001", "I-002", "A-001"] },
-            { "text": "自分を責めすぎない（失敗は経験）", "refs": ["I-012"] },
-            { "text": "コントロールできることに集中する（変えられないことは手放す）", "refs": ["I-003"] }
+            { "text": "感情をそのまま受け入れる", "term": "感情受容 / Emotional Acceptance" },
+            { "text": "事実と解釈を分ける", "term": "認知的再評価 / Cognitive Reappraisal" },
+            { "text": "コントロールできる領域に集中する", "term": "制御焦点 / Locus of Control" },
+            { "text": "最悪を想定して備える", "term": "防衛的悲観主義 / Defensive Pessimism" },
+            { "text": "過去の成功体験を思い出す", "term": "自己効力感の強化 / Self-Efficacy Enhancement" },
+            { "text": "不安を情報として扱う", "term": "不安の機能化 / Functional Anxiety" },
+            { "text": "自分を客観視する", "term": "メタ認知 / Metacognition" },
+            { "text": "完璧を求めない", "term": "最適化志向 / Satisficing" },
+            { "text": "失敗を学習機会に変える", "term": "成長マインドセット / Growth Mindset" },
+            { "text": "自責と責任を区別する", "term": "責任と自己批判の分離 / Responsibility vs Self-Blame" },
+            { "text": "回復時間を確保する", "term": "回復資源管理 / Recovery Resource Management" },
+            { "text": "感情を言葉にして外に出す", "term": "表出的筆記 / Expressive Writing" }
           ]
         },
         {
           "topicId": "T-CALM",
-          "name": "冷静でいられる人の処世術",
+          "name": "冷静でいられる人の処世術（12）",
           "items": [
-            { "text": "深呼吸を習慣にする（6秒で落ち着く）", "refs": ["I-007"] },
-            { "text": "すぐに反応しない（一拍置く）", "refs": ["I-007", "R-036"] },
-            { "text": "事実と感情を分ける（冷静に分析）", "refs": ["I-001", "I-003"] },
-            { "text": "最悪のシナリオを想定する（心の準備）", "refs": ["I-001", "AD-001"] },
-            { "text": "相手の感情を推測する（なぜそう言うのか）", "refs": ["R-007", "R-037"] },
-            { "text": "「今」に集中する（過去も未来も考えない）", "refs": ["I-003"] }
+            { "text": "深呼吸で間を取る", "term": "生理的覚醒調整 / Physiological Arousal Regulation" },
+            { "text": "反応を6秒遅らせる", "term": "衝動制御 / Impulse Control" },
+            { "text": "事実と感情を分ける", "term": "認知分離 / Cognitive Defusion" },
+            { "text": "最悪のシナリオを言語化する", "term": "暴露法 / Exposure Technique" },
+            { "text": "相手の意図を推測しない", "term": "推論の保留 / Inference Suspension" },
+            { "text": "「今」に意識を戻す", "term": "マインドフルネス / Mindfulness" },
+            { "text": "身体の緊張を緩める", "term": "筋弛緩法 / Progressive Muscle Relaxation" },
+            { "text": "状況を俯瞰する", "term": "認知的距離化 / Cognitive Distancing" },
+            { "text": "感情に名前をつける", "term": "情動名称化 / Emotion Naming" },
+            { "text": "自分の思考を観察する", "term": "脱中心化 / Decentering" },
+            { "text": "判断を保留にする", "term": "判断の延期 / Judgment Deferral" },
+            { "text": "過去の成功対処を参照する", "term": "対処資源の活用 / Coping Resources Utilization" }
           ]
         },
         {
           "topicId": "T-CONFIDENCE",
-          "name": "自信がある人の処世術",
+          "name": "自信がある人の処世術（12）",
           "items": [
-            { "text": "小さな成功体験を積む（自己効力感）", "refs": ["I-012", "A-002"] },
-            { "text": "自分の強みを知っている（言語化できる）", "refs": ["L-001"] },
-            { "text": "他人の評価に振り回されない（自分軸）", "refs": ["I-012", "R-013"] },
-            { "text": "失敗を恐れない（チャレンジする）", "refs": ["AD-001", "I-001"] },
-            { "text": "自分を褒める習慣がある（自己承認）", "refs": ["I-012"] },
-            { "text": "姿勢と表情を意識する（体から自信を作る）", "refs": ["R-034"] }
+            { "text": "小さな成功体験を積む", "term": "自己効力感 / Self-Efficacy" },
+            { "text": "自分の強みを言語化する", "term": "強みの同定 / Strengths Identification" },
+            { "text": "他人の評価を参考値にする", "term": "外的評価の相対化 / External Evaluation Relativization" },
+            { "text": "失敗を学習と再定義する", "term": "帰属スタイル変容 / Attribution Reframing" },
+            { "text": "過去の達成を記録する", "term": "達成記録 / Achievement Log" },
+            { "text": "姿勢と表情を整える", "term": "身体フィードバック / Body Feedback" },
+            { "text": "得意な領域で実績を出す", "term": "コンピテンス・ゾーン / Competence Zone" },
+            { "text": "比較対象を過去の自分にする", "term": "自己比較 / Self-Comparison" },
+            { "text": "挑戦の難易度を調整する", "term": "フロー理論 / Flow Theory" },
+            { "text": "成功のイメージを先に持つ", "term": "イメージトレーニング / Mental Rehearsal" },
+            { "text": "自己批判を事実確認に変える", "term": "認知的再構成 / Cognitive Restructuring" },
+            { "text": "肯定的な自己対話を行う", "term": "セルフトーク / Self-Talk" }
           ]
         }
       ]
@@ -179,40 +231,56 @@
       "topics": [
         {
           "topicId": "T-SUCCESS",
-          "name": "成功する人の処世術",
+          "name": "成功する人の処世術（12）",
           "items": [
-            { "text": "失敗を糧にする（PDCAを回す）", "refs": ["AD-001"] },
-            { "text": "長期視点で考える（短期の損得に惑わされない）", "refs": ["AD-001", "L-001"] },
-            { "text": "継続する仕組みを作る（意志力に頼らない）", "refs": ["A-001", "A-002"] },
-            { "text": "リスクを計算して取る（無謀と挑戦は違う）", "refs": ["AD-001"] },
-            { "text": "人に頼ることをためらわない（チーム力）", "refs": ["R-019"] },
-            { "text": "自己投資を惜しまない（学び続ける）", "refs": ["AD-001"] },
-            { "text": "小さな約束を守る（信用の積み重ね）", "refs": ["R-005", "R-006"] },
-            { "text": "決断を先延ばしにしない（決めたら動く）", "refs": ["A-001", "L-001"] }
+            { "text": "失敗を次の実験に変える", "term": "試行錯誤学習 / Trial-and-Error Learning" },
+            { "text": "長期視点で判断する", "term": "時間割引の抑制 / Temporal Discounting Suppression" },
+            { "text": "継続の仕組みを作る", "term": "習慣形成 / Habit Formation" },
+            { "text": "リスクを計算して取る", "term": "期待値思考 / Expected Value Thinking" },
+            { "text": "人の力を借りる", "term": "社会的資源活用 / Social Capital Utilization" },
+            { "text": "自己投資を惜しまない", "term": "人的資本投資 / Human Capital Investment" },
+            { "text": "小さな約束を守る", "term": "マイクロ・コミットメント / Micro-Commitment" },
+            { "text": "決断を先延ばしにしない", "term": "決断速度 / Decision Speed" },
+            { "text": "行動を先に起こす", "term": "行動優先 / Action Bias" },
+            { "text": "成果を可視化する", "term": "進捗の可視化 / Progress Visualization" },
+            { "text": "環境を成功に寄せる", "term": "成功環境の構築 / Success Environment Structuring" },
+            { "text": "目標を公言する", "term": "公開コミットメント / Public Commitment" }
           ]
         },
         {
           "topicId": "T-HABIT",
-          "name": "良い習慣を持つ人の処世術",
+          "name": "良い習慣を持つ人の処世術（12）",
           "items": [
-            { "text": "朝のルーティンを持つ（1日の始まりを制する）", "refs": ["A-001"] },
-            { "text": "小さく始める（ハードルを下げる）", "refs": ["A-002"] },
-            { "text": "トリガーを設定する（〜したら〜する）", "refs": ["A-001", "A-002"] },
-            { "text": "環境を整える（誘惑を排除）", "refs": ["A-001"] },
-            { "text": "記録をつける（可視化する）", "refs": ["A-002"] },
-            { "text": "完璧を目指さない（続けることが最優先）", "refs": ["A-002", "I-012"] }
+            { "text": "朝のルーティンを持つ", "term": "モーニングルーティン / Morning Routine" },
+            { "text": "小さく始める", "term": "最小行動単位 / Minimum Viable Action" },
+            { "text": "トリガーを設定する", "term": "行動トリガー / Habit Cue" },
+            { "text": "環境を整える", "term": "環境設計 / Environmental Design" },
+            { "text": "記録をつける", "term": "セルフモニタリング / Self-Monitoring" },
+            { "text": "連続記録を意識する", "term": "ストリーク効果 / Streak Effect" },
+            { "text": "報酬を組み込む", "term": "即時報酬 / Immediate Reward" },
+            { "text": "同じ時間に行う", "term": "時間固定化 / Time Anchoring" },
+            { "text": "誘惑を物理的に遠ざける", "term": "環境統制 / Environment Control" },
+            { "text": "失敗しても翌日再開する", "term": "回復力 / Habit Resilience" },
+            { "text": "既存の習慣に紐づける", "term": "習慣スタッキング / Habit Stacking" },
+            { "text": "理想より継続を優先する", "term": "一貫性原則 / Consistency Principle" }
           ]
         },
         {
           "topicId": "T-FOCUS",
-          "name": "集中力が高い人の処世術",
+          "name": "集中力が高い人の処世術（12）",
           "items": [
-            { "text": "スマホを遠ざける（物理的に）", "refs": ["A-001"] },
-            { "text": "シングルタスクを徹底する（マルチタスクしない）", "refs": ["A-001"] },
-            { "text": "時間を区切る（ポモドーロ法）", "refs": ["A-001", "A-002"] },
-            { "text": "やらないことを決める（引き算思考）", "refs": ["L-001", "A-001"] },
-            { "text": "朝の時間を活用する（ゴールデンタイム）", "refs": ["A-001"] },
-            { "text": "締め切りを自分で設定する（適度なプレッシャー）", "refs": ["A-001", "A-002"] }
+            { "text": "スマホを視界から消す", "term": "誘惑排除 / Temptation Removal" },
+            { "text": "シングルタスクを徹底する", "term": "単一課題集中 / Single-Tasking" },
+            { "text": "時間を区切る", "term": "タイムボクシング / Time Boxing" },
+            { "text": "やらないことを決める", "term": "否定リスト / Not-To-Do List" },
+            { "text": "朝の時間を確保する", "term": "認知資源の優先配分 / Cognitive Resource Prioritization" },
+            { "text": "締め切りを自分で設定する", "term": "締切効果 / Deadline Effect" },
+            { "text": "集中が切れたら休む", "term": "ウルトラディアンリズム / Ultradian Rhythm" },
+            { "text": "最も重要なタスクを朝に置く", "term": "MIT法 / Most Important Task" },
+            { "text": "通知をすべて切る", "term": "割り込み排除 / Interruption Blocking" },
+            { "text": "作業前に5分間計画を書く", "term": "意図の実装 / Implementation Intention" },
+            { "text": "適度な運動を取り入れる", "term": "認知機能向上 / Cognitive Enhancement" },
+            { "text": "退屈を避けない", "term": "退屈耐性 / Boredom Tolerance" }
           ]
         }
       ]
@@ -224,26 +292,38 @@
       "topics": [
         {
           "topicId": "T-NOREGRET",
-          "name": "後悔しない人の処世術",
+          "name": "後悔しない人の処世術（12）",
           "items": [
-            { "text": "やりたいことをやる（「いつか」は来ない）", "refs": ["L-001"] },
-            { "text": "人の目を気にしすぎない（自分の人生を生きる）", "refs": ["I-012", "L-001"] },
-            { "text": "感謝を伝える（言葉にする）", "refs": ["R-011"] },
-            { "text": "大切な人との時間を優先する（仕事だけにならない）", "refs": ["L-001"] },
-            { "text": "健康を軽視しない（体が資本）", "refs": ["I-007", "L-001"] },
-            { "text": "挑戦を続ける（現状維持は後退）", "refs": ["AD-001"] }
+            { "text": "やりたいことを先延ばしにしない", "term": "即時行動原則 / Immediate Action Principle" },
+            { "text": "他人の期待を確認してから応える", "term": "期待の明確化 / Expectation Clarification" },
+            { "text": "感謝を言葉で伝える", "term": "感謝表出 / Gratitude Expression" },
+            { "text": "大切な人との時間を優先する", "term": "関係性投資 / Relationship Investment" },
+            { "text": "健康を資産として扱う", "term": "健康資本 / Health Capital" },
+            { "text": "挑戦の機会を逃さない", "term": "機会費用意識 / Opportunity Cost Awareness" },
+            { "text": "選択の理由を記録する", "term": "意思決定ジャーナル / Decision Journal" },
+            { "text": "過去の選択を引き受ける", "term": "選択の引き受け / Ownership of Choices" },
+            { "text": "人生の優先領域を明確にする", "term": "価値階層化 / Value Hierarchy" },
+            { "text": "死を意識して生きる", "term": "メメント・モリ / Memento Mori" },
+            { "text": "安全策だけを選ばない", "term": "リスク許容度調整 / Risk Tolerance Adjustment" },
+            { "text": "判断期限を設ける", "term": "決断デッドライン / Decision Deadline" }
           ]
         },
         {
           "topicId": "T-BALANCE",
-          "name": "ワークライフバランスが取れている人の処世術",
+          "name": "ワークライフバランスの処世術（12）",
           "items": [
-            { "text": "仕事の終わりを決める（ダラダラしない）", "refs": ["A-001"] },
-            { "text": "休日は完全にオフにする（切り替え上手）", "refs": ["I-007"] },
-            { "text": "趣味を持つ（仕事以外の居場所）", "refs": ["L-001"] },
-            { "text": "NOと言える（抱え込まない）", "refs": ["R-014", "R-020"] },
-            { "text": "完璧主義を手放す（7割で良い）", "refs": ["I-012", "A-002"] },
-            { "text": "自分の時間を確保する（予定に入れる）", "refs": ["A-001", "L-001"] }
+            { "text": "仕事の終了時刻を決める", "term": "終業境界 / Work Boundary" },
+            { "text": "休日は完全にオフにする", "term": "心理的デタッチメント / Psychological Detachment" },
+            { "text": "仕事以外の居場所を持つ", "term": "多領域アイデンティティ / Multi-Domain Identity" },
+            { "text": "NOを言う", "term": "境界線防衛 / Boundary Defense" },
+            { "text": "完璧主義を手放す", "term": "完璧主義の放棄 / Perfectionism Release" },
+            { "text": "自分の時間を予定に入れる", "term": "セルフ・アポイントメント / Self-Appointment" },
+            { "text": "通勤時間を自己投資に使う", "term": "移動時間の価値化 / Commute Optimization" },
+            { "text": "睡眠時間を確保する", "term": "睡眠衛生 / Sleep Hygiene" },
+            { "text": "体調を優先判断基準にする", "term": "身体優先原則 / Body-First Principle" },
+            { "text": "断る理由を用意しておく", "term": "断りテンプレート / Refusal Template" },
+            { "text": "休むことを仕事と認識する", "term": "回復戦略 / Recovery Strategy" },
+            { "text": "趣味に没頭する時間を確保する", "term": "フロー体験確保 / Flow Time Allocation" }
           ]
         }
       ]
@@ -255,26 +335,38 @@
       "topics": [
         {
           "topicId": "T-CHANGE",
-          "name": "変化に強い人の処世術",
+          "name": "変化に強い人の処世術（12）",
           "items": [
-            { "text": "変化を受け入れる（抵抗しない）", "refs": ["AD-001"] },
-            { "text": "学び続ける（新しいスキルを習得）", "refs": ["AD-001"] },
-            { "text": "複数の選択肢を持つ（一つに依存しない）", "refs": ["AD-001", "L-001"] },
-            { "text": "人脈を広げる（社外にも繋がりを持つ）", "refs": ["R-003", "R-004"] },
-            { "text": "情報感度を高める（トレンドを知る）", "refs": ["AD-001"] },
-            { "text": "失敗から素早く立ち直る（レジリエンス）", "refs": ["I-012", "AD-001"] }
+            { "text": "変化を脅威ではなく情報として扱う", "term": "変化の認知再評価 / Change Reappraisal" },
+            { "text": "学び続ける", "term": "生涯学習 / Lifelong Learning" },
+            { "text": "複数の選択肢を持つ", "term": "オプション・バリュー / Option Value" },
+            { "text": "弱い紐帯を維持する", "term": "弱い紐帯の強さ / Strength of Weak Ties" },
+            { "text": "情報感度を高める", "term": "環境スキャニング / Environmental Scanning" },
+            { "text": "失敗から素早く立ち直る", "term": "レジリエンス / Resilience" },
+            { "text": "固定観念を疑う", "term": "アンラーニング / Unlearning" },
+            { "text": "不確実性を許容する", "term": "曖昧さ耐性 / Ambiguity Tolerance" },
+            { "text": "変化の兆候を早期に察知する", "term": "弱いシグナル / Weak Signal Detection" },
+            { "text": "過去の成功体験に固執しない", "term": "成功の罠回避 / Success Trap Avoidance" },
+            { "text": "実験的に試してから判断する", "term": "プロトタイピング / Prototyping" },
+            { "text": "撤退基準を事前に決める", "term": "撤退条件設定 / Exit Criteria" }
           ]
         },
         {
           "topicId": "T-PROBLEM",
-          "name": "問題解決力が高い人の処世術",
+          "name": "問題解決力が高い人の処世術（12）",
           "items": [
-            { "text": "問題を細分化する（分解して考える）", "refs": ["A-002"] },
-            { "text": "仮説を立てて検証する（当てずっぽうにしない）", "refs": ["AD-001"] },
-            { "text": "複数の解決策を考える（一つに固執しない）", "refs": ["AD-001"] },
-            { "text": "他者の視点を取り入れる（相談する）", "refs": ["R-019", "R-037"] },
-            { "text": "感情と論理を分ける（冷静に分析）", "refs": ["I-003", "I-007"] },
-            { "text": "行動しながら考える（100%準備しない）", "refs": ["A-001", "A-002"] }
+            { "text": "問題を構造化する", "term": "問題構造化 / Problem Structuring" },
+            { "text": "仮説を立てて検証する", "term": "仮説検証思考 / Hypothesis-Driven Thinking" },
+            { "text": "複数の解決策を比較する", "term": "オプション比較 / Option Comparison" },
+            { "text": "他者の視点を取り入れる", "term": "多角的視点 / Multi-Perspective" },
+            { "text": "感情と論理を分ける", "term": "感情と認知の分離 / Emotion-Cognition Separation" },
+            { "text": "行動しながら考える", "term": "反復的問題解決 / Iterative Problem Solving" },
+            { "text": "根本原因を特定する", "term": "根本原因分析 / Root Cause Analysis" },
+            { "text": "制約条件を明確にする", "term": "制約明示化 / Constraint Clarification" },
+            { "text": "成功パターンを転用する", "term": "類推的推論 / Analogical Reasoning" },
+            { "text": "分からないことは認める", "term": "無知の認識 / Acknowledgment of Ignorance" },
+            { "text": "解決策の副作用を確認する", "term": "システム思考 / Systems Thinking" },
+            { "text": "実行可能な最初の一歩を決める", "term": "実行可能性優先 / Actionability Focus" }
           ]
         }
       ]
