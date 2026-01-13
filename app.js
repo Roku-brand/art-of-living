@@ -625,8 +625,10 @@ function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = nu
           return `
           <div class="sidebarCompactItem ${isActive ? "isActive" : ""}" data-os="${escapeHtml(k)}">
             <div class="sidebarCompactLeft">
-              <div class="sidebarCompactSub">${escapeHtml(osSubtitle(k))}</div>
-              <div class="sidebarCompactMain">${escapeHtml(osLabel(k))}</div>
+              <div class="sidebarCompactLabel">
+                <span class="sidebarCompactMain">${escapeHtml(osLabel(k))}</span>
+                <span class="sidebarCompactSub">${escapeHtml(osSubtitle(k))}</span>
+              </div>
             </div>
           </div>
         `;}).join("")}
