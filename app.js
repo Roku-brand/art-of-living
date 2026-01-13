@@ -1345,10 +1345,6 @@ function renderSituationTips() {
                 <li class="tips-simple-topic">
                   <button class="tips-simple-topic-link" type="button" data-topic-id="${escapeHtml(topic.topicId)}">
                     <span class="tips-simple-topic-name">${escapeHtml(topic.name)}</span>
-                    <span class="tips-simple-topic-meta">
-                      <span class="tips-simple-topic-count">${(topic.items || []).length}件</span>
-                      <span class="tips-simple-topic-arrow" aria-hidden="true">→</span>
-                    </span>
                   </button>
                 </li>
               `).join("")}
