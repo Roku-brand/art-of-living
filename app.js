@@ -275,6 +275,7 @@ function renderShell(activeTab) {
           </div>
         </div>
         <nav class="header-nav">
+          <button class="header-nav-item ${activeTab === 'home' ? 'active' : ''}" data-nav="#home">トップ</button>
           <button class="header-nav-item ${activeTab === 'tips' ? 'active' : ''}" data-nav="#tips">ケース別処世術</button>
           <button class="header-nav-item ${activeTab === 'list' ? 'active' : ''}" data-nav="#list?os=life">体系処世術・OS</button>
           <button class="header-nav-item ${activeTab === 'my' ? 'active' : ''}" data-nav="#my">マイページ</button>
@@ -370,6 +371,7 @@ function renderShell(activeTab) {
     </div>
 
     <div class="container" id="view"></div>
+    <div class="page-end-band" aria-hidden="true"></div>
   `;
 
   // ログインモーダルの開閉（マイページから呼び出される）
