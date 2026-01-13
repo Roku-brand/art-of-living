@@ -3587,6 +3587,9 @@ input:focus-visible, textarea:focus-visible{
   margin-bottom: 16px;
   flex-wrap: wrap;
 }
+.topic-group-nav .btn{
+  color: #000;
+}
 .topic-group-nav-btn{
   flex: 1;
   max-width: 200px;
