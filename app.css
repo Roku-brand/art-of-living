@@ -30,8 +30,8 @@
   /* Shared hero styling - updated for dark theme */
   --hero-bg: linear-gradient(135deg, rgba(248,238,240,.08), rgba(215,177,90,.06));
   --hero-border: rgba(248,238,240,.18);
-  --hero-title: rgba(248,238,240,.95);
-  --hero-subtitle: rgba(248,238,240,.70);
+  --hero-title: rgba(0,0,0,.95);
+  --hero-subtitle: rgba(0,0,0,.70);
 
   /* Sidebar compact */
   --sb-accent: #d7b15a;
