@@ -1768,44 +1768,25 @@ function renderTopPage() {
         <div class="top-content-main">
           <div class="top-panel">
             <div class="top-panel-header">
-              <span class="top-panel-icon">📋</span>
-              <span class="top-panel-title">ケース別処世術</span>
-              <button class="top-panel-link" data-nav="#tips">一覧へ →</button>
-            </div>
-            <div class="top-panel-grid">
-              <button class="top-panel-card" data-nav="#tips">
-                <span class="top-panel-card-title">なぜか好かれる<span class="top-panel-card-arrow">→</span></span>
-                <span class="top-panel-card-meta">対人印象・信頼</span>
-              </button>
-              <button class="top-panel-card" data-nav="#tips">
-                <span class="top-panel-card-title">冷静でいられる<span class="top-panel-card-arrow">→</span></span>
-                <span class="top-panel-card-meta">メンタル・思考</span>
-              </button>
-              <button class="top-panel-card" data-nav="#tips">
-                <span class="top-panel-card-title">なめられない<span class="top-panel-card-arrow">→</span></span>
-                <span class="top-panel-card-meta">対人・境界線</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="top-panel">
-            <div class="top-panel-header">
-              <span class="top-panel-icon">🧩</span>
-              <span class="top-panel-title">体系処世術・OS</span>
-              <button class="top-panel-link" data-nav="#list?os=life">OS一覧 →</button>
+              <span class="top-panel-icon">🧭</span>
+              <span class="top-panel-title">忘れるな「基本原則」</span>
             </div>
             <div class="top-panel-note">
-              <p>OSとは、判断・行動を支える「処世術のフレームワーク」です。7つのOS体系で、迷わず動ける自分を構築します。</p>
-            </div>
-            <div class="top-panel-grid">
-              <button class="top-panel-card" data-nav="#list?os=internal">
-                <span class="top-panel-card-title">OS-02 内部心理OS<span class="top-panel-card-arrow">→</span></span>
-                <span class="top-panel-card-meta">心の扱い方</span>
-              </button>
-              <button class="top-panel-card" data-nav="#list?os=adapt">
-                <span class="top-panel-card-title">OS-06 適応OS<span class="top-panel-card-arrow">→</span></span>
-                <span class="top-panel-card-meta">キャッチアップの極意</span>
-              </button>
+              <ol>
+                <li>
+                  <strong>処世術は好かれない（メタ発言抑制）</strong><br />
+                  処世術は“使うもの”であって、“語るもの”ではない。
+                </li>
+                <li>
+                  <strong>処世術は万能ではない（コンテクスト依存性）</strong><br />
+                  同じ戦術でも人・場・力関係・時間軸が変われば結果は反転する。
+                </li>
+                <li>
+                  <strong>処世術は人格の代替ではない（行動分離原則）</strong><br />
+                  処世術は人格を作るものではない。人格を守るための道具である。
+                </li>
+              </ol>
+              <p>語るな（可視化の抑制）／信じるな（万能化の抑制）／同一化するな（人格侵食の抑制）</p>
             </div>
           </div>
         </div>
@@ -1820,17 +1801,6 @@ function renderTopPage() {
               <button class="top-panel-list-item" data-nav="#tips">なめられない人の処世術</button>
               <button class="top-panel-list-item" data-nav="#tips">変化に強い人の処世術</button>
               <button class="top-panel-list-item" data-nav="#tips">自信がある人の処世術</button>
-            </div>
-          </div>
-
-          <div class="top-panel">
-            <div class="top-panel-header">
-              <span class="top-panel-icon">📘</span>
-              <span class="top-panel-title">処世術禄について</span>
-            </div>
-            <div class="top-panel-note">
-              <p>ケース別に「立ち回り」を整理し、体系処世術で判断の構造を学べるポータルです。情報過多の時代に、迷わない判断軸を提供します。</p>
-              <button class="top-panel-link inline" data-nav="#list?os=life">体系処世術を読む →</button>
             </div>
           </div>
         </div>
