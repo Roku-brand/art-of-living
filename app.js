@@ -760,16 +760,42 @@ function renderList(osKey, focusOsId = null) {
   // card events
   bindCardEvents();
 
-  // If focus was provided, scroll to highlight the hero and remove focus class after animation
+  // If focus was provided, scroll to highlight the specific card or hero
   if (focusOsId) {
-    const hero = view.querySelector(".list-hero-focused");
-    if (hero) {
-      setTimeout(() => {
-        hero.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
-      setTimeout(() => {
-        hero.classList.remove("list-hero-focused");
-      }, 3000);
+    // Check if focusOsId is a card ID (e.g., "R-007", "I-001") or an OS ID (e.g., "OS-01")
+    const isCardId = /^[A-Z]{1,2}-\d{3}$/.test(focusOsId);
+    
+    if (isCardId) {
+      // Find and highlight the specific card
+      const cardEl = view.querySelector(`[data-cardid="${CSS.escape(focusOsId)}"]`);
+      if (cardEl) {
+        // Add highlight class
+        cardEl.classList.add("scard-focused");
+        // Expand the card
+        const expandBox = view.querySelector(`[data-expand="${CSS.escape(focusOsId)}"]`);
+        if (expandBox) {
+          expandBox.style.display = "block";
+        }
+        // Scroll to card
+        setTimeout(() => {
+          cardEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
+        // Remove highlight after animation
+        setTimeout(() => {
+          cardEl.classList.remove("scard-focused");
+        }, 3000);
+      }
+    } else {
+      // OS-level focus (existing behavior)
+      const hero = view.querySelector(".list-hero-focused");
+      if (hero) {
+        setTimeout(() => {
+          hero.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+        setTimeout(() => {
+          hero.classList.remove("list-hero-focused");
+        }, 3000);
+      }
     }
   }
 }
@@ -1362,6 +1388,11 @@ function renderTopicGroupPage(topicId) {
             <span class="topic-group-item-num">${idx + 1}</span>
             <span class="topic-group-item-text">${escapeHtml(item.text)}</span>
             ${item.term ? `<span class="topic-group-item-term">（${escapeHtml(item.term)}）</span>` : ""}
+            ${(item.refs && item.refs.length) ? `
+              <div class="topic-group-item-refs">
+                ${item.refs.map((ref) => `<a class="topic-group-ref-tag" href="#" data-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</a>`).join("")}
+              </div>
+            ` : ""}
           </div>
         `).join("")}
       </div>
@@ -1369,6 +1400,24 @@ function renderTopicGroupPage(topicId) {
   `;
 
   $("#backToTips").onclick = () => nav("#tips");
+
+  // Handle clicks on ref tags to navigate to the systematic wisdom
+  view.querySelectorAll(".topic-group-ref-tag[data-ref]").forEach((el) => {
+    el.onclick = (e) => {
+      e.preventDefault();
+      const refId = el.getAttribute("data-ref");
+      // Determine which OS the ref belongs to based on prefix
+      let osKey = "life";
+      if (refId.startsWith("I-")) osKey = "internal";
+      else if (refId.startsWith("O-")) osKey = "operation";
+      else if (refId.startsWith("A-")) osKey = "exection";
+      else if (refId.startsWith("AD-")) osKey = "adapt";
+      else if (refId.startsWith("X-")) osKey = "extra";
+      else if (refId.startsWith("R-")) osKey = "life"; // R- is in both life and relation
+      // Navigate to the list page with the card ID highlighted
+      nav(`#list?os=${encodeURIComponent(osKey)}&focus=${encodeURIComponent(refId)}`);
+    };
+  });
 }
 
 // ========== ケース別処世術 カテゴリ詳細ページ ==========
