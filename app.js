@@ -1022,7 +1022,6 @@ function renderMy() {
         <div class="mypage-hero-icon">📚</div>
         <div class="mypage-hero-content">
           <h2 class="mypage-hero-title">マイページ</h2>
-          <p class="mypage-hero-subtitle">お気に入りの処世術とマイ処世術を管理</p>
         </div>
       </div>
       <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.my)}</div>
