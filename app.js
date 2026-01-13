@@ -17,6 +17,12 @@ const OS_META = [
   { key: "extra",     osId: "OS-07", title: "追加OS（仮）", subtitle: "⑦追加・実験枠",   desc: "調整枠・実験枠。",                          file: "./data/extra.json" }
 ];
 
+const HERO_SIDE_COPY = {
+  system: "体系処世術：情報の洪水に惑わされないためには、点在する情報ではなく“構造化された知恵”が必要。\n自己啓発・心理学・行動科学・対人術・キャリア論などを 5つのOS・195の項目 に集約した”処世術の体系書”",
+  tips: "ケース別処世術：「思考術」「対人術」「仕事術」「成功術」「人生術」の5つのカテゴリーで\n人生のあらゆる局面を切り抜ける”処世術の究極解”",
+  my: "マイページ：もう迷わないために、自分のために選択・洗練された”処世術棚”"
+};
+
 // OS-ID to OS key mapping
 const OS_ID_MAP = {};
 OS_META.forEach(m => { OS_ID_MAP[m.osId] = m.key; });
@@ -165,6 +171,10 @@ function parseQuery(qs) {
 
 function nav(hash) {
   location.hash = hash;
+}
+
+function formatHeroSide(text) {
+  return escapeHtml(text).replace(/\n/g, "<br>");
 }
 
 /**
@@ -688,11 +698,17 @@ function renderList(osKey, focusOsId = null) {
   const showSystemHero = osKey === "life" && !focusOsId;
   const heroTitle = showSystemHero ? "体系処世術" : (meta?.title || currentOS);
   const heroDescription = showSystemHero ? "" : (meta?.desc || heroSubtitle);
+  const heroSideCopy = showSystemHero ? `
+    <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.system)}</div>
+  ` : "";
 
   view.innerHTML = `
     <div class="list-hero-fullwidth ${focusOsId ? 'list-hero-focused' : ''}">
-      <div class="list-hero-title">${escapeHtml(heroTitle)}</div>
-      ${heroDescription ? `<div class="list-hero-subtitle">${escapeHtml(heroDescription)}</div>` : ""}
+      <div class="list-hero-main">
+        <div class="list-hero-title">${escapeHtml(heroTitle)}</div>
+        ${heroDescription ? `<div class="list-hero-subtitle">${escapeHtml(heroDescription)}</div>` : ""}
+      </div>
+      ${heroSideCopy}
     </div>
 
     <div class="list-layout has-mobile-sidebar">
@@ -979,6 +995,7 @@ function renderMy() {
         <h2 class="mypage-hero-title">マイページ</h2>
         <p class="mypage-hero-subtitle">お気に入りの処世術とマイ処世術を管理</p>
       </div>
+      <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.my)}</div>
     </div>
 
     <!-- お気に入り一覧 -->
@@ -1258,7 +1275,10 @@ function renderSituationTips() {
 
   view.innerHTML = `
     <div class="tips-simple-layout">
-      <div class="tips-simple-hero">ケース別処世術</div>
+      <div class="tips-simple-hero">
+        <div class="tips-simple-hero-title">ケース別処世術</div>
+        <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.tips)}</div>
+      </div>
       ${sectionMap.map((section) => {
         const topics = buildSectionTopics(section.categoryIds);
         return `
