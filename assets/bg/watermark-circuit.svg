@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-label="回路ライン透かし">
+  <defs>
+    <linearGradient id="circuitFade" x1="0" x2="1">
+      <stop offset="0%" stop-color="#d7b15a" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#d7b15a" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#d7b15a" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Left circuit network -->
+  <g stroke="#d7b15a" stroke-opacity="0.08" stroke-width="2" stroke-linecap="round">
+    <!-- Left side lines -->
+    <path d="M20 80 L80 120 L80 60"/>
+    <path d="M20 160 L60 180 L100 160 L100 200"/>
+    <path d="M40 240 L100 280 L100 220"/>
+    <path d="M20 320 L80 340 L120 300"/>
+    <!-- Connecting lines left -->
+    <path d="M100 140 L160 180 L160 100"/>
+    <path d="M120 260 L180 220 L220 260"/>
+    <!-- Extended lines -->
+    <path d="M160 60 L220 100 L260 60"/>
+    <path d="M180 340 L240 300 L280 340"/>
+  </g>
+  <!-- Right circuit network -->
+  <g stroke="#d7b15a" stroke-opacity="0.08" stroke-width="2" stroke-linecap="round">
+    <!-- Right side lines -->
+    <path d="M780 80 L720 120 L720 60"/>
+    <path d="M780 160 L740 180 L700 160 L700 200"/>
+    <path d="M760 240 L700 280 L700 220"/>
+    <path d="M780 320 L720 340 L680 300"/>
+    <!-- Connecting lines right -->
+    <path d="M700 140 L640 180 L640 100"/>
+    <path d="M680 260 L620 220 L580 260"/>
+    <!-- Extended lines -->
+    <path d="M640 60 L580 100 L540 60"/>
+    <path d="M620 340 L560 300 L520 340"/>
+  </g>
+  <!-- Connection nodes left -->
+  <g fill="#d7b15a" fill-opacity="0.1">
+    <circle cx="80" cy="120" r="4"/>
+    <circle cx="80" cy="60" r="4"/>
+    <circle cx="60" cy="180" r="4"/>
+    <circle cx="100" cy="160" r="4"/>
+    <circle cx="100" cy="280" r="4"/>
+    <circle cx="80" cy="340" r="4"/>
+    <circle cx="160" cy="180" r="4"/>
+    <circle cx="180" cy="220" r="4"/>
+    <circle cx="220" cy="100" r="4"/>
+    <circle cx="240" cy="300" r="4"/>
+  </g>
+  <!-- Connection nodes right -->
+  <g fill="#d7b15a" fill-opacity="0.1">
+    <circle cx="720" cy="120" r="4"/>
+    <circle cx="720" cy="60" r="4"/>
+    <circle cx="740" cy="180" r="4"/>
+    <circle cx="700" cy="160" r="4"/>
+    <circle cx="700" cy="280" r="4"/>
+    <circle cx="720" cy="340" r="4"/>
+    <circle cx="640" cy="180" r="4"/>
+    <circle cx="620" cy="220" r="4"/>
+    <circle cx="580" cy="100" r="4"/>
+    <circle cx="560" cy="300" r="4"/>
+  </g>
+</svg>
