@@ -1343,6 +1343,42 @@ function renderSituationTips() {
 }
 
 // ========== 処世術群詳細ページ ==========
+
+/**
+ * Extract Japanese term only (remove English after " / ")
+ */
+function extractJapaneseTerm(term) {
+  if (!term) return "";
+  const parts = term.split(" / ");
+  return parts[0].trim();
+}
+
+/**
+ * Get all topics in flat order for navigation
+ */
+function getAllTopicsFlat(categories) {
+  const allTopics = [];
+  for (const cat of categories) {
+    for (const topic of (cat.topics || [])) {
+      allTopics.push({ ...topic, categoryName: cat.name });
+    }
+  }
+  return allTopics;
+}
+
+/**
+ * Find adjacent topics for navigation
+ */
+function findAdjacentTopics(topicId, categories) {
+  const allTopics = getAllTopicsFlat(categories);
+  const currentIndex = allTopics.findIndex((t) => t.topicId === topicId);
+  if (currentIndex === -1) return { prev: null, next: null };
+  
+  const prev = currentIndex > 0 ? allTopics[currentIndex - 1] : null;
+  const next = currentIndex < allTopics.length - 1 ? allTopics[currentIndex + 1] : null;
+  return { prev, next };
+}
+
 function renderTopicGroupPage(topicId) {
   renderShell("tips");
   const view = $("#view");
@@ -1374,11 +1410,28 @@ function renderTopicGroupPage(topicId) {
   }
 
   const items = topic.items || [];
+  
+  // Find adjacent topics for navigation
+  const { prev, next } = findAdjacentTopics(topicId, categories);
+  
+  // Extract short names for navigation buttons (remove count in parentheses)
+  const getShortName = (name) => {
+    if (!name) return "";
+    // Remove trailing count like "（12）" or "(12)"
+    return name.replace(/[（(]\d+[）)]\s*$/, "").trim();
+  };
+  
+  const prevName = prev ? getShortName(prev.name) : "";
+  const nextName = next ? getShortName(next.name) : "";
 
   view.innerHTML = `
     <div class="topic-group-page">
       <div class="topic-group-header">
-        <button class="btn ghost topic-group-back" id="backToTips">← ケース別処世術</button>
+        <div class="topic-group-nav">
+          ${prev ? `<button class="btn ghost topic-group-nav-btn" id="navPrev">← ${escapeHtml(prevName)}</button>` : `<span class="topic-group-nav-placeholder"></span>`}
+          <button class="btn ghost topic-group-nav-center" id="backToTips">戻る</button>
+          ${next ? `<button class="btn ghost topic-group-nav-btn" id="navNext">${escapeHtml(nextName)} →</button>` : `<span class="topic-group-nav-placeholder"></span>`}
+        </div>
         <div class="topic-group-title-wrap">
           <h1 class="topic-group-title">${escapeHtml(topic.name)}</h1>
           <span class="topic-group-count">${items.length}件</span>
@@ -1389,7 +1442,7 @@ function renderTopicGroupPage(topicId) {
           <div class="topic-group-item">
             <span class="topic-group-item-num">${idx + 1}</span>
             <span class="topic-group-item-text">${escapeHtml(item.text)}</span>
-            ${item.term ? `<span class="topic-group-item-term">（${escapeHtml(item.term)}）</span>` : ""}
+            ${item.term ? `<span class="topic-group-item-term">（${escapeHtml(extractJapaneseTerm(item.term))}）</span>` : ""}
             ${(item.refs && item.refs.length) ? `
               <div class="topic-group-item-refs">
                 ${item.refs.map((ref) => `<a class="topic-group-ref-tag" href="#" data-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</a>`).join("")}
@@ -1402,6 +1455,17 @@ function renderTopicGroupPage(topicId) {
   `;
 
   $("#backToTips").onclick = () => nav("#tips");
+  
+  // Navigation to adjacent topics
+  const navPrevBtn = $("#navPrev");
+  if (navPrevBtn && prev) {
+    navPrevBtn.onclick = () => nav(`#topic-group?id=${encodeURIComponent(prev.topicId)}`);
+  }
+  
+  const navNextBtn = $("#navNext");
+  if (navNextBtn && next) {
+    navNextBtn.onclick = () => nav(`#topic-group?id=${encodeURIComponent(next.topicId)}`);
+  }
 
   // Handle clicks on ref tags to navigate to the systematic wisdom
   view.querySelectorAll(".topic-group-ref-tag[data-ref]").forEach((el) => {
