@@ -644,12 +644,37 @@ function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = nu
   `;
 }
 
+function renderMobileSidebarToggle(
+  openLabel = "処世術OSを開く",
+  closeLabel = "処世術OSを閉じる"
+) {
+  return `
+    <div class="mobile-side-toggle">
+      <button class="btn ghost" type="button" data-mobile-sidebar-toggle data-open-label="${escapeHtml(openLabel)}" data-close-label="${escapeHtml(closeLabel)}" aria-expanded="false">
+        ${escapeHtml(openLabel)}
+      </button>
+    </div>
+  `;
+}
+
 function bindSidebarActions(container) {
   container.querySelectorAll("[data-os]").forEach((el) => {
     el.onclick = () => nav(`#list?os=${el.getAttribute("data-os")}`);
   });
   const goSearch = container.querySelector("#goSearch");
   if (goSearch) goSearch.onclick = () => nav(`#search?q=`);
+
+  const mobileToggle = container.querySelector("[data-mobile-sidebar-toggle]");
+  const listSide = container.querySelector(".list-side");
+  if (mobileToggle && listSide) {
+    const openLabel = mobileToggle.getAttribute("data-open-label") || "処世術OSを開く";
+    const closeLabel = mobileToggle.getAttribute("data-close-label") || "処世術OSを閉じる";
+    mobileToggle.onclick = () => {
+      const isOpen = listSide.classList.toggle("isOpen");
+      mobileToggle.setAttribute("aria-expanded", String(isOpen));
+      mobileToggle.textContent = isOpen ? closeLabel : openLabel;
+    };
+  }
 }
 
 function renderList(osKey, focusOsId = null) {
@@ -719,6 +744,7 @@ function renderList(osKey, focusOsId = null) {
       </div>
 
       <div class="list-main">
+        ${renderMobileSidebarToggle()}
         <div class="list-headline">
           <div class="title">${escapeHtml(meta?.title || currentOS)} の処世術一覧</div>
           <div class="count">
@@ -911,6 +937,7 @@ function renderSearch({ q }) {
       </div>
 
       <div class="list-main">
+        ${renderMobileSidebarToggle("OS一覧を開く", "OS一覧を閉じる")}
         <div class="list-headline">
           <div class="title">検索（OS横断）</div>
           <div class="count">件数：<b>${filtered.length}</b><span class="count-sep">/</span>全体：<b>${all.length}</b></div>
@@ -1655,6 +1682,7 @@ function renderSituationsList() {
       </div>
 
       <div class="list-main">
+        ${renderMobileSidebarToggle("処世術OSを開く", "処世術OSを閉じる")}
         <div class="list-hero situation-hero">
           <div class="list-hero-title">シチュエーション別まとめ</div>
           <div class="list-hero-subtitle">既存の処世術カードを「悩み」「なりたい状態」「詰まり感」から直接アクセスできる入口として再編成。抽象論ではなく、判断・行動・立ち回りの集合体として処世術を再提示する。</div>
@@ -1740,6 +1768,7 @@ function renderSituationDetail(situationId) {
       </div>
 
       <div class="list-main">
+        ${renderMobileSidebarToggle("処世術OSを開く", "処世術OSを閉じる")}
         <div class="situation-detail-hero">
           <button class="btn ghost situation-back" id="backToList">← シチュエーション一覧</button>
           <div class="situation-detail-num">${escapeHtml(situation.id)}</div>
