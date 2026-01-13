@@ -1701,21 +1701,27 @@ function renderTopPage() {
       <section class="top-entry-section">
         <div class="top-entry-cards classic">
           <button class="top-entry-card classic" data-nav="#tips">
-            <span class="top-entry-icon">🤝</span>
+            <span class="top-entry-icon" aria-hidden="true">
+              <img src="./assets/icons/icon-handshake.svg" alt="" />
+            </span>
             <div class="top-entry-content">
               <span class="top-entry-name">人間関係で悩んでいる</span>
               <span class="top-entry-desc">好かれる／なめられない／信頼される</span>
             </div>
           </button>
           <button class="top-entry-card classic" data-nav="#tips">
-            <span class="top-entry-icon">💡</span>
+            <span class="top-entry-icon" aria-hidden="true">
+              <img src="./assets/icons/icon-bulb.svg" alt="" />
+            </span>
             <div class="top-entry-content">
               <span class="top-entry-name">自分を強くしたい</span>
               <span class="top-entry-desc">メンタル・思考・変化対応</span>
             </div>
           </button>
           <button class="top-entry-card classic" data-nav="#list?os=life">
-            <span class="top-entry-icon">🧩</span>
+            <span class="top-entry-icon" aria-hidden="true">
+              <img src="./assets/icons/icon-network.svg" alt="" />
+            </span>
             <div class="top-entry-content">
               <span class="top-entry-name">全体の仕組みを知りたい</span>
               <span class="top-entry-desc">判断の仕組み・OS</span>
