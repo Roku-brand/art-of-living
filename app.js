@@ -18,9 +18,9 @@ const OS_META = [
 ];
 
 const HERO_SIDE_COPY = {
-  system: "体系処世術：情報の洪水に惑わされないためには、点在する情報ではなく“構造化された知恵”が必要。\n自己啓発・心理学・行動科学・対人術・キャリア論などを 5つのOS・195の項目 に集約した”処世術の体系書”",
-  tips: "ケース別処世術：「思考術」「対人術」「仕事術」「成功術」「人生術」の5つのカテゴリーで\n人生のあらゆる局面を切り抜ける”処世術の究極解”",
-  my: "マイページ：もう迷わないために、自分のために選択・洗練された”処世術棚”"
+  system: "情報の洪水に惑わされないためには、点在する情報ではなく“構造化された知恵”が必要。\n自己啓発・心理学・行動科学・対人術・キャリア論などを 5つのOS・195の項目 に集約した”処世術の体系書”",
+  tips: "「思考術」「対人術」「仕事術」「成功術」「人生術」の5つのカテゴリーで\n人生のあらゆる局面を切り抜ける”処世術の究極解”",
+  my: "もう迷わないために、自分のために選択・洗練された”処世術棚”"
 };
 
 // OS-ID to OS key mapping
@@ -1016,10 +1016,12 @@ function renderMy() {
   view.innerHTML = `
     <!-- マイページヒーロー -->
     <div class="mypage-hero">
-      <div class="mypage-hero-icon">📚</div>
-      <div class="mypage-hero-content">
-        <h2 class="mypage-hero-title">マイページ</h2>
-        <p class="mypage-hero-subtitle">お気に入りの処世術とマイ処世術を管理</p>
+      <div class="mypage-hero-top">
+        <div class="mypage-hero-icon">📚</div>
+        <div class="mypage-hero-content">
+          <h2 class="mypage-hero-title">マイページ</h2>
+          <p class="mypage-hero-subtitle">お気に入りの処世術とマイ処世術を管理</p>
+        </div>
       </div>
       <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.my)}</div>
     </div>

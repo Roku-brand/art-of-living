@@ -652,10 +652,9 @@ a:hover{ text-decoration: underline; }
   box-shadow: var(--shadow0);
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .list-hero{
@@ -681,8 +680,8 @@ a:hover{ text-decoration: underline; }
   min-width: 0;
 }
 .hero-right-copy{
-  margin-left: auto;
-  text-align: right;
+  margin-left: 0;
+  text-align: left;
   max-width: 420px;
   font-size: 18px;
   font-weight: 900;
@@ -692,8 +691,6 @@ a:hover{ text-decoration: underline; }
 }
 @media (max-width: 720px){
   .hero-right-copy{
-    margin-left: 0;
-    text-align: left;
     font-size: 16px;
   }
 }
@@ -1238,15 +1235,20 @@ input:focus-visible, textarea:focus-visible{
 /* ========== マイページ専用スタイル ========== */
 .mypage-hero{
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
   padding: 20px 18px;
   margin-bottom: 14px;
   background: var(--hero-bg);
   border: 1px solid var(--hero-border);
   border-radius: var(--r-xl);
   box-shadow: var(--shadow0);
-  flex-wrap: wrap;
+}
+.mypage-hero-top{
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 .mypage-hero-icon{
   font-size: 32px;
@@ -2278,10 +2280,9 @@ input:focus-visible, textarea:focus-visible{
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
 }
 .tips-simple-hero-title{
   font-size: 22px;
