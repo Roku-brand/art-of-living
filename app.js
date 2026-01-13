@@ -270,7 +270,7 @@ function renderShell(activeTab) {
               <span class="hamburger-line"></span>
               <span class="hamburger-line"></span>
             </button>
-            <h1>処世術禄</h1>
+            <h1 class="brand-title" id="brandTitle">処世術禄</h1>
           </div>
         </div>
         <div class="header-right">
@@ -331,6 +331,11 @@ function renderShell(activeTab) {
           <button class="mobile-menu-close" id="mobileMenuClose" aria-label="閉じる">×</button>
         </div>
         <div class="mobile-menu-list">
+          <button class="mobile-menu-item" id="mobileMenuHome">
+            <span class="mobile-menu-subtitle">入口・俯瞰</span>
+            <span class="mobile-menu-main">トップ</span>
+            <span class="mobile-menu-desc">全体像と入口の選択</span>
+          </button>
           <button class="mobile-menu-item" id="mobileMenuTips">
             <span class="mobile-menu-subtitle">即効性・具体論</span>
             <span class="mobile-menu-main">ケース別処世術</span>
@@ -418,6 +423,12 @@ function renderShell(activeTab) {
     panel.classList.add("is-open");
   };
 
+  // ブランドタイトルでトップページへ戻る
+  const brandTitle = $("#brandTitle");
+  if (brandTitle) {
+    brandTitle.onclick = () => nav("#home");
+  }
+
   const closeMenu = () => {
     overlay.classList.remove("is-open");
     panel.classList.remove("is-open");
@@ -427,6 +438,15 @@ function renderShell(activeTab) {
   overlay.onclick = (e) => {
     if (e.target === overlay) closeMenu();
   };
+
+  // トップページ
+  const mobileMenuHome = $("#mobileMenuHome");
+  if (mobileMenuHome) {
+    mobileMenuHome.onclick = () => {
+      closeMenu();
+      nav("#home");
+    };
+  }
 
   // ケース別処世術
   const mobileMenuTips = $("#mobileMenuTips");
@@ -1642,12 +1662,101 @@ function renderThemeSections(theme, allCards) {
   `;
 }
 
+// ========== トップページ（入口・俯瞰ハブ） ==========
+function renderTopPage() {
+  renderShell("home");
+  const view = $("#view");
+
+  // 数値データの計算
+  const totalCards = DATA.all.length;
+  const situationTipsData = DATA.situationTips || {};
+  const categories = situationTipsData.categories || [];
+  const totalCategories = categories.reduce((sum, cat) => sum + (cat.topics || []).length, 0);
+  const osCount = OS_META.length;
+
+  view.innerHTML = `
+    <div class="top-page">
+      <!-- ヘッダーセクション（思想提示） -->
+      <section class="top-header-section">
+        <h1 class="top-service-name">処世術禄</h1>
+        <p class="top-subtitle">社会科学と心理学を束ね、情報過多の時代に判断を構造化する</p>
+      </section>
+
+      <!-- 規模感セクション（数値による信頼形成） -->
+      <section class="top-stats-section">
+        <div class="top-stat-item">
+          <span class="top-stat-num">${totalCards}</span>
+          <span class="top-stat-label">処世術カード</span>
+        </div>
+        <div class="top-stat-divider"></div>
+        <div class="top-stat-item">
+          <span class="top-stat-num">${totalCategories}</span>
+          <span class="top-stat-label">ケース別テーマ</span>
+        </div>
+        <div class="top-stat-divider"></div>
+        <div class="top-stat-item">
+          <span class="top-stat-num">${osCount}</span>
+          <span class="top-stat-label">OS（体系）</span>
+        </div>
+      </section>
+
+      <!-- 入口選択セクション（最重要） -->
+      <section class="top-entry-section">
+        <h2 class="top-entry-title">どこから始めますか？</h2>
+        <div class="top-entry-cards">
+          <button class="top-entry-card" id="entryInterpersonal">
+            <span class="top-entry-icon">🤝</span>
+            <div class="top-entry-content">
+              <span class="top-entry-name">人間関係で悩んでいる</span>
+              <span class="top-entry-desc">好かれる・なめられない・信頼される</span>
+            </div>
+            <span class="top-entry-arrow">→</span>
+          </button>
+          <button class="top-entry-card" id="entryMental">
+            <span class="top-entry-icon">🧠</span>
+            <div class="top-entry-content">
+              <span class="top-entry-name">自分を強くしたい</span>
+              <span class="top-entry-desc">メンタル・思考・変化対応</span>
+            </div>
+            <span class="top-entry-arrow">→</span>
+          </button>
+          <button class="top-entry-card" id="entryOS">
+            <span class="top-entry-icon">🗂️</span>
+            <div class="top-entry-content">
+              <span class="top-entry-name">全体構造を知りたい</span>
+              <span class="top-entry-desc">判断の仕組み・OS</span>
+            </div>
+            <span class="top-entry-arrow">→</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 補助説明セクション（任意・最小） -->
+      <section class="top-supplement-section">
+        <div class="top-supplement-item">
+          <span class="top-supplement-label">ケース別処世術</span>
+          <span class="top-supplement-desc">今すぐ使う立ち回り</span>
+        </div>
+        <div class="top-supplement-item">
+          <span class="top-supplement-label">OS処世術</span>
+          <span class="top-supplement-desc">判断の裏にある構造</span>
+        </div>
+      </section>
+    </div>
+  `;
+
+  // 入口ボタンのクリックイベント
+  $("#entryInterpersonal").onclick = () => nav("#tips");
+  $("#entryMental").onclick = () => nav("#tips");
+  $("#entryOS").onclick = () => nav("#list?os=life");
+}
+
 // ========== ルーティング ==========
 async function boot() {
   await loadAll();
 
   const onRoute = () => {
-    const hash = location.hash || "#tips";
+    const hash = location.hash || "#home";
 
     if (hash.startsWith("#list")) {
       const q = parseQuery(hash.split("?")[1] || "");
@@ -1693,8 +1802,8 @@ async function boot() {
 
     if (hash.startsWith("#my")) return renderMy();
 
-    // Default: redirect to tips (ケース別処世術)
-    renderSituationTips();
+    // Default: render top page (handles #home, #, empty hash, and any unknown routes)
+    renderTopPage();
   };
 
   window.addEventListener("hashchange", onRoute);
