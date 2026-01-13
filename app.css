@@ -106,6 +106,14 @@ a:hover{ text-decoration: underline; }
   align-items:center;
   gap:10px;
 }
+.brand-icon{
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(248,237,240,.4);
+  box-shadow: 0 8px 18px rgba(17,5,9,.35);
+  background: rgba(248,237,240,.08);
+}
 .brand h1{
   margin:0;
   font-size: 18px;
@@ -3484,7 +3492,9 @@ input:focus-visible, textarea:focus-visible{
   position: relative;
   padding: 48px 32px;
   border-radius: 24px;
-  background: linear-gradient(140deg, rgba(118,35,44,.92), rgba(82,28,32,.92));
+  background:
+    url("./assets/hero-compass.svg") right center / 70% no-repeat,
+    linear-gradient(140deg, rgba(118,35,44,.92), rgba(82,28,32,.92));
   box-shadow: 0 24px 60px rgba(51,19,22,.35);
   overflow: hidden;
 }
@@ -3502,6 +3512,20 @@ input:focus-visible, textarea:focus-visible{
   position: relative;
   max-width: 560px;
   color: #f8ece7;
+}
+.top-hero-emblem{
+  position: absolute;
+  right: 28px;
+  bottom: -24px;
+  width: 220px;
+  height: 220px;
+  opacity: .35;
+  filter: drop-shadow(0 24px 40px rgba(13,3,5,.55));
+  pointer-events: none;
+}
+.top-hero-emblem img{
+  width: 100%;
+  height: 100%;
 }
 .top-hero-eyebrow{
   margin: 0 0 8px;
@@ -3708,6 +3732,14 @@ input:focus-visible, textarea:focus-visible{
   }
   .top-hero{
     padding: 32px 20px;
+    background-size: 120%;
+  }
+  .top-hero-emblem{
+    width: 160px;
+    height: 160px;
+    right: 12px;
+    bottom: -12px;
+    opacity: .28;
   }
   .top-hero-title{
     font-size: 28px;

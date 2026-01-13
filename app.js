@@ -270,6 +270,7 @@ function renderShell(activeTab) {
               <span class="hamburger-line"></span>
               <span class="hamburger-line"></span>
             </button>
+            <img class="brand-icon" src="./icons/icon.svg" alt="処世術禄の羅針盤アイコン" />
             <h1 class="brand-title" id="brandTitle">処世術禄</h1>
           </div>
         </div>
@@ -1681,6 +1682,9 @@ function renderTopPage() {
           <p class="top-hero-eyebrow">判断・立ち回りに特化した</p>
           <h1 class="top-hero-title">構造化ポータル</h1>
           <p class="top-hero-desc">社会科学と心理学を束ね、判断を構造化する。迷わない立ち回りを、今ここから。</p>
+        </div>
+        <div class="top-hero-emblem" aria-hidden="true">
+          <img src="./icons/icon.svg" alt="" />
         </div>
       </section>
 
