@@ -1766,9 +1766,9 @@ function renderTopPage() {
     <div class="top-page top-page-classic">
       <section class="top-hero">
         <div class="top-hero-inner">
-          <p class="top-hero-eyebrow">判断・立ち回りに特化した</p>
-          <h1 class="top-hero-title">構造化ポータル</h1>
-          <p class="top-hero-desc">社会科学と心理学を束ね、情報過多の時代に判断を構造化する。</p>
+          <p class="top-hero-eyebrow">人生の判断と立ち回りにOSを。</p>
+          <h1 class="top-hero-title">情報過多の時代に、本質だけを残す。</h1>
+          <p class="top-hero-desc">社会科学と心理学、先人の経験則を束ね、情報の雑音を排する。<br>AIによる膨大なデータ分析・構造化を通して、判断と立ち回りを再現可能な形に落とし込む。</p>
         </div>
       </section>
 
