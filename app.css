@@ -3582,20 +3582,18 @@ input:focus-visible, textarea:focus-visible{
   flex-direction: column;
   justify-content: center;
   background:
-    /* 上部ナビ想定で少し暗く */
-    linear-gradient(180deg, rgba(20,6,10,.40) 0%, transparent 25%),
-    /* 中央はわずかに明るく */
-    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(90,32,39,.25), transparent),
-    /* 周辺減光（ビネット）- ヒーローでは強め */
-    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(20,6,10,.55) 100%),
+    /* ページ上部の明るさを整える淡いベール */
+    linear-gradient(180deg, rgba(255,255,255,.92) 0%, rgba(248,238,240,.85) 65%, rgba(245,231,234,.9) 100%),
+    /* ほんのりワインレッドの光 */
+    radial-gradient(circle at 50% 35%, rgba(122,34,48,.10), transparent 60%),
     /* 極薄の回路パターン */
     url("./assets/bg/watermark-circuit.svg"),
-    /* ベースのワインレッドグラデーション */
-    linear-gradient(180deg, #4a1420 0%, #3d1119 55%, #30101a 100%);
-  background-size: 100% 100%, 100% 100%, 100% 100%, cover, 100% 100%;
+    /* ベースの白 */
+    linear-gradient(180deg, #ffffff 0%, #f9f3f5 100%);
+  background-size: 100% 100%, 100% 100%, cover, 100% 100%;
   box-shadow:
-    inset 0 1px 0 rgba(248,238,240,.08),
-    0 26px 60px rgba(20,6,10,.45);
+    inset 0 1px 0 rgba(255,255,255,.7),
+    0 26px 60px rgba(59,15,22,.18);
   overflow: hidden;
 }
 /* 中央に大きく配置する羅針盤/紋章モチーフ - 8〜15%の透明度 */
@@ -3608,8 +3606,8 @@ input:focus-visible, textarea:focus-visible{
   width: 120%;
   height: 120%;
   background:
-    url("./assets/bg/hero-sigil.svg") center center / contain no-repeat;
-  opacity: 0.12;
+    url("./assets/bg/watermark-compass.svg") center center / contain no-repeat;
+  opacity: 0.18;
   pointer-events: none;
 }
 /* テキスト可読性のための暗めグラデーションオーバーレイ */
@@ -3619,16 +3617,16 @@ input:focus-visible, textarea:focus-visible{
   inset: 0;
   background:
     linear-gradient(180deg, 
-      rgba(36,12,20,.35) 0%, 
-      rgba(36,12,20,.15) 40%,
-      rgba(36,12,20,.25) 100%
+      rgba(255,255,255,.35) 0%, 
+      rgba(255,255,255,.2) 40%,
+      rgba(248,238,240,.35) 100%
     );
   pointer-events: none;
 }
 .top-hero-inner{
   position: relative;
   max-width: 520px;
-  color: var(--cream-50);
+  color: var(--wine-900);
   z-index: 1;
 }
 .top-hero-emblem{
@@ -3650,7 +3648,7 @@ input:focus-visible, textarea:focus-visible{
   font-size: 26px;
   font-weight: 700;
   letter-spacing: .08em;
-  color: rgba(255,240,232,.95);
+  color: rgba(90,23,34,.9);
 }
 .top-hero-title{
   margin: 0 0 16px;
@@ -3658,12 +3656,13 @@ input:focus-visible, textarea:focus-visible{
   font-weight: 900;
   letter-spacing: .08em;
   line-height: 1.25;
+  color: rgba(59,15,22,.98);
 }
 .top-hero-desc{
   margin: 0;
   font-size: 15px;
   line-height: 1.8;
-  color: rgba(255,244,240,.8);
+  color: rgba(59,15,22,.72);
 }
 
 /* Entry Cards Section */
