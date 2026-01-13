@@ -255,32 +255,46 @@ async function loadAll() {
 }
 
 // ========== UI シェル ==========
+function renderHeader(loggedIn) {
+  return `
+    <header class="header">
+      <div class="header-inner">
+        <div class="header-left">
+          <button class="hamburger-btn" id="hamburgerBtn" aria-label="メニュー">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+          </button>
+          <div class="brand" id="brandHome">
+            <img class="brand-icon" src="./assets/compass-circuit.svg" alt="コンパスと回路のロゴ" />
+            <span class="brand-title" id="brandTitle">処世術禄</span>
+          </div>
+        </div>
+        <nav class="header-nav" aria-label="主要ナビゲーション">
+          <button class="header-nav-link" data-nav="#tips">ケース別処世術</button>
+          <button class="header-nav-link" data-nav="#list?os=life">体系処世術・OS</button>
+          <button class="header-nav-link" data-nav="#my">マイページ</button>
+        </nav>
+        <div class="header-right">
+          <button class="header-icon-btn" data-nav="#search" aria-label="検索">
+            <span aria-hidden="true">🔍</span>
+          </button>
+          <button class="header-account-btn" id="headerAccountBtn" aria-label="アカウント">
+            ${loggedIn ? `<span class="header-account-icon logged-in">👤</span>` : `<span class="header-account-icon">👤</span>`}
+          </button>
+        </div>
+      </div>
+    </header>
+  `;
+}
+
 function renderShell(activeTab) {
   const app = $("#app");
   const user = loadUser();
   const loggedIn = user !== null;
 
   app.innerHTML = `
-    <div class="header">
-      <div class="header-inner">
-        <div class="brand">
-          <div class="brand-main">
-            <button class="hamburger-btn" id="hamburgerBtn" aria-label="メニュー">
-              <span class="hamburger-line"></span>
-              <span class="hamburger-line"></span>
-              <span class="hamburger-line"></span>
-            </button>
-            <img class="brand-icon" src="./icons/icon.svg" alt="処世術禄の羅針盤アイコン" />
-            <h1 class="brand-title" id="brandTitle">処世術禄</h1>
-          </div>
-        </div>
-        <div class="header-right">
-          <button class="header-account-btn" id="headerAccountBtn" aria-label="アカウント">
-            ${loggedIn ? `<span class="header-account-icon logged-in">👤</span>` : `<span class="header-account-icon">👤</span>`}
-          </button>
-        </div>
-      </div>
-    </div>
+    ${renderHeader(loggedIn)}
 
     <!-- アカウントモーダル -->
     <div class="login-modal-overlay" id="loginModalOverlay">
@@ -429,6 +443,18 @@ function renderShell(activeTab) {
   if (brandTitle) {
     brandTitle.onclick = () => nav("#home");
   }
+
+  const brandHome = $("#brandHome");
+  if (brandHome) {
+    brandHome.onclick = () => nav("#home");
+  }
+
+  app.querySelectorAll(".header [data-nav]").forEach((el) => {
+    el.onclick = () => {
+      const target = el.getAttribute("data-nav");
+      if (target) nav(target);
+    };
+  });
 
   const closeMenu = () => {
     overlay.classList.remove("is-open");
@@ -1664,145 +1690,163 @@ function renderThemeSections(theme, allCards) {
 }
 
 // ========== トップページ（入口・俯瞰ハブ） ==========
+function renderHomeHero() {
+  return `
+    <section class="top-hero">
+      <div class="top-hero-inner">
+        <h1 class="top-hero-title">判断・立ち回りに特化した <span class="hero-break">構造化ポータル</span></h1>
+        <p class="top-hero-desc">社会科学と心理学を束ね、情報過多の時代に判断を構造化する。</p>
+      </div>
+    </section>
+  `;
+}
+
+function renderHomeEntryCards() {
+  return `
+    <section class="top-entry-section">
+      <div class="top-entry-cards">
+        <button class="top-entry-card" data-nav="#tips#interpersonal">
+          <span class="top-entry-icon">🤝</span>
+          <div class="top-entry-content">
+            <span class="top-entry-name">人間関係で悩んでいる</span>
+            <span class="top-entry-desc">距離感・信頼・なめられない関係へ</span>
+          </div>
+        </button>
+        <button class="top-entry-card" data-nav="#tips#mental">
+          <span class="top-entry-icon">💡</span>
+          <div class="top-entry-content">
+            <span class="top-entry-name">自分を強くしたい</span>
+            <span class="top-entry-desc">メンタル・思考・変化対応を鍛える</span>
+          </div>
+        </button>
+        <button class="top-entry-card" data-nav="#list?os=life">
+          <span class="top-entry-icon">🧭</span>
+          <div class="top-entry-content">
+            <span class="top-entry-name">全体の仕組みを知りたい</span>
+            <span class="top-entry-desc">判断構造とOSの全体像を把握</span>
+          </div>
+        </button>
+      </div>
+    </section>
+  `;
+}
+
+function renderHomeStatsBar() {
+  return `
+    <section class="top-stats-section">
+      <div class="top-stat-item">
+        <span class="top-stat-num">200</span>
+        <span class="top-stat-label">処世術カード</span>
+      </div>
+      <div class="top-stat-divider"></div>
+      <div class="top-stat-item">
+        <span class="top-stat-num">18</span>
+        <span class="top-stat-label">カテゴリ</span>
+      </div>
+      <div class="top-stat-divider"></div>
+      <div class="top-stat-item">
+        <span class="top-stat-num">7</span>
+        <span class="top-stat-label">OS</span>
+      </div>
+    </section>
+  `;
+}
+
+function renderHomeMainGrid() {
+  return `
+    <section class="top-content-grid">
+      <div class="top-content-main">
+        <div class="top-panel">
+          <div class="top-panel-header">
+            <span class="top-panel-icon">🧭</span>
+            <span class="top-panel-title">ケース別処世術</span>
+            <button class="top-panel-link" data-nav="#tips">一覧へ →</button>
+          </div>
+          <div class="top-mini-grid">
+            <button class="top-mini-card" data-nav="#tips#interpersonal">
+              <span class="top-mini-title">人間関係の摩耗を減らす</span>
+              <span class="top-mini-meta">距離感・信頼・衝突対応</span>
+            </button>
+            <button class="top-mini-card" data-nav="#tips#mental">
+              <span class="top-mini-title">心のブレを整える</span>
+              <span class="top-mini-meta">思考整理・不安対処</span>
+            </button>
+            <button class="top-mini-card" data-nav="#tips">
+              <span class="top-mini-title">評価と影響力を高める</span>
+              <span class="top-mini-meta">交渉・報告・根回し</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="top-panel">
+          <div class="top-panel-header">
+            <span class="top-panel-icon">🧩</span>
+            <span class="top-panel-title">体系処世術：OS</span>
+            <button class="top-panel-link" data-nav="#list?os=life">OS一覧 →</button>
+          </div>
+          <div class="top-link-grid">
+            <button class="top-link-card" data-nav="#list?os=life">OS-01 人生OS</button>
+            <button class="top-link-card" data-nav="#list?os=internal">OS-02 内部心理OS</button>
+            <button class="top-link-card" data-nav="#list?os=relation">OS-03 対人関係OS</button>
+            <button class="top-link-card" data-nav="#list?os=operation">OS-04 環境操作OS</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-content-side">
+        <div class="top-panel">
+          <div class="top-panel-header">
+            <span class="top-panel-icon">📌</span>
+            <span class="top-panel-title">今週の注目処世術</span>
+          </div>
+          <div class="top-panel-list">
+            <button class="top-panel-list-item" data-nav="#tips">なめられない人の処世術</button>
+            <button class="top-panel-list-item" data-nav="#tips">変化に強い人の処世術</button>
+            <button class="top-panel-list-item" data-nav="#tips">自信がある人の処世術</button>
+          </div>
+        </div>
+
+        <div class="top-panel">
+          <div class="top-panel-header">
+            <span class="top-panel-icon">📘</span>
+            <span class="top-panel-title">処世術禄について</span>
+          </div>
+          <div class="top-panel-note">
+            <p>ケース別の立ち回りと、7つのOS体系で判断構造を俯瞰する入口ハブ。</p>
+            <button class="top-panel-link inline" data-nav="#list?os=life">体系処世術を読む →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderHomeFooter() {
+  return `
+    <footer class="top-footer">
+      <div class="top-footer-links">
+        <button class="top-footer-link" data-nav="#tips">ケース別処世術</button>
+        <button class="top-footer-link" data-nav="#list?os=life">体系処世術・OS</button>
+        <button class="top-footer-link" data-nav="#my">マイページ</button>
+      </div>
+      <p class="top-footer-note">処世術禄は判断と立ち回りの構造化を支えるポータルです。</p>
+    </footer>
+  `;
+}
+
 function renderTopPage() {
   renderShell("home");
   const view = $("#view");
 
-  // 数値データの計算
-  const totalCards = DATA.all.length;
-  const situationTipsData = DATA.situationTips || {};
-  const categories = situationTipsData.categories || [];
-  const totalCategories = categories.reduce((sum, cat) => sum + (cat.topics || []).length, 0);
-  const osCount = OS_META.length;
-
   view.innerHTML = `
-    <div class="top-page top-page-classic">
-      <section class="top-hero">
-        <div class="top-hero-inner">
-          <p class="top-hero-eyebrow">判断・立ち回りに特化した</p>
-          <h1 class="top-hero-title">構造化ポータル</h1>
-          <p class="top-hero-desc">社会科学と心理学を束ね、判断を構造化する。迷わない立ち回りを、今ここから。</p>
-        </div>
-        <div class="top-hero-emblem" aria-hidden="true">
-          <img src="./icons/icon.svg" alt="" />
-        </div>
-      </section>
-
-      <section class="top-entry-section">
-        <div class="top-entry-cards classic">
-          <button class="top-entry-card classic" data-nav="#tips">
-            <span class="top-entry-icon">🤝</span>
-            <div class="top-entry-content">
-              <span class="top-entry-name">人間関係で悩んでいる</span>
-              <span class="top-entry-desc">好かれる・なめられない・信頼される</span>
-            </div>
-          </button>
-          <button class="top-entry-card classic" data-nav="#tips">
-            <span class="top-entry-icon">💡</span>
-            <div class="top-entry-content">
-              <span class="top-entry-name">自分を強くしたい</span>
-              <span class="top-entry-desc">メンタル・思考・変化対応</span>
-            </div>
-          </button>
-          <button class="top-entry-card classic" data-nav="#list?os=life">
-            <span class="top-entry-icon">🧩</span>
-            <div class="top-entry-content">
-              <span class="top-entry-name">全体の仕組みを知りたい</span>
-              <span class="top-entry-desc">判断の仕組み・OS</span>
-            </div>
-          </button>
-        </div>
-      </section>
-
-      <section class="top-stats-section classic">
-        <div class="top-stat-item">
-          <span class="top-stat-num">${totalCards}</span>
-          <span class="top-stat-label">処世術カード</span>
-        </div>
-        <div class="top-stat-divider"></div>
-        <div class="top-stat-item">
-          <span class="top-stat-num">${totalCategories}</span>
-          <span class="top-stat-label">ケース別テーマ</span>
-        </div>
-        <div class="top-stat-divider"></div>
-        <div class="top-stat-item">
-          <span class="top-stat-num">${osCount}</span>
-          <span class="top-stat-label">OS</span>
-        </div>
-      </section>
-
-      <section class="top-content-grid">
-        <div class="top-content-main">
-          <div class="top-panel">
-            <div class="top-panel-header">
-              <span class="top-panel-icon">🧭</span>
-              <span class="top-panel-title">ケース別処世術</span>
-              <button class="top-panel-link" data-nav="#tips">一覧へ →</button>
-            </div>
-            <div class="top-panel-grid">
-              <button class="top-panel-card" data-nav="#tips">
-                <span class="top-panel-card-title">なぜか好かれる</span>
-                <span class="top-panel-card-meta">対人印象・信頼</span>
-              </button>
-              <button class="top-panel-card" data-nav="#tips">
-                <span class="top-panel-card-title">冷静でいられる</span>
-                <span class="top-panel-card-meta">メンタル・思考</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="top-panel">
-            <div class="top-panel-header">
-              <span class="top-panel-icon">🧩</span>
-              <span class="top-panel-title">体系処世術・OS</span>
-              <button class="top-panel-link" data-nav="#list?os=life">OS一覧 →</button>
-            </div>
-            <div class="top-panel-grid">
-              <button class="top-panel-card" data-nav="#list?os=life">
-                <span class="top-panel-card-title">OS-01 人生OS</span>
-                <span class="top-panel-card-meta">迷わない行き方</span>
-              </button>
-              <button class="top-panel-card" data-nav="#list?os=internal">
-                <span class="top-panel-card-title">OS-02 内部心理OS</span>
-                <span class="top-panel-card-meta">心の扱い方</span>
-              </button>
-              <button class="top-panel-card" data-nav="#list?os=relation">
-                <span class="top-panel-card-title">OS-03 対人関係OS</span>
-                <span class="top-panel-card-meta">人との関わり方</span>
-              </button>
-              <button class="top-panel-card" data-nav="#list?os=operation">
-                <span class="top-panel-card-title">OS-04 環境操作OS</span>
-                <span class="top-panel-card-meta">影響力の技術</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="top-content-side">
-          <div class="top-panel">
-            <div class="top-panel-header">
-              <span class="top-panel-icon">📌</span>
-              <span class="top-panel-title">今週の注目処世術</span>
-            </div>
-            <div class="top-panel-list">
-              <button class="top-panel-list-item" data-nav="#tips">なめられない人の処世術</button>
-              <button class="top-panel-list-item" data-nav="#tips">変化に強い人の処世術</button>
-              <button class="top-panel-list-item" data-nav="#tips">自信がある人の処世術</button>
-            </div>
-          </div>
-
-          <div class="top-panel">
-            <div class="top-panel-header">
-              <span class="top-panel-icon">📘</span>
-              <span class="top-panel-title">処世術禄について</span>
-            </div>
-            <div class="top-panel-note">
-              <p>ケース別に「立ち回り」を整理し、体系処世術で判断の構造を学べるポータル。</p>
-              <button class="top-panel-link inline" data-nav="#list?os=life">体系処世術を読む →</button>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div class="top-page">
+      <div class="top-page-inner">
+        ${renderHomeHero()}
+        ${renderHomeEntryCards()}
+        ${renderHomeStatsBar()}
+        ${renderHomeMainGrid()}
+        ${renderHomeFooter()}
+      </div>
     </div>
   `;
 
