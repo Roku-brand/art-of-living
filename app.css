@@ -651,6 +651,11 @@ a:hover{ text-decoration: underline; }
   margin-bottom: 14px;
   box-shadow: var(--shadow0);
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .list-hero{
@@ -671,6 +676,26 @@ a:hover{ text-decoration: underline; }
   font-size: 13px;
   line-height: 1.6;
   color: var(--hero-subtitle);
+}
+.list-hero-main{
+  min-width: 0;
+}
+.hero-right-copy{
+  margin-left: auto;
+  text-align: right;
+  max-width: 420px;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.7;
+  color: var(--hero-title);
+  letter-spacing: 0.01em;
+}
+@media (max-width: 720px){
+  .hero-right-copy{
+    margin-left: 0;
+    text-align: left;
+    font-size: 14px;
+  }
 }
 
 .list-headline{
@@ -1221,6 +1246,7 @@ input:focus-visible, textarea:focus-visible{
   border: 1px solid var(--hero-border);
   border-radius: var(--r-xl);
   box-shadow: var(--shadow0);
+  flex-wrap: wrap;
 }
 .mypage-hero-icon{
   font-size: 32px;
@@ -2243,10 +2269,6 @@ input:focus-visible, textarea:focus-visible{
   z-index: 1;
 }
 .tips-simple-hero{
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--hero-title);
-  letter-spacing: .02em;
   background: var(--hero-bg);
   border: 1px solid var(--hero-border);
   border-radius: var(--r-xl);
@@ -2255,6 +2277,17 @@ input:focus-visible, textarea:focus-visible{
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.tips-simple-hero-title{
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--hero-title);
+  letter-spacing: .02em;
 }
 .tips-simple-title{
   font-size: 20px;
