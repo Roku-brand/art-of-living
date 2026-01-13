@@ -4040,20 +4040,24 @@ input:focus-visible, textarea:focus-visible{
     grid-template-columns: 1fr;
   }
   .top-stats-section.classic{
-    flex-direction: column;
-    gap: 16px;
-    padding: 20px 16px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 14px 10px;
     margin: 0 12px;
   }
   .top-stat-item{
-    padding: 0 20px;
+    padding: 0 10px;
   }
   .top-stat-num{
-    font-size: 36px;
+    font-size: 26px;
+  }
+  .top-stat-label{
+    font-size: 10px;
   }
   .top-stat-divider{
-    width: 80px;
-    height: 1px;
+    width: 1px;
+    height: 32px;
   }
   .top-panel-grid{
     grid-template-columns: 1fr;
