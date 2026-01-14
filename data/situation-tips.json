@@ -98,7 +98,7 @@
         },
         {
           "topicId": "T-IMPRESSION",
-          "name": "印象がいい人の処世術（10）",
+          "name": "第一印象の処世術（10）",
           "items": [
             {
               "text": "最初の7秒で好印象を作る",
@@ -174,7 +174,7 @@
         },
         {
           "topicId": "T-RESPECT",
-          "name": "なめられない人の処世術（11）",
+          "name": "軽んじられない処世術（11）",
           "items": [
             {
               "text": "境界線を明確にする",
@@ -257,7 +257,7 @@
         },
         {
           "topicId": "T-TRUST",
-          "name": "信頼される人の処世術（11）",
+          "name": "信頼を獲得する処世術（11）",
           "items": [
             {
               "text": "言ったことを必ずやる",
@@ -520,7 +520,7 @@
       "topics": [
         {
           "topicId": "T-WORK",
-          "name": "仕事ができる人の処世術（11）",
+          "name": "仕事遂行の処世術（11）",
           "items": [
             {
               "text": "報告は結論から述べる",
@@ -603,7 +603,7 @@
         },
         {
           "topicId": "T-LEADER",
-          "name": "リーダーシップがある人の処世術（10）",
+          "name": "リーダーシップの処世術（10）",
           "items": [
             {
               "text": "責任を自分で取る",
@@ -679,7 +679,7 @@
         },
         {
           "topicId": "T-COMMUNICATION",
-          "name": "コミュニケーション上手な人の処世術（10）",
+          "name": "業務コミュニケーションの処世術（10）",
           "items": [
             {
               "text": "相手の話を8割聞く",
@@ -859,7 +859,7 @@
       "topics": [
         {
           "topicId": "T-MENTAL",
-          "name": "メンタルが強い人の処世術（12）",
+          "name": "メンタル耐性の処世術（12）",
           "items": [
             {
               "text": "感情をそのまま受け入れる",
@@ -949,7 +949,7 @@
         },
         {
           "topicId": "T-CALM",
-          "name": "冷静でいられる人の処世術（10）",
+          "name": "冷静さを保つ処世術（10）",
           "items": [
             {
               "text": "深呼吸で間を取る",
@@ -1025,7 +1025,7 @@
         },
         {
           "topicId": "T-CONFIDENCE",
-          "name": "自信がある人の処世術（10）",
+          "name": "自己信頼の処世術（10）",
           "items": [
             {
               "text": "小さな成功体験を積む",
@@ -1101,7 +1101,7 @@
         },
         {
           "topicId": "T-YOYUU",
-          "name": "余裕あふれる処世術（12）",
+          "name": "余裕を生む処世術（12）",
           "items": [
             {
               "text": "反応を急がない",
@@ -1198,7 +1198,7 @@
       "topics": [
         {
           "topicId": "T-SUCCESS",
-          "name": "成功する人の処世術（12）",
+          "name": "成功者の処世術（12）",
           "items": [
             {
               "text": "失敗を次の実験に変える",
@@ -1288,7 +1288,7 @@
         },
         {
           "topicId": "T-HABIT",
-          "name": "良い習慣を持つ人の処世術（10）",
+          "name": "習慣設計の処世術（10）",
           "items": [
             {
               "text": "朝のルーティンを持つ",
@@ -1364,7 +1364,7 @@
         },
         {
           "topicId": "T-FOCUS",
-          "name": "集中力が高い人の処世術（10）",
+          "name": "集中力運用の処世術（10）",
           "items": [
             {
               "text": "スマホを視界から消す",
@@ -1523,7 +1523,7 @@
       "topics": [
         {
           "topicId": "T-NOREGRET",
-          "name": "後悔しない人の処世術（12）",
+          "name": "後悔を避ける処世術（12）",
           "items": [
             {
               "text": "やりたいことを先延ばしにしない",
@@ -1613,76 +1613,76 @@
         },
         {
           "topicId": "T-BALANCE",
-          "name": "ワークライフバランスの処世術（10）",
+          "name": "夢と挑戦の処世術（10）",
           "items": [
             {
-              "text": "仕事の終了時刻を決める",
-              "term": "終業境界 / Work Boundary",
+              "text": "挑戦の機会を先延ばしにしない",
+              "term": "機会費用意識 / Opportunity Cost Awareness",
               "refs": [
-                "R-013"
+                "AD-005"
               ]
             },
             {
-              "text": "休日は完全にオフにする",
-              "term": "心理的デタッチメント / Psychological Detachment",
+              "text": "失敗を学習機会として捉える",
+              "term": "成長マインドセット / Growth Mindset",
               "refs": [
-                "I-016"
+                "I-012"
               ]
             },
             {
-              "text": "仕事以外の居場所を持つ",
-              "term": "多領域アイデンティティ / Multi-Domain Identity",
+              "text": "小さく始めて早く試す",
+              "term": "プロトタイピング / Prototyping",
               "refs": [
-                "R-015"
+                "AD-004"
               ]
             },
             {
-              "text": "NOを言う",
-              "term": "境界線防衛 / Boundary Defense",
+              "text": "撤退基準を事前に決める",
+              "term": "撤退条件設定 / Exit Criteria",
               "refs": [
-                "R-014"
+                "AD-008"
               ]
             },
             {
-              "text": "完璧主義を手放す",
-              "term": "完璧主義の放棄 / Perfectionism Release",
+              "text": "夢を言葉にして明確化する",
+              "term": "ビジョン言語化 / Vision Articulation",
               "refs": [
-                "I-008"
+                "A-025"
               ]
             },
             {
-              "text": "自分の時間を予定に入れる",
-              "term": "セルフ・アポイントメント / Self-Appointment",
+              "text": "安全策だけを選ばない",
+              "term": "リスク許容度調整 / Risk Tolerance Adjustment",
               "refs": [
-                "R-013"
+                "AD-005"
               ]
             },
             {
-              "text": "睡眠時間を確保する",
-              "term": "睡眠衛生 / Sleep Hygiene",
+              "text": "周囲の反対を恐れずに進む",
+              "term": "社会的圧力耐性 / Social Pressure Resistance",
               "refs": [
-                "I-009"
+                "R-024"
               ]
             },
             {
-              "text": "体調を優先判断基準にする",
-              "term": "身体優先原則 / Body-First Principle",
+              "text": "継続の仕組みを作る",
+              "term": "習慣形成 / Habit Formation",
               "refs": [
-                "I-010"
+                "A-010"
               ]
             },
             {
-              "text": "休むことを仕事と認識する",
-              "term": "回復戦略 / Recovery Strategy",
+              "text": "人の力を借りる",
+              "term": "社会的資源活用 / Social Capital Utilization",
               "refs": [
-                "I-009"
+                "R-019"
               ]
             },
             {
-              "text": "趣味に没頭する時間を確保する",
-              "term": "フロー体験確保 / Flow Time Allocation",
+              "text": "行動を先に起こす",
+              "term": "行動優先 / Action Bias",
               "refs": [
-                "A-007"
+                "A-002"
               ]
             }
           ]
@@ -1786,7 +1786,7 @@
       "topics": [
         {
           "topicId": "T-CHANGE",
-          "name": "変化に強い人の処世術（11）",
+          "name": "変化適応の処世術（11）",
           "items": [
             {
               "text": "変化を脅威ではなく情報として扱う",
@@ -1869,7 +1869,7 @@
         },
         {
           "topicId": "T-PROBLEM",
-          "name": "問題解決力が高い人の処世術（10）",
+          "name": "問題解決の処世術（10）",
           "items": [
             {
               "text": "問題を構造化する",
