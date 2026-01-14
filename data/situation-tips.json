@@ -1613,43 +1613,67 @@
         },
         {
           "topicId": "T-BALANCE",
-          "name": "夢と挑戦の処世術（12）",
+          "name": "夢と挑戦の処世術（15）",
           "items": [
             {
-              "text": "千里の道も一歩から"
+              "text": "夢はスケールで決める",
+              "term": "ビジョン拡張原理 / Vision Expansion Principle"
             },
             {
-              "text": "七転び八起き"
+              "text": "根拠のない自信を否定しない",
+              "term": "自己効力感 / Self-Efficacy"
             },
             {
-              "text": "石の上にも三年"
+              "text": "他人の期待と夢を切り離す",
+              "term": "外発動機遮断 / Extrinsic Motivation Decoupling"
             },
             {
-              "text": "蒔かぬ種は生えぬ"
+              "text": "夢を言語化しすぎない",
+              "term": "内的保持 / Internal Retention"
             },
             {
-              "text": "虎穴に入らずんば虎子を得ず"
+              "text": "挑戦は成功率で判断しない",
+              "term": "期待値思考 / Expected Value Thinking"
             },
             {
-              "text": "案ずるより産むが易し"
+              "text": "合理性を超える決断を許容する",
+              "term": "Leap of Faith"
             },
             {
-              "text": "失敗は成功の母"
+              "text": "挑戦しない合理性も理解した上で選ぶ",
+              "term": "機会費用認識 / Opportunity Cost Awareness"
             },
             {
-              "text": "急がば回れ"
+              "text": "人生に一度は賭けに出る余白を残す",
+              "term": "非線形リターン認識 / Non-Linear Return Awareness"
             },
             {
-              "text": "好きこそ物の上手なれ"
+              "text": "夢を理由に今を壊さない",
+              "term": "持続可能性 / Sustainability"
             },
             {
-              "text": "艱難汝を玉にす"
+              "text": "夢は計画に落としすぎない",
+              "term": "過度計画抑制 / Over-Planning Suppression"
             },
             {
-              "text": "人事を尽くして天命を待つ"
+              "text": "失敗を前提に挑戦する",
+              "term": "試行錯誤モデル / Trial-and-Error Model"
             },
             {
-              "text": "志あるところに道は開ける"
+              "text": "夢は途中で変えていい",
+              "term": "可変目標理論 / Variable Goal Theory"
+            },
+            {
+              "text": "夢を達成基準ではなく評価基準にする",
+              "term": "価値基準化 / Value Criterization"
+            },
+            {
+              "text": "夢を持たない時期を前提にする",
+              "term": "フェーズ分離 / Phase Separation"
+            },
+            {
+              "text": "夢を失っても自分を否定しない",
+              "term": "自己連続性 / Self-Continuity"
             }
           ]
         },
