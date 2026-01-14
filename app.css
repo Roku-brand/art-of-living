@@ -4223,7 +4223,7 @@ input:focus-visible, textarea:focus-visible{
   width: 100%;
   height: 350px;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   overflow: hidden;
 }
 .page-compass-hemisphere::before{
@@ -4237,7 +4237,6 @@ input:focus-visible, textarea:focus-visible{
   height: 180%;
   background:
     url("./assets/bg/compass-hemisphere.svg") center bottom / contain no-repeat;
-  opacity: 1;
   pointer-events: none;
 }
 @media (max-width: 768px){
