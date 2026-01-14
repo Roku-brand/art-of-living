@@ -1613,77 +1613,43 @@
         },
         {
           "topicId": "T-BALANCE",
-          "name": "夢と挑戦の処世術（10）",
+          "name": "夢と挑戦の処世術（12）",
           "items": [
             {
-              "text": "挑戦の機会を先延ばしにしない",
-              "term": "機会費用意識 / Opportunity Cost Awareness",
-              "refs": [
-                "AD-005"
-              ]
+              "text": "千里の道も一歩から"
             },
             {
-              "text": "失敗を学習機会として捉える",
-              "term": "成長マインドセット / Growth Mindset",
-              "refs": [
-                "I-012"
-              ]
+              "text": "七転び八起き"
             },
             {
-              "text": "小さく始めて早く試す",
-              "term": "プロトタイピング / Prototyping",
-              "refs": [
-                "AD-004"
-              ]
+              "text": "石の上にも三年"
             },
             {
-              "text": "撤退基準を事前に決める",
-              "term": "撤退条件設定 / Exit Criteria",
-              "refs": [
-                "AD-008"
-              ]
+              "text": "蒔かぬ種は生えぬ"
             },
             {
-              "text": "夢を言葉にして明確化する",
-              "term": "ビジョン言語化 / Vision Articulation",
-              "refs": [
-                "A-025"
-              ]
+              "text": "虎穴に入らずんば虎子を得ず"
             },
             {
-              "text": "安全策だけを選ばない",
-              "term": "リスク許容度調整 / Risk Tolerance Adjustment",
-              "refs": [
-                "AD-005"
-              ]
+              "text": "案ずるより産むが易し"
             },
             {
-              "text": "周囲の反対を恐れずに進む",
-              "term": "社会的圧力耐性 / Social Pressure Resistance",
-              "refs": [
-                "R-024"
-              ]
+              "text": "失敗は成功の母"
             },
             {
-              "text": "継続の仕組みを作る",
-              "term": "習慣形成 / Habit Formation",
-              "refs": [
-                "A-010"
-              ]
+              "text": "急がば回れ"
             },
             {
-              "text": "人の力を借りる",
-              "term": "社会的資源活用 / Social Capital Utilization",
-              "refs": [
-                "R-019"
-              ]
+              "text": "好きこそ物の上手なれ"
             },
             {
-              "text": "行動を先に起こす",
-              "term": "行動優先 / Action Bias",
-              "refs": [
-                "A-002"
-              ]
+              "text": "艱難汝を玉にす"
+            },
+            {
+              "text": "人事を尽くして天命を待つ"
+            },
+            {
+              "text": "志あるところに道は開ける"
             }
           ]
         },
