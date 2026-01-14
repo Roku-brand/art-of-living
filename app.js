@@ -18,8 +18,8 @@ const OS_META = [
 ];
 
 const HERO_SIDE_COPY = {
-  system: "情報の洪水に惑わされないためには、点在する情報ではなく“構造化された知恵”が必要。\n自己啓発・心理学・行動科学・対人術・キャリア論などを 5つのOS・195の項目 に集約した”処世術の体系書”",
-  tips: "「思考術」「対人術」「仕事術」「成功術」「人生術」の5つのカテゴリーで\n人生のあらゆる局面を切り抜ける”処世術の究極解”",
+  system: "処世術一覧を支える「判断の構造」を扱う構造レイヤ。\n7つのOSと命題群によるインデックスで構成。役割は「分類」「照合」「理解」。",
+  tips: "「思考術」「対人術」「仕事術」「成功術」「人生術」の5つのカテゴリーで\n人生のあらゆる局面を切り抜ける処世術一覧",
   my: "もう迷わないために、自分のために選択・洗練された”処世術棚”"
 };
 
@@ -286,8 +286,8 @@ function renderShell(activeTab) {
         </div>
         <nav class="header-nav">
           <button class="header-nav-item ${activeTab === 'home' ? 'active' : ''}" data-nav="#home">トップ</button>
-          <button class="header-nav-item ${activeTab === 'tips' ? 'active' : ''}" data-nav="#tips">ケース別処世術</button>
-          <button class="header-nav-item ${activeTab === 'list' ? 'active' : ''}" data-nav="#list?os=life">体系処世術・OS</button>
+          <button class="header-nav-item ${activeTab === 'tips' ? 'active' : ''}" data-nav="#tips">処世術一覧</button>
+          <button class="header-nav-item ${activeTab === 'list' ? 'active' : ''}" data-nav="#list?os=life">判断基盤</button>
           <button class="header-nav-item ${activeTab === 'my' ? 'active' : ''}" data-nav="#my">マイページ</button>
         </nav>
         <div class="header-right">
@@ -363,13 +363,13 @@ function renderShell(activeTab) {
           </button>
           <button class="mobile-menu-item" id="mobileMenuTips">
             <span class="mobile-menu-subtitle">即効性・具体論</span>
-            <span class="mobile-menu-main">ケース別処世術</span>
+            <span class="mobile-menu-main">処世術一覧</span>
             <span class="mobile-menu-desc">すぐに使える箇条書きの処世術</span>
           </button>
           <button class="mobile-menu-item" id="mobileMenuList">
-            <span class="mobile-menu-subtitle">体系的に学ぶ</span>
-            <span class="mobile-menu-main">体系処世術・OS</span>
-            <span class="mobile-menu-desc">7つのOSで構成された処世術体系</span>
+            <span class="mobile-menu-subtitle">判断の構造</span>
+            <span class="mobile-menu-main">判断基盤</span>
+            <span class="mobile-menu-desc">処世術を支える7つのOSと命題</span>
           </button>
           <button class="mobile-menu-item" id="mobileMenuMy">
             <span class="mobile-menu-subtitle">個人設定</span>
@@ -503,7 +503,7 @@ function renderShell(activeTab) {
     };
   }
 
-  // ケース別処世術
+  // 処世術一覧
   const mobileMenuTips = $("#mobileMenuTips");
   if (mobileMenuTips) {
     mobileMenuTips.onclick = () => {
@@ -512,7 +512,7 @@ function renderShell(activeTab) {
     };
   }
 
-  // 体系処世術
+  // 判断基盤
   const mobileMenuList = $("#mobileMenuList");
   if (mobileMenuList) {
     mobileMenuList.onclick = () => {
@@ -617,7 +617,7 @@ function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = nu
 
   return `
     <div class="sidebarCompact">
-      <div class="sidebarCompactTitle">処世術OS</div>
+      <div class="sidebarCompactTitle">判断基盤</div>
 
       <div class="sidebarCompactList" id="osbar">
         ${items.map((k) => {
@@ -645,8 +645,8 @@ function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = nu
 }
 
 function renderMobileSidebarToggle(
-  openLabel = "処世術OSを開く",
-  closeLabel = "処世術OSを閉じる"
+  openLabel = "判断基盤を開く",
+  closeLabel = "判断基盤を閉じる"
 ) {
   return `
     <div class="mobile-side-toggle">
@@ -667,8 +667,8 @@ function bindSidebarActions(container) {
   const mobileToggle = container.querySelector("[data-mobile-sidebar-toggle]");
   const listSide = container.querySelector(".list-side");
   if (mobileToggle && listSide) {
-    const openLabel = mobileToggle.getAttribute("data-open-label") || "処世術OSを開く";
-    const closeLabel = mobileToggle.getAttribute("data-close-label") || "処世術OSを閉じる";
+    const openLabel = mobileToggle.getAttribute("data-open-label") || "判断基盤を開く";
+    const closeLabel = mobileToggle.getAttribute("data-close-label") || "判断基盤を閉じる";
     mobileToggle.onclick = () => {
       const isOpen = listSide.classList.toggle("isOpen");
       mobileToggle.setAttribute("aria-expanded", String(isOpen));
@@ -723,7 +723,7 @@ function renderList(osKey, focusOsId = null) {
   // ★重要：DOM順を「sidebar → main」にして grid(320px / 1fr) と一致させる
   const heroSubtitle = "行き方・心の扱い・対人関係などを7つのOSで整理した処世術一覧。";
   const showSystemHero = osKey === "life" && !focusOsId;
-  const heroTitle = showSystemHero ? "体系処世術" : (meta?.title || currentOS);
+  const heroTitle = showSystemHero ? "判断基盤" : (meta?.title || currentOS);
   const heroDescription = showSystemHero ? "" : (meta?.desc || heroSubtitle);
   const heroSideCopy = showSystemHero ? `
     <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.system)}</div>
@@ -937,7 +937,7 @@ function renderSearch({ q }) {
       </div>
 
       <div class="list-main">
-        ${renderMobileSidebarToggle("OS一覧を開く", "OS一覧を閉じる")}
+        ${renderMobileSidebarToggle("判断基盤を開く", "判断基盤を閉じる")}
         <div class="list-headline">
           <div class="title">検索（OS横断）</div>
           <div class="count">件数：<b>${filtered.length}</b><span class="count-sep">/</span>全体：<b>${all.length}</b></div>
@@ -1332,7 +1332,7 @@ function renderSituationTips() {
   view.innerHTML = `
     <div class="tips-simple-layout">
       <div class="tips-simple-hero">
-        <div class="tips-simple-hero-title">ケース別処世術</div>
+        <div class="tips-simple-hero-title">処世術一覧</div>
         <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.tips)}</div>
       </div>
       ${sectionMap.map((section) => {
@@ -1512,7 +1512,7 @@ function renderTopicGroupPage(topicId) {
   });
 }
 
-// ========== ケース別処世術 カテゴリ詳細ページ ==========
+// ========== 処世術一覧 カテゴリ詳細ページ ==========
 function renderTipsCategoryDetail(categoryId) {
   renderShell("tips");
   const view = $("#view");
@@ -1680,7 +1680,7 @@ function renderSituationsList() {
       </div>
 
       <div class="list-main">
-        ${renderMobileSidebarToggle("処世術OSを開く", "処世術OSを閉じる")}
+        ${renderMobileSidebarToggle("判断基盤を開く", "判断基盤を閉じる")}
         <div class="list-hero situation-hero">
           <div class="list-hero-title">シチュエーション別まとめ</div>
           <div class="list-hero-subtitle">既存の処世術カードを「悩み」「なりたい状態」「詰まり感」から直接アクセスできる入口として再編成。抽象論ではなく、判断・行動・立ち回りの集合体として処世術を再提示する。</div>
@@ -1766,7 +1766,7 @@ function renderSituationDetail(situationId) {
       </div>
 
       <div class="list-main">
-        ${renderMobileSidebarToggle("処世術OSを開く", "処世術OSを閉じる")}
+        ${renderMobileSidebarToggle("判断基盤を開く", "判断基盤を閉じる")}
         <div class="situation-detail-hero">
           <button class="btn ghost situation-back" id="backToList">← シチュエーション一覧</button>
           <div class="situation-detail-num">${escapeHtml(situation.id)}</div>
