@@ -339,91 +339,185 @@
           ]
         },
         {
-          "topicId": "T-RENAI",
-          "name": "恋愛の処世術（12）",
+          "topicId": "T-RENAI-MAN",
+          "name": "恋愛戦略の処世術（男→女）（12）",
           "items": [
             {
-              "text": "追いかけすぎない",
-              "term": "追求の抑制 / Pursuit Moderation",
+              "text": "追いかけすぎずに適度な距離感を保つ",
+              "term": "希少性の演出 / Scarcity Effect",
               "refs": [
                 "R-001"
               ]
             },
             {
-              "text": "自分の時間を確保する",
-              "term": "自己領域の維持 / Personal Space Preservation",
+              "text": "自分の世界観・目標を持ち、それを語る",
+              "term": "魅力の源泉形成 / Value Demonstration",
               "refs": [
-                "R-013"
+                "R-026"
               ]
             },
             {
-              "text": "相手を変えようとしない",
-              "term": "受容の姿勢 / Acceptance Stance",
+              "text": "リードする場面と譲る場面を使い分ける",
+              "term": "主導権の配置 / Leadership Calibration",
               "refs": [
-                "R-024"
+                "R-038"
               ]
             },
             {
-              "text": "期待を言葉にする",
-              "term": "期待の言語化 / Expectation Verbalization",
+              "text": "清潔感と身だしなみを整える",
+              "term": "外見の初期設定 / Appearance Setting",
               "refs": [
-                "R-011"
+                "R-034"
               ]
             },
             {
-              "text": "違和感を放置しない",
-              "term": "違和感の即時処理 / Immediate Discomfort Addressing",
+              "text": "余裕を見せる（焦りを出さない）",
+              "term": "非反応性 / Non-Reactivity",
               "refs": [
-                "R-010"
+                "I-007"
               ]
             },
             {
-              "text": "依存と好意を区別する",
-              "term": "感情の分離 / Emotional Differentiation",
+              "text": "ユーモアで場の空気を和らげる",
+              "term": "場の温度調整 / Mood Calibration",
+              "refs": [
+                "R-031"
+              ]
+            },
+            {
+              "text": "自分から誘う・行動を起こす",
+              "term": "主体性の提示 / Initiative Taking",
+              "refs": [
+                "A-001"
+              ]
+            },
+            {
+              "text": "相手の話に興味を持ち、深掘りする",
+              "term": "関心の表明 / Interest Demonstration",
+              "refs": [
+                "R-032"
+              ]
+            },
+            {
+              "text": "自己開示は段階的に行う",
+              "term": "情報開示の設計 / Disclosure Calibration",
+              "refs": [
+                "R-001",
+                "R-002"
+              ]
+            },
+            {
+              "text": "決断力を見せる（優柔不断を避ける）",
+              "term": "意思決定力 / Decision Capability",
+              "refs": [
+                "A-001"
+              ]
+            },
+            {
+              "text": "他の女性からの評価を匂わせる",
+              "term": "社会的証明 / Social Proof",
+              "refs": [
+                "R-025"
+              ]
+            },
+            {
+              "text": "感情表現は抑制しつつ誠実さを見せる",
+              "term": "感情制御と誠実性 / Emotional Control with Sincerity",
+              "refs": [
+                "I-007",
+                "R-005"
+              ]
+            }
+          ]
+        },
+        {
+          "topicId": "T-RENAI-WOMAN",
+          "name": "恋愛戦略の処世術（女→男）（12）",
+          "items": [
+            {
+              "text": "興味を見せつつも追わせる余地を残す",
+              "term": "プッシュプル / Push-Pull Technique",
+              "refs": [
+                "R-001"
+              ]
+            },
+            {
+              "text": "笑顔と視線を戦略的に使う",
+              "term": "非言語シグナル / Nonverbal Signaling",
+              "refs": [
+                "R-003",
+                "R-004"
+              ]
+            },
+            {
+              "text": "褒めるときは具体的に、本気で",
+              "term": "承認の差別化 / Recognition Differentiation",
+              "refs": [
+                "R-018"
+              ]
+            },
+            {
+              "text": "自分の魅力を自覚し、磨く領域を絞る",
+              "term": "強みの強調 / Strength Amplification",
+              "refs": [
+                "I-010"
+              ]
+            },
+            {
+              "text": "返信・反応のタイミングを意識する",
+              "term": "可用性の調整 / Availability Management",
+              "refs": [
+                "R-001"
+              ]
+            },
+            {
+              "text": "依存心を見せすぎない",
+              "term": "自立性の提示 / Independence Display",
               "refs": [
                 "R-015"
               ]
             },
             {
-              "text": "相手のペースを尊重する",
-              "term": "ペース同調 / Pace Synchronization",
+              "text": "相手に頼る場面をつくる",
+              "term": "関与の機会提供 / Involvement Opportunity",
               "refs": [
-                "R-002"
+                "R-019"
               ]
             },
             {
-              "text": "嫉妬を相手にぶつけない",
+              "text": "自分の趣味・世界を持つ",
+              "term": "独自性の維持 / Individuality Maintenance",
+              "refs": [
+                "R-013"
+              ]
+            },
+            {
+              "text": "ミステリアスな一面を残す",
+              "term": "情報の出し惜しみ / Information Withholding",
+              "refs": [
+                "R-001"
+              ]
+            },
+            {
+              "text": "場の空気を読んで会話を調整する",
+              "term": "場への適応 / Contextual Adaptation",
+              "refs": [
+                "R-031"
+              ]
+            },
+            {
+              "text": "嫉妬心を見せすぎない",
               "term": "感情の内部処理 / Internal Emotion Processing",
               "refs": [
                 "I-007"
               ]
             },
             {
-              "text": "沈黙を恐れない",
-              "term": "沈黙の許容 / Silence Tolerance",
+              "text": "相手の努力や成果を認める",
+              "term": "承認と評価 / Recognition and Appreciation",
               "refs": [
-                "R-008"
-              ]
-            },
-            {
-              "text": "相手の話を最後まで聞く",
-              "term": "傾聴 / Active Listening",
-              "refs": [
-                "R-007"
-              ]
-            },
-            {
-              "text": "記念日より日常を大切にする",
-              "term": "日常の価値化 / Everyday Appreciation",
-              "refs": [
-                "R-027"
-              ]
-            },
-            {
-              "text": "日常的に感謝を伝える",
-              "term": "感謝表出 / Gratitude Expression",
-              "refs": [
-                "R-018"
+                "R-018",
+                "R-035"
               ]
             }
           ]
@@ -507,6 +601,186 @@
               "term": "戦略的無知 / Strategic Ignorance",
               "refs": [
                 "R-041"
+              ]
+            }
+          ]
+        },
+        {
+          "topicId": "T-PERSUASION",
+          "name": "説得・言語化の処世術（12）",
+          "items": [
+            {
+              "text": "相手の利益を先に提示する",
+              "term": "利益先行型提案 / Benefit-First Proposal",
+              "refs": [
+                "R-011"
+              ]
+            },
+            {
+              "text": "結論から話し、理由を後から添える",
+              "term": "PREP法 / PREP Method",
+              "refs": [
+                "O-001"
+              ]
+            },
+            {
+              "text": "抽象と具体を往復して伝える",
+              "term": "抽象化と具体化 / Abstraction-Concretization",
+              "refs": [
+                "R-042"
+              ]
+            },
+            {
+              "text": "相手の言葉を使って説明する",
+              "term": "言語の同調 / Language Mirroring",
+              "refs": [
+                "R-007"
+              ]
+            },
+            {
+              "text": "反論を先に認め、その上で主張する",
+              "term": "譲歩と主張 / Concession and Assertion",
+              "refs": [
+                "R-024"
+              ]
+            },
+            {
+              "text": "選択肢を絞って提示する",
+              "term": "選択肢の制限 / Choice Limitation",
+              "refs": [
+                "O-015"
+              ]
+            },
+            {
+              "text": "比喩や例え話で理解を促す",
+              "term": "アナロジー / Analogy",
+              "refs": [
+                "AD-004"
+              ]
+            },
+            {
+              "text": "感情に訴えてから論理で裏付ける",
+              "term": "パトス・ロゴス連携 / Pathos-Logos Combination",
+              "refs": [
+                "I-005"
+              ]
+            },
+            {
+              "text": "沈黙を恐れず、相手に考える時間を与える",
+              "term": "沈黙の活用 / Strategic Silence",
+              "refs": [
+                "R-008"
+              ]
+            },
+            {
+              "text": "小さなYESを積み重ねる",
+              "term": "フット・イン・ザ・ドア / Foot-in-the-Door",
+              "refs": [
+                "O-016"
+              ]
+            },
+            {
+              "text": "相手の立場を代弁してから話す",
+              "term": "視点取得 / Perspective-Taking",
+              "refs": [
+                "R-007"
+              ]
+            },
+            {
+              "text": "言い切る勇気を持つ",
+              "term": "断定表現 / Assertive Expression",
+              "refs": [
+                "R-036"
+              ]
+            }
+          ]
+        },
+        {
+          "topicId": "T-PUBLIC",
+          "name": "人前・大舞台の処世術（12）",
+          "items": [
+            {
+              "text": "最初の30秒で場の空気をつかむ",
+              "term": "初頭効果 / Primacy Effect",
+              "refs": [
+                "R-003"
+              ]
+            },
+            {
+              "text": "声の大きさ・速度・間を意識する",
+              "term": "パラ言語 / Paralanguage",
+              "refs": [
+                "R-033"
+              ]
+            },
+            {
+              "text": "姿勢と視線で存在感を出す",
+              "term": "非言語コミュニケーション / Nonverbal Communication",
+              "refs": [
+                "R-034"
+              ]
+            },
+            {
+              "text": "聴衆の一部と目を合わせる",
+              "term": "アイコンタクト / Eye Contact",
+              "refs": [
+                "R-003"
+              ]
+            },
+            {
+              "text": "本番前にルーティンで心を整える",
+              "term": "プレ・パフォーマンス・ルーティン / Pre-Performance Routine",
+              "refs": [
+                "I-016"
+              ]
+            },
+            {
+              "text": "緊張を敵ではなく燃料として使う",
+              "term": "不安の機能化 / Anxiety Reframing",
+              "refs": [
+                "I-001"
+              ]
+            },
+            {
+              "text": "冒頭と結末を丁寧に設計する",
+              "term": "ピーク・エンドの法則 / Peak-End Rule",
+              "refs": [
+                "R-004"
+              ]
+            },
+            {
+              "text": "内容を削り、余白を作る",
+              "term": "情報密度の調整 / Information Density Control",
+              "refs": [
+                "A-009"
+              ]
+            },
+            {
+              "text": "想定外に動じず、流れを作り直す",
+              "term": "即興対応 / Improvisation",
+              "refs": [
+                "AD-007"
+              ]
+            },
+            {
+              "text": "最悪のシナリオを事前に受け入れる",
+              "term": "防衛的悲観主義 / Defensive Pessimism",
+              "refs": [
+                "I-004"
+              ]
+            },
+            {
+              "text": "終わった後の反省は短くする",
+              "term": "反芻の抑制 / Rumination Control",
+              "refs": [
+                "I-010"
+              ]
+            },
+            {
+              "text": "成功体験を記録し、自己効力感を高める",
+              "term": "自己効力感の蓄積 / Self-Efficacy Building",
+              "refs": [
+                "I-009"
               ]
             }
           ]
