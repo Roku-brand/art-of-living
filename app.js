@@ -382,6 +382,7 @@ function renderShell(activeTab) {
 
     <div class="container" id="view"></div>
     <div class="page-end-band" aria-hidden="true"></div>
+    <div class="page-compass-hemisphere" aria-hidden="true"></div>
   `;
 
   // ログインモーダルの開閉（マイページから呼び出される）
