@@ -1826,6 +1826,7 @@ function renderSituationTips() {
     { title: "スキル術", categoryIds: ["C-BUSINESS"] },
     { title: "達成術", categoryIds: ["C-GOAL"] }
   ];
+  const MAX_TOPICS_PER_CATEGORY = 5;
 
   const buildSectionTopics = (ids) =>
     categories
@@ -1843,7 +1844,7 @@ function renderSituationTips() {
         </div>
       </div>
       ${sectionMap.map((section) => {
-        const topics = buildSectionTopics(section.categoryIds);
+        const topics = buildSectionTopics(section.categoryIds).slice(0, MAX_TOPICS_PER_CATEGORY);
         return `
           <section class="tips-simple-section">
             <h2 class="tips-simple-title">≪${escapeHtml(section.title)}≫</h2>
