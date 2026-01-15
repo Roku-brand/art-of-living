@@ -340,93 +340,62 @@
         },
         {
           "topicId": "T-RENAI-MAN",
-          "name": "恋愛戦略の処世術（男→女）（12）",
+          "name": "恋愛戦略の処世術（男→女）（11）",
           "items": [
             {
-              "text": "追いかけすぎずに適度な距離感を保つ",
-              "term": "希少性の演出 / Scarcity Effect",
-              "refs": [
-                "R-001"
-              ]
+              "text": "非言語情報（清潔感・姿勢・声）を重視",
+              "term": "非言語重視 / Nonverbal Emphasis",
+              "refs": []
             },
             {
-              "text": "自分の世界観・目標を持ち、それを語る",
-              "term": "魅力の源泉形成 / Value Demonstration",
-              "refs": [
-                "R-026"
-              ]
+              "text": "初期は「理解者」ポジションを取る",
+              "term": "理解者ポジション / Supporter Positioning",
+              "refs": []
             },
             {
-              "text": "リードする場面と譲る場面を使い分ける",
-              "term": "主導権の配置 / Leadership Calibration",
-              "refs": [
-                "R-038"
-              ]
+              "text": "会話は情報交換ではなく感情交換",
+              "term": "感情交換 / Emotional Exchange",
+              "refs": []
             },
             {
-              "text": "清潔感と身だしなみを整える",
-              "term": "外見の初期設定 / Appearance Setting",
-              "refs": [
-                "R-034"
-              ]
+              "text": "好意は出し切らず6割で止める",
+              "term": "好意コントロール / Affection Moderation",
+              "refs": []
             },
             {
-              "text": "余裕を見せる（焦りを出さない）",
-              "term": "非反応性 / Non-Reactivity",
-              "refs": [
-                "I-007"
-              ]
+              "text": "距離（物理・心理）を一段ずつ詰める",
+              "term": "距離段階設計 / Gradual Distance",
+              "refs": []
             },
             {
-              "text": "ユーモアで場の空気を和らげる",
-              "term": "場の温度調整 / Mood Calibration",
-              "refs": [
-                "R-031"
-              ]
+              "text": "他にも選択肢がある感を匂わせる",
+              "term": "選択肢提示 / Option Signaling",
+              "refs": []
             },
             {
-              "text": "自分から誘う・行動を起こす",
-              "term": "主体性の提示 / Initiative Taking",
-              "refs": [
-                "A-001"
-              ]
+              "text": "価値判断を相手に委ねる",
+              "term": "価値判断委任 / Value Delegation",
+              "refs": []
             },
             {
-              "text": "相手の話に興味を持ち、深掘りする",
-              "term": "関心の表明 / Interest Demonstration",
-              "refs": [
-                "R-032"
-              ]
+              "text": "余白と不完全さを残す",
+              "term": "余白維持 / Space and Imperfection",
+              "refs": []
             },
             {
-              "text": "自己開示は段階的に行う",
-              "term": "情報開示の設計 / Disclosure Calibration",
-              "refs": [
-                "R-001",
-                "R-002"
-              ]
+              "text": "自分に軸がある",
+              "term": "自己軸保持 / Inner Axis",
+              "refs": []
             },
             {
-              "text": "決断力を見せる（優柔不断を避ける）",
-              "term": "意思決定力 / Decision Capability",
-              "refs": [
-                "A-001"
-              ]
+              "text": "相手の温度が上がった瞬間に決断する",
+              "term": "温度上昇時決断 / Timely Decision",
+              "refs": []
             },
             {
-              "text": "他の女性からの評価を匂わせる",
-              "term": "社会的証明 / Social Proof",
-              "refs": [
-                "R-025"
-              ]
-            },
-            {
-              "text": "感情表現は抑制しつつ誠実さを見せる",
-              "term": "感情制御と誠実性 / Emotional Control with Sincerity",
-              "refs": [
-                "I-007",
-                "R-005"
-              ]
+              "text": "一貫した自信と安心感を醸し出す",
+              "term": "一貫自信安心感 / Consistent Confidence",
+              "refs": []
             }
           ]
         },
@@ -435,90 +404,64 @@
           "name": "恋愛戦略の処世術（女→男）（12）",
           "items": [
             {
-              "text": "興味を見せつつも追わせる余地を残す",
-              "term": "プッシュプル / Push-Pull Technique",
-              "refs": [
-                "R-001"
-              ]
+              "text": "称賛は結果よりプロセスを褒める",
+              "term": "プロセス称賛 / Process Praise",
+              "refs": []
             },
             {
-              "text": "笑顔と視線を戦略的に使う",
-              "term": "非言語シグナル / Nonverbal Signaling",
-              "refs": [
-                "R-003",
-                "R-004"
-              ]
+              "text": "好意は早めに示すが、重くしない",
+              "term": "早期好意軽量 / Early Light Affection",
+              "refs": []
             },
             {
-              "text": "褒めるときは具体的に、本気で",
-              "term": "承認の差別化 / Recognition Differentiation",
-              "refs": [
-                "R-018"
-              ]
+              "text": "聞き役に回り、承認で自尊心を満たす",
+              "term": "承認傾聴 / Validation Listening",
+              "refs": []
             },
             {
-              "text": "自分の魅力を自覚し、磨く領域を絞る",
-              "term": "強みの強調 / Strength Amplification",
-              "refs": [
-                "I-010"
-              ]
+              "text": "リアクションは大きめに、否定は控える",
+              "term": "大きめリアクション / Expressive Response",
+              "refs": []
             },
             {
-              "text": "返信・反応のタイミングを意識する",
-              "term": "可用性の調整 / Availability Management",
-              "refs": [
-                "R-001"
-              ]
+              "text": "頼るが、依存しない",
+              "term": "頼りと自立 / Reliance with Independence",
+              "refs": []
             },
             {
-              "text": "依存心を見せすぎない",
-              "term": "自立性の提示 / Independence Display",
-              "refs": [
-                "R-015"
-              ]
+              "text": "他の予定・世界を持っている感を出す",
+              "term": "別世界保持 / Independent World",
+              "refs": []
             },
             {
-              "text": "相手に頼る場面をつくる",
-              "term": "関与の機会提供 / Involvement Opportunity",
-              "refs": [
-                "R-019"
-              ]
+              "text": "相手を立てるが、下に回らない",
+              "term": "敬意と対等 / Respectful Equality",
+              "refs": []
             },
             {
-              "text": "自分の趣味・世界を持つ",
-              "term": "独自性の維持 / Individuality Maintenance",
-              "refs": [
-                "R-013"
-              ]
+              "text": "距離は一気に詰めず、段階を作る",
+              "term": "段階距離 / Staged Closeness",
+              "refs": []
             },
             {
-              "text": "ミステリアスな一面を残す",
-              "term": "情報の出し惜しみ / Information Withholding",
-              "refs": [
-                "R-001"
-              ]
+              "text": "連絡は「返す人」になりすぎない",
+              "term": "返信主導調整 / Response Moderation",
+              "refs": []
             },
             {
-              "text": "場の空気を読んで会話を調整する",
-              "term": "場への適応 / Contextual Adaptation",
-              "refs": [
-                "R-031"
-              ]
+              "text": "相手が踏み出しやすい空気を作る",
+              "term": "踏み出し支援 / Encouraging Initiative",
+              "refs": []
             },
             {
-              "text": "嫉妬心を見せすぎない",
-              "term": "感情の内部処理 / Internal Emotion Processing",
-              "refs": [
-                "I-007"
-              ]
+              "text": "感情の起伏を出しすぎない",
+              "term": "感情波抑制 / Emotional Stability",
+              "refs": []
             },
             {
-              "text": "相手の努力や成果を認める",
-              "term": "承認と評価 / Recognition and Appreciation",
-              "refs": [
-                "R-018",
-                "R-035"
-              ]
+              "text": "関係を急かさず、余白を残す",
+              "term": "余白維持 / Leaving Space",
+              "refs": []
             }
           ]
         }
@@ -1712,91 +1655,57 @@
         },
         {
           "topicId": "T-NOREGRET",
-          "name": "後悔しない処世術（12）",
+          "name": "後悔しないための処世術（10）",
           "items": [
             {
-              "text": "やりたいことを先延ばしにしない",
-              "term": "即時行動原則 / Immediate Action Principle",
-              "refs": [
-                "A-001"
-              ]
+              "text": "正しい生き方ではなく、納得できる生き方を選ぶ",
+              "term": "納得基準 / Satisfying Choice Principle",
+              "refs": []
             },
             {
-              "text": "他人の期待を確認してから応える",
-              "term": "期待の明確化 / Expectation Clarification",
-              "refs": [
-                "R-011"
-              ]
+              "text": "失敗の多い人生より、何もない人生の方が空虚になる",
+              "term": "空虚回避 / Emptiness Avoidance",
+              "refs": []
             },
             {
-              "text": "伝えたい感謝を先延ばしにしない",
-              "term": "感謝の即時表出 / Immediate Gratitude",
-              "refs": [
-                "R-018"
-              ]
+              "text": "正論・勝敗・プライドより、人との関係を重視する",
+              "term": "関係優先 / Relationship Priority",
+              "refs": []
             },
             {
-              "text": "大切な人との時間を優先する",
-              "term": "関係性投資 / Relationship Investment",
-              "refs": [
-                "R-027"
-              ]
+              "text": "「今忙しい」を言い訳にしない",
+              "term": "今忙しい排除 / No-Busy Excuse",
+              "refs": []
             },
             {
-              "text": "健康を資産として扱う",
-              "term": "健康資本 / Health Capital",
-              "refs": [
-                "I-016"
-              ]
+              "text": "人生の自由度は、健康で決まる",
+              "term": "健康自由度 / Health-Driven Freedom",
+              "refs": []
             },
             {
-              "text": "挑戦の機会を逃さない",
-              "term": "機会費用意識 / Opportunity Cost Awareness",
-              "refs": [
-                "AD-005"
-              ]
+              "text": "他人の評価に振り回されない",
+              "term": "評価非依存 / Detachment from External Evaluation",
+              "refs": []
             },
             {
-              "text": "選択の理由を記録する",
-              "term": "意思決定ジャーナル / Decision Journal",
-              "refs": [
-                "A-008"
-              ]
+              "text": "効率を求めすぎると、偶発的な機会を失う",
+              "term": "偶発機会保全 / Serendipity Preservation",
+              "refs": []
             },
             {
-              "text": "過去の選択を引き受ける",
-              "term": "選択の引き受け / Ownership of Choices",
-              "refs": [
-                "I-010"
-              ]
+              "text": "人生は有限であることを、定期的に思い出す",
+              "term": "有限性想起 / Mortality Recall",
+              "refs": []
             },
             {
-              "text": "人生の優先領域を明確にする",
-              "term": "価値階層化 / Value Hierarchy",
-              "refs": [
-                "R-028"
-              ]
+              "text": "感謝と謝罪は、思った瞬間に言語化する",
+              "term": "感謝謝罪即時化 / Immediate Appreciation and Apology",
+              "refs": []
             },
             {
-              "text": "死を意識して生きる",
-              "term": "メメント・モリ / Memento Mori",
-              "refs": [
-                "R-029"
-              ]
-            },
-            {
-              "text": "安全策だけを選ばない",
-              "term": "リスク許容度調整 / Risk Tolerance Adjustment",
-              "refs": [
-                "AD-005"
-              ]
-            },
-            {
-              "text": "判断期限を設ける",
-              "term": "決断デッドライン / Decision Deadline",
-              "refs": [
-                "A-003"
-              ]
+              "text": "人生を一度きりの計画で固定しない",
+              "term": "柔軟計画 / Flexible Life Planning",
+              "refs": []
             }
           ]
         },
