@@ -20,7 +20,7 @@ const OS_META = [
 const HERO_SIDE_COPY = {
   system: "人生OS/内部OSなどの分類で処世術を引ける入口。\n目的が決まっているときに素早く探すためのOS別索引。",
   base: "判断基盤は「なぜ効くか」「いつ使うか」「落とし穴」を学ぶための概念地図。\n6つの機能カテゴリで意思決定の原理を整理する。",
-  tips: "「思考術」「対人術」「仕事術」「成功術」「人生術」の5つのカテゴリーで\n人生のあらゆる局面を切り抜ける処世術一覧",
+  tips: "「人生術」「思考術」「対人術」「スキル術」「達成術」の5つのカテゴリーで\n人生のあらゆる局面を切り抜ける処世術一覧",
   my: "もう迷わないために、自分のために選択・洗練された”処世術棚”"
 };
 
@@ -1820,11 +1820,11 @@ function renderSituationTips() {
   const categories = situationTipsData.categories || [];
 
   const sectionMap = [
+    { title: "人生術", categoryIds: ["C-LIFE"] },
     { title: "思考術", categoryIds: ["C-MENTAL"] },
     { title: "対人術", categoryIds: ["C-RELATION"] },
-    { title: "仕事術", categoryIds: ["C-BUSINESS"] },
-    { title: "成功術", categoryIds: ["C-GOAL"] },
-    { title: "人生術", categoryIds: ["C-LIFE"] }
+    { title: "スキル術", categoryIds: ["C-BUSINESS"] },
+    { title: "達成術", categoryIds: ["C-GOAL"] }
   ];
 
   const buildSectionTopics = (ids) =>
