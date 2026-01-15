@@ -1356,6 +1356,8 @@ function renderBaseCategory(key, focusId = null, osFilter = "") {
           <div class="count">${countLabel}</div>
         </div>
 
+        ${renderBaseCategoryTabs(meta.key)}
+
         <div class="tabbar-wrap">
           <div class="tabbar-label">分類タブ（OS別）</div>
           <div class="tabbar" id="baseTabbar">
@@ -1377,6 +1379,12 @@ function renderBaseCategory(key, focusId = null, osFilter = "") {
 
   bindBaseSidebarActions(view);
   bindCardEvents();
+  view.querySelectorAll("[data-base-category-tab]").forEach((btn) => {
+    btn.onclick = () => {
+      const tabKey = btn.getAttribute("data-base-category-tab");
+      if (tabKey) nav(buildBaseCategoryHash(tabKey));
+    };
+  });
   const baseTabbar = $("#baseTabbar");
   if (baseTabbar) {
     baseTabbar.querySelectorAll("[data-base-tab]").forEach((btn) => {
