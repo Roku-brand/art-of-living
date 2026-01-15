@@ -1167,14 +1167,16 @@ function bindCardEvents() {
 }
 
 // ========== 索引（検索） ==========
-function renderSearch({ q } = {}) {
+function renderSearch(params = {}) {
   renderShell("list");
   const view = $("#view");
 
+  const safeParams = (params && typeof params === "object") ? params : {};
+  const q = safeParams.q ?? "";
   const all = sortById(DATA.all);
   const total = all.length;
 
-  const query = String(q || "").trim().toLowerCase();
+  const query = String(q).trim().toLowerCase();
 
   let filtered = all;
 
@@ -1216,7 +1218,7 @@ function renderSearch({ q } = {}) {
 
         <div class="search-form-wrap">
           <div class="grid">
-            <input class="input" id="q" placeholder="キーワード（例：疲れ / 交渉 / 先延ばし）" value="${escapeHtml(q || "")}" />
+            <input class="input" id="q" placeholder="キーワード（例：疲れ / 交渉 / 先延ばし）" value="${escapeHtml(q)}" />
             <div class="row">
               <button class="btn primary" id="doSearch">検索</button>
               <button class="btn ghost" id="clearSearch">クリア</button>
@@ -1276,6 +1278,7 @@ function renderSearch({ q } = {}) {
 }
 
 function renderBaseHome() {
+  // #base は索引ビューへのエイリアス
   renderSearch({ q: "" });
 }
 
