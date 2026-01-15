@@ -63,6 +63,8 @@ const BASE_CATEGORY_MAP = {
   extra: "problem"
 };
 
+const BASE_CATEGORY_DEFAULT = "cognition";
+
 const BASE_APPLY_GUIDE = {
   emotion: [
     "感情の波で判断が乱れたとき。",
@@ -262,9 +264,9 @@ function getBaseCategoryMeta(key) {
 }
 
 function getBaseCategoryKey(cardOrOsKey) {
-  if (!cardOrOsKey) return "cognition";
+  if (!cardOrOsKey) return BASE_CATEGORY_DEFAULT;
   const osKey = typeof cardOrOsKey === "string" ? cardOrOsKey : cardOrOsKey.os;
-  return BASE_CATEGORY_MAP[osKey] || "cognition";
+  return BASE_CATEGORY_MAP[osKey] || BASE_CATEGORY_DEFAULT;
 }
 
 function getBaseCardsByCategory(key) {
@@ -410,7 +412,9 @@ async function loadAll() {
     const tipsRes = await fetch("./data/situation-tips.json", { cache: "no-store" });
     if (tipsRes.ok) {
       const tipsData = await tipsRes.json();
-      DATA.situationTips = tipsData && typeof tipsData === "object" ? tipsData : { categories: [] };
+      DATA.situationTips = tipsData && typeof tipsData === "object" && !Array.isArray(tipsData)
+        ? tipsData
+        : { categories: [] };
     }
   } catch (e) {
     console.error("fetchSituationTips error:", e);
