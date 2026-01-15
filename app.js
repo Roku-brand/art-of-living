@@ -1166,8 +1166,8 @@ function bindCardEvents() {
   });
 }
 
-// ========== 索引（検索） ==========
-function renderSearch(params = {}) {
+// ========== 索引 ==========
+function renderBaseIndex(params = {}) {
   renderShell("list");
   const view = $("#view");
 
@@ -1193,6 +1193,10 @@ function renderSearch(params = {}) {
   }
 
   const showResults = Boolean(query);
+  const indexCountLabel = showResults
+    ? `全体：<b>${total}</b><span class="count-sep">/</span>検索：<b>${filtered.length}</b>`
+    : `全体：<b>${total}</b>`;
+  const searchCountLabel = `件数：<b>${filtered.length}</b><span class="count-sep">/</span>全体：<b>${total}</b>`;
 
   view.innerHTML = `
     <div class="list-hero-fullwidth">
@@ -1212,7 +1216,7 @@ function renderSearch(params = {}) {
         ${renderMobileSidebarToggle("判断基盤を開く", "判断基盤を閉じる")}
         <div class="list-headline">
           <div class="title">索引</div>
-          <div class="count">全体：<b>${total}</b>${showResults ? `<span class="count-sep">/</span>検索：<b>${filtered.length}</b>` : ""}</div>
+          <div class="count">${indexCountLabel}</div>
         </div>
 
         <div class="search-form-wrap">
@@ -1228,7 +1232,7 @@ function renderSearch(params = {}) {
         ${showResults ? `
           <div class="list-headline">
             <div class="title">検索結果</div>
-            <div class="count">件数：<b>${filtered.length}</b><span class="count-sep">/</span>全体：<b>${total}</b></div>
+            <div class="count">${searchCountLabel}</div>
           </div>
           <div class="cards-grid" id="cards">
             ${filtered.map((c) => renderCard(c)).join("")}
@@ -2439,12 +2443,12 @@ async function boot() {
     if (hash.startsWith("#search")) {
       // 旧検索ルートは索引ビューとして扱う（後方互換）
       const q = parseQuery(hash.split("?")[1] || "");
-      return renderSearch({ q: q.q || "" });
+      return renderBaseIndex({ q: q.q || "" });
     }
 
     if (hash.startsWith("#base")) {
       const q = parseQuery(hash.split("?")[1] || "");
-      return renderSearch({ q: q.q || "" });
+      return renderBaseIndex({ q: q.q || "" });
     }
 
     if (hash.startsWith("#detail")) {
