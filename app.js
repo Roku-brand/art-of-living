@@ -316,7 +316,7 @@ function getCardTerm(card) {
 function formatCardTitle(card) {
   const baseTitle = String(card?.title || "").trim();
   if (!baseTitle) return "";
-  if (/[（(].+[）)]/.test(baseTitle)) return baseTitle;
+  if (/（.+）|\(.+\)/.test(baseTitle)) return baseTitle;
   const term = getCardTerm(card);
   if (term && term !== baseTitle) return `${baseTitle}（${term}）`;
   return baseTitle;
@@ -1068,7 +1068,7 @@ function renderCard(c) {
   const applyGuide = getCardApplyGuide(c);
   const tipLinks = getRelatedTipLinks(c);
 
-  const hasExpand = ess.length || pit.length || strat.length || applyGuide.length || tipLinks.length || tags.length;
+  const hasExpand = ess.length || pit.length || strat.length || applyGuide.length || tipLinks.length;
 
   return `
     <div class="scard ${osClass(osKey)}" data-cardid="${escapeHtml(c.id)}">
@@ -1882,7 +1882,7 @@ function renderTopicGroupPage(topicId) {
       return `
         <div class="topic-group-item-refs">
           <span class="topic-group-item-ref-label">判断基盤</span>
-          <a class="topic-group-ref-tag" href="${escapeHtml(href)}">判断基盤を探す</a>
+          <a class="topic-group-ref-tag" href="${href}">判断基盤を探す</a>
         </div>
       `;
     }
@@ -1893,7 +1893,7 @@ function renderTopicGroupPage(topicId) {
       const href = categoryKey
         ? `#base-category?key=${encodeURIComponent(categoryKey)}&focus=${encodeURIComponent(ref)}`
         : "#base";
-      return `<a class="topic-group-ref-tag" href="${escapeHtml(href)}" data-ref="${escapeHtml(ref)}" data-base="${escapeHtml(categoryKey || "")}">${escapeHtml(label)}</a>`;
+      return `<a class="topic-group-ref-tag" href="${href}" data-ref="${escapeHtml(ref)}" data-base="${escapeHtml(categoryKey || "")}">${escapeHtml(label)}</a>`;
     }).join("");
     return `
       <div class="topic-group-item-refs">
