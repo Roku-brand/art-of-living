@@ -2503,7 +2503,7 @@ input:focus-visible, textarea:focus-visible{
   box-shadow: var(--sb-shadow);
   margin-bottom: 16px;
   break-inside: avoid;
-  display: inline-block;
+  display: block;
   width: 100%;
 }
 .tips-simple-topic-toggle{
