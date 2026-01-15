@@ -970,7 +970,7 @@ function renderList(osKey, focusOsId = null) {
   ];
 
   // ★重要：DOM順を「sidebar → main」にして grid(320px / 1fr) と一致させる
-  const heroSubtitle = "人生OS・内部OSなど7つのOSで整理した処世術一覧。目的が決まったときに引ける入口。";
+  const heroSubtitle = "人生の難局は、無数にあるようでいて、行き詰まる構造は限られている。ここには、そのすべてに対処するための完成した処世術の体系がある。";
   const showSystemHero = osKey === "life" && !focusOsId;
   const heroTitle = showSystemHero ? "OS別処世術一覧" : (meta?.title || currentOS);
   const heroDescription = showSystemHero ? heroSubtitle : (meta?.desc || heroSubtitle);
