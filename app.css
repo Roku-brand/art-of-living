@@ -142,8 +142,8 @@ a:hover{ text-decoration: underline; }
 }
 .header-inner{
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
   padding: 0 20px;
   height: 100%;
   display: flex;
