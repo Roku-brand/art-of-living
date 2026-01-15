@@ -45,11 +45,11 @@ const TAB_ORDER = {
 };
 
 const BASE_CATEGORIES = [
-  { key: "emotion", title: "情動の扱い", subtitle: "感情の波を整える", desc: "不安・怒り・疲れなど情動を扱い、判断が乱れない土台をつくる。", icon: "🫧" },
-  { key: "cognition", title: "認知の扱い", subtitle: "見方・価値基準の整理", desc: "意味づけや価値基準のズレを整え、判断の視点を広げる。", icon: "🧠" },
-  { key: "attention", title: "注意の扱い", subtitle: "変化と情報の拾い方", desc: "変化の兆し・情報の取捨選択を整え、見落としを減らす。", icon: "👀" },
-  { key: "action", title: "行動の扱い", subtitle: "着手・継続の設計", desc: "行動の始動と継続を支える仕組みづくりに集中する。", icon: "🏃" },
-  { key: "relation", title: "対人・境界", subtitle: "距離感と信頼の管理", desc: "対人距離・境界・信頼の取り方を明確にする。", icon: "🤝" },
+  { key: "emotion", title: "感情", subtitle: "情緒反応の整理", desc: "不安・怒り・疲れなど感情反応を整え、判断が乱れない土台をつくる。", icon: "🫧" },
+  { key: "cognition", title: "評価", subtitle: "意味づけ・価値判断の整理", desc: "意味づけや価値判断のズレを整え、判断の視点を広げる。", icon: "🧠" },
+  { key: "attention", title: "適応", subtitle: "状況変化への対応", desc: "状況変化への対応や情報の取捨選択を整え、見落としを減らす。", icon: "👀" },
+  { key: "action", title: "行動", subtitle: "着手・継続の設計", desc: "行動の始動と継続を支える仕組みづくりに集中する。", icon: "🏃" },
+  { key: "relation", title: "人間関係", subtitle: "距離感と信頼の管理", desc: "人間関係における距離・信頼・境界の取り方を明確にする。", icon: "🤝" },
   { key: "problem", title: "問題解決", subtitle: "構造化と合意形成", desc: "課題の構造化や交渉・合意形成で迷いを減らす。", icon: "🧩" }
 ];
 
@@ -74,12 +74,12 @@ const BASE_APPLY_GUIDE = {
     "疲労や不安が強いときは先に整える。"
   ],
   cognition: [
-    "視点が固定され選択肢が狭くなったとき。",
-    "価値基準を言語化して整理したいとき。"
+    "評価の軸が偏り選択肢が狭くなったとき。",
+    "価値判断を言語化して整理したいとき。"
   ],
   attention: [
-    "情報量が多く注意が散っているとき。",
-    "変化の兆しや優先度を見直したいとき。"
+    "変化のスピードに適応しきれていないとき。",
+    "情報量が多く判断が散っているとき。"
   ],
   action: [
     "着手や継続が止まりそうなとき。",
@@ -2180,7 +2180,7 @@ function renderTipsTopicDetail(topicNavId) {
 // カテゴリ順序と表示設定
 const SITUATION_CATEGORIES = [
   { key: "成功・仕事力", icon: "🏆", desc: "成功と仕事で成果を出すための処世術" },
-  { key: "対人関係・印象", icon: "🤝", desc: "人との関わり方と印象形成の処世術" },
+  { key: "人間関係", icon: "🤝", desc: "人との関わり方と印象形成の処世術" },
   { key: "人間力・器量", icon: "🌟", desc: "人としての魅力と信頼を高める処世術" },
   { key: "組織・環境", icon: "🏢", desc: "組織の中で上手く立ち回る処世術" },
   { key: "内面・感情", icon: "💭", desc: "心と感情を整える処世術" },
