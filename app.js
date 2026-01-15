@@ -64,6 +64,9 @@ const BASE_CATEGORY_MAP = {
 };
 
 const BASE_CATEGORY_DEFAULT = "cognition";
+const DEFAULT_OS_KEY = "extra";
+const ALL_OS_KEY = "all";
+const ALL_OS_LABEL = "すべて";
 
 const BASE_APPLY_GUIDE = {
   emotion: [
@@ -366,7 +369,7 @@ function getTagStats() {
 }
 
 function osClass(osKey) {
-  const k = String(osKey || "extra");
+  const k = String(osKey || DEFAULT_OS_KEY);
   return `os-${k}`;
 }
 
@@ -760,6 +763,22 @@ function buildTabStats(cards, maxTabs = 7, osKey = null) {
   return { tabs, shownKeys: shown, totalTabs: sorted.length };
 }
 
+function getCardOsKey(card) {
+  return String((card && card.os) || DEFAULT_OS_KEY);
+}
+
+function buildBaseOsTabs(cards) {
+  const counts = new Map();
+  cards.forEach((c) => {
+    const osKey = getCardOsKey(c);
+    counts.set(osKey, (counts.get(osKey) || 0) + 1);
+  });
+  return OS_META.flatMap((meta) => {
+    const count = counts.get(meta.key);
+    return count ? [{ key: meta.key, label: meta.title, count }] : [];
+  });
+}
+
 function osLabel(osKey) {
   const meta = OS_META.find((m) => m.key === osKey);
   return meta ? meta.title : osKey;
@@ -768,6 +787,17 @@ function osLabel(osKey) {
 function osSubtitle(osKey) {
   const meta = OS_META.find((m) => m.key === osKey);
   return meta ? meta.subtitle : "";
+}
+
+function resolveOsKey(osKey) {
+  if (!osKey) return "";
+  return osKey === ALL_OS_LABEL ? ALL_OS_KEY : osKey;
+}
+
+function buildBaseCategoryHash(key, osKey) {
+  const normalizedOsKey = osKey || ALL_OS_KEY;
+  const osParam = normalizedOsKey !== ALL_OS_KEY ? `&os=${encodeURIComponent(normalizedOsKey)}` : "";
+  return `#base-category?key=${encodeURIComponent(key)}${osParam}`;
 }
 
 function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = null) {
@@ -1262,12 +1292,12 @@ function renderBaseHome() {
   view.querySelectorAll("[data-base-category]").forEach((btn) => {
     btn.onclick = () => {
       const key = btn.getAttribute("data-base-category");
-      if (key) nav(`#base-category?key=${encodeURIComponent(key)}`);
+      if (key) nav(buildBaseCategoryHash(key));
     };
   });
 }
 
-function renderBaseCategory(key, focusId = null) {
+function renderBaseCategory(key, focusId = null, osFilter = "") {
   renderShell("list");
   const view = $("#view");
 
@@ -1284,6 +1314,26 @@ function renderBaseCategory(key, focusId = null) {
   }
 
   const cards = getBaseCardsByCategory(meta.key);
+  const osTabs = buildBaseOsTabs(cards);
+  const focusCard = focusId ? getCardById(focusId) : null;
+  const fallbackOs = focusCard ? getCardOsKey(focusCard) : "";
+  const osKeys = new Set(osTabs.map((tab) => tab.key));
+  const normalizedFilter = resolveOsKey(osFilter);
+  const normalizedFallback = resolveOsKey(fallbackOs);
+  let activeOsKey = normalizedFilter || normalizedFallback || ALL_OS_KEY;
+  if (activeOsKey !== ALL_OS_KEY && !osKeys.has(activeOsKey)) {
+    activeOsKey = ALL_OS_KEY;
+  }
+  const filteredCards = activeOsKey === ALL_OS_KEY
+    ? cards
+    : cards.filter((c) => getCardOsKey(c) === activeOsKey);
+  const tabButtons = [
+    { key: ALL_OS_KEY, label: ALL_OS_LABEL, count: cards.length },
+    ...osTabs
+  ];
+  const countLabel = activeOsKey === ALL_OS_KEY
+    ? `件数：<b>${cards.length}</b>`
+    : `件数：<b>${filteredCards.length}</b><span class="count-sep">/</span>全体：<b>${cards.length}</b>`;
 
   view.innerHTML = `
     <div class="list-layout has-mobile-sidebar">
@@ -1307,11 +1357,23 @@ function renderBaseCategory(key, focusId = null) {
 
         <div class="list-headline">
           <div class="title">${escapeHtml(meta.title)} の判断基盤</div>
-          <div class="count">件数：<b>${cards.length}</b></div>
+          <div class="count">${countLabel}</div>
+        </div>
+
+        <div class="tabbar-wrap">
+          <div class="tabbar-label">分類タブ（OS別）</div>
+          <div class="tabbar" id="baseTabbar">
+            ${tabButtons.map((tab) => `
+              <button class="tabbtn ${tab.key === activeOsKey ? "active" : ""}" data-base-tab="${escapeHtml(tab.key)}">
+                <span>${escapeHtml(tab.label)}</span>
+                <span class="tabcount">${tab.count}</span>
+              </button>
+            `).join("")}
+          </div>
         </div>
 
         <div class="cards-grid" id="cards">
-          ${cards.map((c, i) => renderCard(c, i)).join("")}
+          ${filteredCards.map((c, i) => renderCard(c, i)).join("")}
         </div>
       </div>
     </div>
@@ -1319,6 +1381,15 @@ function renderBaseCategory(key, focusId = null) {
 
   bindBaseSidebarActions(view);
   bindCardEvents();
+  const baseTabbar = $("#baseTabbar");
+  if (baseTabbar) {
+    baseTabbar.querySelectorAll("[data-base-tab]").forEach((btn) => {
+      btn.onclick = () => {
+        const tabKey = btn.getAttribute("data-base-tab") || ALL_OS_KEY;
+        nav(buildBaseCategoryHash(meta.key, tabKey));
+      };
+    });
+  }
 
   if (focusId) {
     const cardEl = view.querySelector(`[data-cardid="${CSS.escape(focusId)}"]`);
@@ -2424,7 +2495,7 @@ async function boot() {
 
     if (hash.startsWith("#base-category")) {
       const q = parseQuery(hash.split("?")[1] || "");
-      return renderBaseCategory(q.key || "", q.focus || null);
+      return renderBaseCategory(q.key || "", q.focus || null, q.os || "");
     }
 
     if (hash.startsWith("#base-tags")) {
