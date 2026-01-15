@@ -786,6 +786,25 @@ function buildBaseCategoryHash(key, osKey) {
   return `#base-category?key=${encodeURIComponent(key)}${osParam}`;
 }
 
+function renderBaseCategoryTabs(activeKey = "") {
+  return `
+    <div class="tabbar-wrap">
+      <div class="tabbar-label">分類タブ</div>
+      <div class="tabbar" id="baseCategoryTabs">
+        ${BASE_CATEGORIES.map((cat) => {
+          const count = getBaseCardsByCategory(cat.key).length;
+          return `
+            <button class="tabbtn ${cat.key === activeKey ? "active" : ""}" data-base-category-tab="${escapeHtml(cat.key)}">
+              <span>${escapeHtml(cat.title)}</span>
+              <span class="tabcount">${count}</span>
+            </button>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+}
+
 function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = null) {
   const items = [
     "life", "internal", "relation", "operation", "exection", "adapt", "extra"
@@ -1205,6 +1224,8 @@ function renderBaseIndex(params = {}) {
           <div class="count">${indexCountLabel}</div>
         </div>
 
+        ${renderBaseCategoryTabs()}
+
         <div class="search-form-wrap">
           <div class="base-search-bar">
             <input class="input base-search-input" id="q" placeholder="キーワード（例：疲れ / 交渉 / 先延ばし）" value="${escapeHtml(q)}" />
@@ -1250,6 +1271,12 @@ function renderBaseIndex(params = {}) {
   `;
 
   bindBaseSidebarActions(view);
+  view.querySelectorAll("[data-base-category-tab]").forEach((btn) => {
+    btn.onclick = () => {
+      const key = btn.getAttribute("data-base-category-tab");
+      if (key) nav(buildBaseCategoryHash(key));
+    };
+  });
   view.querySelectorAll("[data-base-category]").forEach((btn) => {
     btn.onclick = () => {
       const key = btn.getAttribute("data-base-category");
@@ -1329,6 +1356,8 @@ function renderBaseCategory(key, focusId = null, osFilter = "") {
           <div class="count">${countLabel}</div>
         </div>
 
+        ${renderBaseCategoryTabs(meta.key)}
+
         <div class="tabbar-wrap">
           <div class="tabbar-label">分類タブ（OS別）</div>
           <div class="tabbar" id="baseTabbar">
@@ -1350,6 +1379,12 @@ function renderBaseCategory(key, focusId = null, osFilter = "") {
 
   bindBaseSidebarActions(view);
   bindCardEvents();
+  view.querySelectorAll("[data-base-category-tab]").forEach((btn) => {
+    btn.onclick = () => {
+      const tabKey = btn.getAttribute("data-base-category-tab");
+      if (tabKey) nav(buildBaseCategoryHash(tabKey));
+    };
+  });
   const baseTabbar = $("#baseTabbar");
   if (baseTabbar) {
     baseTabbar.querySelectorAll("[data-base-tab]").forEach((btn) => {
