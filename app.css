@@ -2647,6 +2647,11 @@ input:focus-visible, textarea:focus-visible{
   border-color: rgba(59,130,246,.45);
   box-shadow: 0 4px 10px rgba(59,130,246,.18);
 }
+@media (max-width: 1200px){
+  .tips-simple-layout{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
 @media (max-width: 1100px){
   .tips-simple-layout{
     grid-template-columns: repeat(3, minmax(0, 1fr));
