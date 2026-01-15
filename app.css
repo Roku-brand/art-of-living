@@ -2527,6 +2527,23 @@ input:focus-visible, textarea:focus-visible{
   color: rgba(8,14,16,.68);
   line-height: 1.6;
 }
+.tips-simple-category-list{
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(10,18,20,.12);
+}
+.tips-simple-category-heading{
+  font-size: 14px;
+  font-weight: 800;
+  color: rgba(8,14,16,.7);
+  margin-bottom: 8px;
+  letter-spacing: .02em;
+}
+.tips-simple-category-items{
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
 .tips-simple-items[hidden]{
   display: none;
 }
@@ -2545,6 +2562,20 @@ input:focus-visible, textarea:focus-visible{
 }
 .tips-simple-item-text{
   flex: 1 1 auto;
+}
+.tips-simple-item-body{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.tips-simple-item-term{
+  color: rgba(8,14,16,.55);
+  font-weight: 600;
+}
+.tips-simple-item-topic{
+  color: rgba(99,102,241,.75);
+  font-size: 12px;
+  font-weight: 700;
 }
 .tips-simple-item-refs{
   flex: 0 0 auto;
