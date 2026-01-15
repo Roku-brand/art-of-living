@@ -1318,10 +1318,10 @@ function renderSituationTips() {
   const categories = situationTipsData.categories || [];
 
   const sectionMap = [
-    { title: "思考術", categoryIds: ["C-MENTAL", "C-ADAPT"] },
-    { title: "対人術", categoryIds: ["C-RELATION"] },
-    { title: "仕事術", categoryIds: ["C-BUSINESS"] },
     { title: "成功術", categoryIds: ["C-GOAL"] },
+    { title: "仕事術", categoryIds: ["C-BUSINESS"] },
+    { title: "対人術", categoryIds: ["C-RELATION"] },
+    { title: "思考術", categoryIds: ["C-MENTAL", "C-ADAPT"] },
     { title: "人生術", categoryIds: ["C-LIFE"] }
   ];
 
@@ -1342,10 +1342,13 @@ function renderSituationTips() {
           <section class="tips-simple-section">
             <h2 class="tips-simple-title">≪${escapeHtml(section.title)}≫</h2>
             <ul class="tips-simple-topics">
-              ${topics.map((topic) => `
+              ${topics.map((topic, idx) => `
                 <li class="tips-simple-topic">
                   <button class="tips-simple-topic-link" type="button" data-topic-id="${escapeHtml(topic.topicId)}">
-                    <span class="tips-simple-topic-name">${escapeHtml(topic.name)}</span>
+                    <span class="tips-simple-topic-meta">
+                      <span class="tips-simple-topic-num">${String(idx + 1).padStart(2, "0")}</span>
+                      <span class="tips-simple-topic-name">${escapeHtml(topic.name)}</span>
+                    </span>
                   </button>
                 </li>
               `).join("")}
