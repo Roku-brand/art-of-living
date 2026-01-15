@@ -275,7 +275,7 @@ function getCardById(id) {
   return DATA.all.find((c) => String(c.id) === String(id)) || null;
 }
 
-function buildTipReferenceIndex(situationTips = {}) {
+function buildTipReferenceIndex(situationTips = { categories: [] }) {
   const refsByCard = new Map();
   const termByCard = new Map();
   const categories = situationTips?.categories || [];
@@ -369,7 +369,7 @@ function osClass(osKey) {
 }
 
 // ========== データ読み込み ==========
-let DATA = { byOS: {}, all: [], situations: [], situationTips: [], tipRefs: new Map(), cardTerms: new Map() };
+let DATA = { byOS: {}, all: [], situations: [], situationTips: { categories: [] }, tipRefs: new Map(), cardTerms: new Map() };
 
 async function fetchOS(osKey) {
   const meta = OS_META.find((x) => x.key === osKey);
@@ -409,7 +409,8 @@ async function loadAll() {
   try {
     const tipsRes = await fetch("./data/situation-tips.json", { cache: "no-store" });
     if (tipsRes.ok) {
-      DATA.situationTips = await tipsRes.json();
+      const tipsData = await tipsRes.json();
+      DATA.situationTips = tipsData && typeof tipsData === "object" ? tipsData : { categories: [] };
     }
   } catch (e) {
     console.error("fetchSituationTips error:", e);
