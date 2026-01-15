@@ -350,7 +350,7 @@ function getRelatedTipLinks(card) {
     }));
   }
   const fallbackTerm = getCardTerm(card) || card?.title || "";
-  const fallbackQuery = fallbackTerm ? `#search?q=${encodeURIComponent(fallbackTerm)}` : "#tips";
+  const fallbackQuery = fallbackTerm ? `#base?q=${encodeURIComponent(fallbackTerm)}` : "#tips";
   return [{ label: "処世術一覧で探す", href: fallbackQuery }];
 }
 
@@ -612,7 +612,7 @@ function renderShell(activeTab) {
     headerSearchInput.onkeydown = (e) => {
       if (e.key === "Enter") {
         const query = headerSearchInput.value.trim();
-        nav(`#search?q=${encodeURIComponent(query)}`);
+        nav(`#base?q=${encodeURIComponent(query)}`);
       }
     };
   }
@@ -1161,7 +1161,7 @@ function bindCardEvents() {
   view.querySelectorAll("[data-tagchip]").forEach((el) => {
     el.onclick = () => {
       const t = el.getAttribute("data-tagchip");
-      nav(`#search?q=${encodeURIComponent(t)}`);
+      nav(`#base?q=${encodeURIComponent(t)}`);
     };
   });
 }
@@ -1270,16 +1270,16 @@ function renderSearch(params = {}) {
 
   $("#doSearch").onclick = () => {
     const nq = $("#q").value.trim();
-    nav(`#search?q=${encodeURIComponent(nq)}`);
+    nav(`#base?q=${encodeURIComponent(nq)}`);
   };
-  $("#clearSearch").onclick = () => nav(`#search?q=`);
+  $("#clearSearch").onclick = () => nav("#base");
 
   bindCardEvents();
 }
 
-function renderBaseHome() {
+function renderBaseHome(q = "") {
   // #base は索引ビューへのエイリアス
-  renderSearch({ q: "" });
+  renderSearch({ q });
 }
 
 function renderBaseCategory(key, focusId = null, osFilter = "") {
@@ -1895,7 +1895,7 @@ function renderTopicGroupPage(topicId) {
     const refs = item.refs || [];
     if (!refs.length) {
       const fallbackTerm = extractJapaneseTerm(item.term) || item.text || "";
-      const href = fallbackTerm ? `#search?q=${encodeURIComponent(fallbackTerm)}` : "#base";
+      const href = fallbackTerm ? `#base?q=${encodeURIComponent(fallbackTerm)}` : "#base";
       return `
         <div class="topic-group-item-refs">
           <span class="topic-group-item-ref-label">判断基盤</span>
@@ -2437,7 +2437,8 @@ async function boot() {
     }
 
     if (hash.startsWith("#base")) {
-      return renderBaseHome();
+      const q = parseQuery(hash.split("?")[1] || "");
+      return renderBaseHome(q.q || "");
     }
 
     if (hash.startsWith("#list")) {
