@@ -2362,6 +2362,20 @@ input:focus-visible, textarea:focus-visible{
   align-items: center;
   gap: 6px;
 }
+.tips-simple-topic-num{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(8,14,16,.55);
+  background: rgba(99,102,241,.10);
+  border-radius: 999px;
+  flex-shrink: 0;
+}
 .tips-simple-topic-name{
   font-size: 16px;
   font-weight: 800;
