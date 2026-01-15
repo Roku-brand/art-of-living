@@ -2,12 +2,12 @@
   "categories": [
     {
       "categoryId": "C-RELATION",
-      "name": "人間関係",
+      "name": "対人術",
       "icon": "🤝",
       "topics": [
         {
           "topicId": "T-LIKED",
-          "name": "人たらしの処世術（12）",
+          "name": "人たらしの対人術（12）",
           "items": [
             {
               "text": "相手の話を遮らない",
@@ -98,7 +98,7 @@
         },
         {
           "topicId": "T-IMPRESSION",
-          "name": "第一印象の処世術（10）",
+          "name": "第一印象の対人術（10）",
           "items": [
             {
               "text": "最初の7秒で好印象を作る",
@@ -174,7 +174,7 @@
         },
         {
           "topicId": "T-RESPECT",
-          "name": "軽んじられない処世術（11）",
+          "name": "軽んじられない対人術（11）",
           "items": [
             {
               "text": "境界線を明確にする",
@@ -257,7 +257,7 @@
         },
         {
           "topicId": "T-TRUST",
-          "name": "信頼を獲得する処世術（11）",
+          "name": "信頼を獲得する対人術（11）",
           "items": [
             {
               "text": "言ったことを必ずやる",
@@ -340,7 +340,7 @@
         },
         {
           "topicId": "T-RENAI-MAN",
-          "name": "恋愛戦略の処世術（男→女）（12）",
+          "name": "恋愛戦略の対人術（男→女）（12）",
           "items": [
             {
               "text": "追いかけすぎずに適度な距離感を保つ",
@@ -432,7 +432,7 @@
         },
         {
           "topicId": "T-RENAI-WOMAN",
-          "name": "恋愛戦略の処世術（女→男）（12）",
+          "name": "恋愛戦略の対人術（女→男）（12）",
           "items": [
             {
               "text": "興味を見せつつも追わせる余地を残す",
@@ -524,7 +524,7 @@
         },
         {
           "topicId": "T-KAIWA",
-          "name": "会話・雑談の処世術（11）",
+          "name": "会話・雑談の対人術（11）",
           "items": [
             {
               "text": "相手が話したいことを聞く",
@@ -607,7 +607,7 @@
         },
         {
           "topicId": "T-PERSUASION",
-          "name": "説得・言語化の処世術（12）",
+          "name": "説得・言語化の対人術（12）",
           "items": [
             {
               "text": "相手の利益を先に提示する",
@@ -697,7 +697,7 @@
         },
         {
           "topicId": "T-PUBLIC",
-          "name": "人前・大舞台の処世術（12）",
+          "name": "人前・大舞台の対人術（12）",
           "items": [
             {
               "text": "最初の30秒で場の空気をつかむ",
@@ -789,12 +789,12 @@
     },
     {
       "categoryId": "C-BUSINESS",
-      "name": "ビジネス・仕事力",
+      "name": "仕事術",
       "icon": "💼",
       "topics": [
         {
           "topicId": "T-WORK",
-          "name": "仕事遂行の処世術（11）",
+          "name": "仕事遂行の仕事術（11）",
           "items": [
             {
               "text": "報告は結論から述べる",
@@ -877,7 +877,7 @@
         },
         {
           "topicId": "T-LEADER",
-          "name": "リーダーシップの処世術（10）",
+          "name": "リーダーシップの仕事術（10）",
           "items": [
             {
               "text": "責任を自分で取る",
@@ -953,7 +953,7 @@
         },
         {
           "topicId": "T-COMMUNICATION",
-          "name": "業務コミュニケーションの処世術（10）",
+          "name": "業務コミュニケーションの仕事術（10）",
           "items": [
             {
               "text": "相手の話を8割聞く",
@@ -1029,7 +1029,7 @@
         },
         {
           "topicId": "T-NEGOTIATION",
-          "name": "交渉の処世術（13）",
+          "name": "交渉の仕事術（13）",
           "items": [
             {
               "text": "即断しない",
@@ -1128,12 +1128,12 @@
     },
     {
       "categoryId": "C-MENTAL",
-      "name": "メンタル・内面",
+      "name": "思考術",
       "icon": "💭",
       "topics": [
         {
           "topicId": "T-MENTAL",
-          "name": "メンタル耐性の処世術（12）",
+          "name": "メンタル耐性の思考術（12）",
           "items": [
             {
               "text": "感情をそのまま受け入れる",
@@ -1223,7 +1223,7 @@
         },
         {
           "topicId": "T-CALM",
-          "name": "冷静さを保つ処世術（10）",
+          "name": "冷静さを保つ思考術（10）",
           "items": [
             {
               "text": "深呼吸で間を取る",
@@ -1299,7 +1299,7 @@
         },
         {
           "topicId": "T-CONFIDENCE",
-          "name": "自己信頼の処世術（10）",
+          "name": "自己信頼の思考術（10）",
           "items": [
             {
               "text": "小さな成功体験を積む",
@@ -1375,7 +1375,7 @@
         },
         {
           "topicId": "T-YOYUU",
-          "name": "余裕を生む処世術（12）",
+          "name": "余裕を生む思考術（12）",
           "items": [
             {
               "text": "反応を急がない",
@@ -1462,17 +1462,266 @@
               ]
             }
           ]
+        },
+        {
+          "topicId": "T-CHANGE",
+          "name": "変化適応の思考術（11）",
+          "items": [
+            {
+              "text": "変化を脅威ではなく情報として扱う",
+              "term": "変化の認知再評価 / Change Reappraisal",
+              "refs": [
+                "AD-001"
+              ]
+            },
+            {
+              "text": "学び続ける",
+              "term": "生涯学習 / Lifelong Learning",
+              "refs": [
+                "AD-003"
+              ]
+            },
+            {
+              "text": "複数の選択肢を持つ",
+              "term": "オプション・バリュー / Option Value",
+              "refs": [
+                "AD-015"
+              ]
+            },
+            {
+              "text": "弱い紐帯を維持する",
+              "term": "弱い紐帯の強さ / Strength of Weak Ties",
+              "refs": [
+                "R-027"
+              ]
+            },
+            {
+              "text": "情報感度を高める",
+              "term": "環境スキャニング / Environmental Scanning",
+              "refs": [
+                "AD-006"
+              ]
+            },
+            {
+              "text": "失敗から素早く立ち直る",
+              "term": "レジリエンス / Resilience",
+              "refs": [
+                "I-012"
+              ]
+            },
+            {
+              "text": "固定観念を疑う",
+              "term": "アンラーニング / Unlearning",
+              "refs": [
+                "AD-002"
+              ]
+            },
+            {
+              "text": "不確実性を許容する",
+              "term": "曖昧さ耐性 / Ambiguity Tolerance",
+              "refs": [
+                "AD-007"
+              ]
+            },
+            {
+              "text": "変化の兆候を早期に察知する",
+              "term": "弱いシグナル / Weak Signal Detection",
+              "refs": [
+                "AD-024"
+              ]
+            },
+            {
+              "text": "実験的に試してから判断する",
+              "term": "プロトタイピング / Prototyping",
+              "refs": [
+                "AD-004"
+              ]
+            },
+            {
+              "text": "撤退基準を事前に決める",
+              "term": "撤退条件設定 / Exit Criteria",
+              "refs": [
+                "AD-008"
+              ]
+            }
+          ]
+        },
+        {
+          "topicId": "T-PROBLEM",
+          "name": "問題解決の思考術（10）",
+          "items": [
+            {
+              "text": "問題を構造化する",
+              "term": "問題構造化 / Problem Structuring",
+              "refs": [
+                "A-003"
+              ]
+            },
+            {
+              "text": "仮説を立てて検証する",
+              "term": "仮説検証思考 / Hypothesis-Driven Thinking",
+              "refs": [
+                "A-004"
+              ]
+            },
+            {
+              "text": "複数の解決策を比較する",
+              "term": "オプション比較 / Option Comparison",
+              "refs": [
+                "A-009"
+              ]
+            },
+            {
+              "text": "他者の視点を取り入れる",
+              "term": "多角的視点 / Multi-Perspective",
+              "refs": [
+                "R-007"
+              ]
+            },
+            {
+              "text": "感情と論理を分ける",
+              "term": "感情と認知の分離 / Emotion-Cognition Separation",
+              "refs": [
+                "I-006"
+              ]
+            },
+            {
+              "text": "根本原因を特定する",
+              "term": "根本原因分析 / Root Cause Analysis",
+              "refs": [
+                "A-003"
+              ]
+            },
+            {
+              "text": "制約条件を明確にする",
+              "term": "制約明示化 / Constraint Clarification",
+              "refs": [
+                "A-011"
+              ]
+            },
+            {
+              "text": "成功パターンを転用する",
+              "term": "類推的推論 / Analogical Reasoning",
+              "refs": [
+                "AD-004"
+              ]
+            },
+            {
+              "text": "分からないことは認める",
+              "term": "無知の認識 / Acknowledgment of Ignorance",
+              "refs": [
+                "I-010"
+              ]
+            },
+            {
+              "text": "実行可能な最初の一歩を決める",
+              "term": "実行可能性優先 / Actionability Focus",
+              "refs": [
+                "A-002"
+              ]
+            }
+          ]
+        },
+        {
+          "topicId": "T-TACHIMAWARI",
+          "name": "立ち回りの思考術（12）",
+          "items": [
+            {
+              "text": "相手より先に動かない",
+              "term": "後出しの優位 / Second-Mover Advantage",
+              "refs": [
+                "O-014"
+              ]
+            },
+            {
+              "text": "敵を作らずに意見を通す",
+              "term": "対立回避交渉 / Non-Confrontational Negotiation",
+              "refs": [
+                "O-016"
+              ]
+            },
+            {
+              "text": "キーパーソンを早期に特定する",
+              "term": "ステークホルダー分析 / Stakeholder Analysis",
+              "refs": [
+                "O-001"
+              ]
+            },
+            {
+              "text": "恩は売っておく",
+              "term": "互恵性の先行投資 / Reciprocity Priming",
+              "refs": [
+                "R-011"
+              ]
+            },
+            {
+              "text": "弱みを見せる場面を選ぶ",
+              "term": "戦略的自己開示 / Strategic Self-Disclosure",
+              "refs": [
+                "R-001"
+              ]
+            },
+            {
+              "text": "功績を相手に渡す",
+              "term": "功績の譲渡 / Credit Sharing",
+              "refs": [
+                "O-010"
+              ]
+            },
+            {
+              "text": "情報は出すタイミングで価値が変わる",
+              "term": "情報の時間価値 / Information Timing",
+              "refs": [
+                "O-015"
+              ]
+            },
+            {
+              "text": "複数の選択肢を常に持つ",
+              "term": "オプション確保 / Option Preservation",
+              "refs": [
+                "AD-004"
+              ]
+            },
+            {
+              "text": "撤退ラインを先に決める",
+              "term": "損切り基準 / Stop-Loss Criteria",
+              "refs": [
+                "AD-008"
+              ]
+            },
+            {
+              "text": "味方を増やしてから動く",
+              "term": "多数派形成 / Coalition Building",
+              "refs": [
+                "O-016"
+              ]
+            },
+            {
+              "text": "沈黙で相手の出方を見る",
+              "term": "受動的情報収集 / Passive Intelligence Gathering",
+              "refs": [
+                "R-008"
+              ]
+            },
+            {
+              "text": "自分の立場を固定しすぎない",
+              "term": "立場の柔軟性 / Positional Flexibility",
+              "refs": [
+                "AD-007"
+              ]
+            }
+          ]
         }
       ]
     },
     {
       "categoryId": "C-GOAL",
-      "name": "目標達成・成功",
+      "name": "成功術",
       "icon": "🎯",
       "topics": [
         {
           "topicId": "T-SUCCESS",
-          "name": "成功者の処世術（12）",
+          "name": "成功者の成功術（12）",
           "items": [
             {
               "text": "失敗を次の実験に変える",
@@ -1562,7 +1811,7 @@
         },
         {
           "topicId": "T-HABIT",
-          "name": "習慣設計の処世術（10）",
+          "name": "習慣設計の成功術（10）",
           "items": [
             {
               "text": "朝のルーティンを持つ",
@@ -1638,7 +1887,7 @@
         },
         {
           "topicId": "T-FOCUS",
-          "name": "集中力運用の処世術（10）",
+          "name": "集中力運用の成功術（10）",
           "items": [
             {
               "text": "スマホを視界から消す",
@@ -1714,7 +1963,7 @@
         },
         {
           "topicId": "T-JIKAN",
-          "name": "時間の処世術（10）",
+          "name": "時間の成功術（10）",
           "items": [
             {
               "text": "朝の時間を死守する",
@@ -1792,12 +2041,12 @@
     },
     {
       "categoryId": "C-LIFE",
-      "name": "人生設計・生き方",
+      "name": "人生術",
       "icon": "🧭",
       "topics": [
         {
           "topicId": "T-NOREGRET",
-          "name": "後悔を避ける処世術（12）",
+          "name": "後悔を避ける人生術（12）",
           "items": [
             {
               "text": "やりたいことを先延ばしにしない",
@@ -1887,7 +2136,7 @@
         },
         {
           "topicId": "T-BALANCE",
-          "name": "夢と挑戦の処世術（15）",
+          "name": "夢と挑戦の人生術（15）",
           "items": [
             {
               "text": "夢はスケールで決める",
@@ -1953,7 +2202,7 @@
         },
         {
           "topicId": "T-JINSEI",
-          "name": "人生設計の処世術（12）",
+          "name": "人生設計の人生術（12）",
           "items": [
             {
               "text": "5年後を言語化する",
@@ -2037,262 +2286,6 @@
               "term": "撤退基準設定 / Exit Criteria Setting",
               "refs": [
                 "AD-008"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "categoryId": "C-ADAPT",
-      "name": "適応力・変化対応",
-      "icon": "🔄",
-      "topics": [
-        {
-          "topicId": "T-CHANGE",
-          "name": "変化適応の処世術（11）",
-          "items": [
-            {
-              "text": "変化を脅威ではなく情報として扱う",
-              "term": "変化の認知再評価 / Change Reappraisal",
-              "refs": [
-                "AD-001"
-              ]
-            },
-            {
-              "text": "学び続ける",
-              "term": "生涯学習 / Lifelong Learning",
-              "refs": [
-                "AD-003"
-              ]
-            },
-            {
-              "text": "複数の選択肢を持つ",
-              "term": "オプション・バリュー / Option Value",
-              "refs": [
-                "AD-015"
-              ]
-            },
-            {
-              "text": "弱い紐帯を維持する",
-              "term": "弱い紐帯の強さ / Strength of Weak Ties",
-              "refs": [
-                "R-027"
-              ]
-            },
-            {
-              "text": "情報感度を高める",
-              "term": "環境スキャニング / Environmental Scanning",
-              "refs": [
-                "AD-006"
-              ]
-            },
-            {
-              "text": "失敗から素早く立ち直る",
-              "term": "レジリエンス / Resilience",
-              "refs": [
-                "I-012"
-              ]
-            },
-            {
-              "text": "固定観念を疑う",
-              "term": "アンラーニング / Unlearning",
-              "refs": [
-                "AD-002"
-              ]
-            },
-            {
-              "text": "不確実性を許容する",
-              "term": "曖昧さ耐性 / Ambiguity Tolerance",
-              "refs": [
-                "AD-007"
-              ]
-            },
-            {
-              "text": "変化の兆候を早期に察知する",
-              "term": "弱いシグナル / Weak Signal Detection",
-              "refs": [
-                "AD-024"
-              ]
-            },
-            {
-              "text": "実験的に試してから判断する",
-              "term": "プロトタイピング / Prototyping",
-              "refs": [
-                "AD-004"
-              ]
-            },
-            {
-              "text": "撤退基準を事前に決める",
-              "term": "撤退条件設定 / Exit Criteria",
-              "refs": [
-                "AD-008"
-              ]
-            }
-          ]
-        },
-        {
-          "topicId": "T-PROBLEM",
-          "name": "問題解決の処世術（10）",
-          "items": [
-            {
-              "text": "問題を構造化する",
-              "term": "問題構造化 / Problem Structuring",
-              "refs": [
-                "A-003"
-              ]
-            },
-            {
-              "text": "仮説を立てて検証する",
-              "term": "仮説検証思考 / Hypothesis-Driven Thinking",
-              "refs": [
-                "A-004"
-              ]
-            },
-            {
-              "text": "複数の解決策を比較する",
-              "term": "オプション比較 / Option Comparison",
-              "refs": [
-                "A-009"
-              ]
-            },
-            {
-              "text": "他者の視点を取り入れる",
-              "term": "多角的視点 / Multi-Perspective",
-              "refs": [
-                "R-007"
-              ]
-            },
-            {
-              "text": "感情と論理を分ける",
-              "term": "感情と認知の分離 / Emotion-Cognition Separation",
-              "refs": [
-                "I-006"
-              ]
-            },
-            {
-              "text": "根本原因を特定する",
-              "term": "根本原因分析 / Root Cause Analysis",
-              "refs": [
-                "A-003"
-              ]
-            },
-            {
-              "text": "制約条件を明確にする",
-              "term": "制約明示化 / Constraint Clarification",
-              "refs": [
-                "A-011"
-              ]
-            },
-            {
-              "text": "成功パターンを転用する",
-              "term": "類推的推論 / Analogical Reasoning",
-              "refs": [
-                "AD-004"
-              ]
-            },
-            {
-              "text": "分からないことは認める",
-              "term": "無知の認識 / Acknowledgment of Ignorance",
-              "refs": [
-                "I-010"
-              ]
-            },
-            {
-              "text": "実行可能な最初の一歩を決める",
-              "term": "実行可能性優先 / Actionability Focus",
-              "refs": [
-                "A-002"
-              ]
-            }
-          ]
-        },
-        {
-          "topicId": "T-TACHIMAWARI",
-          "name": "立ち回りの処世術（12）",
-          "items": [
-            {
-              "text": "相手より先に動かない",
-              "term": "後出しの優位 / Second-Mover Advantage",
-              "refs": [
-                "O-014"
-              ]
-            },
-            {
-              "text": "敵を作らずに意見を通す",
-              "term": "対立回避交渉 / Non-Confrontational Negotiation",
-              "refs": [
-                "O-016"
-              ]
-            },
-            {
-              "text": "キーパーソンを早期に特定する",
-              "term": "ステークホルダー分析 / Stakeholder Analysis",
-              "refs": [
-                "O-001"
-              ]
-            },
-            {
-              "text": "恩は売っておく",
-              "term": "互恵性の先行投資 / Reciprocity Priming",
-              "refs": [
-                "R-011"
-              ]
-            },
-            {
-              "text": "弱みを見せる場面を選ぶ",
-              "term": "戦略的自己開示 / Strategic Self-Disclosure",
-              "refs": [
-                "R-001"
-              ]
-            },
-            {
-              "text": "功績を相手に渡す",
-              "term": "功績の譲渡 / Credit Sharing",
-              "refs": [
-                "O-010"
-              ]
-            },
-            {
-              "text": "情報は出すタイミングで価値が変わる",
-              "term": "情報の時間価値 / Information Timing",
-              "refs": [
-                "O-015"
-              ]
-            },
-            {
-              "text": "複数の選択肢を常に持つ",
-              "term": "オプション確保 / Option Preservation",
-              "refs": [
-                "AD-004"
-              ]
-            },
-            {
-              "text": "撤退ラインを先に決める",
-              "term": "損切り基準 / Stop-Loss Criteria",
-              "refs": [
-                "AD-008"
-              ]
-            },
-            {
-              "text": "味方を増やしてから動く",
-              "term": "多数派形成 / Coalition Building",
-              "refs": [
-                "O-016"
-              ]
-            },
-            {
-              "text": "沈黙で相手の出方を見る",
-              "term": "受動的情報収集 / Passive Intelligence Gathering",
-              "refs": [
-                "R-008"
-              ]
-            },
-            {
-              "text": "自分の立場を固定しすぎない",
-              "term": "立場の柔軟性 / Positional Flexibility",
-              "refs": [
-                "AD-007"
               ]
             }
           ]

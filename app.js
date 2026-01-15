@@ -1820,7 +1820,7 @@ function renderSituationTips() {
   const categories = situationTipsData.categories || [];
 
   const sectionMap = [
-    { title: "思考術", categoryIds: ["C-MENTAL", "C-ADAPT"] },
+    { title: "思考術", categoryIds: ["C-MENTAL"] },
     { title: "対人術", categoryIds: ["C-RELATION"] },
     { title: "仕事術", categoryIds: ["C-BUSINESS"] },
     { title: "成功術", categoryIds: ["C-GOAL"] },
