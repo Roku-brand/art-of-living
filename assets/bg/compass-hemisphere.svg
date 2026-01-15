@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-label="コンパス半球装飾" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <!-- 濃いエンジ色のグラデーション -->
+    <radialGradient id="hemisphereGlow" cx="50%" cy="100%" r="70%">
+      <stop offset="0%" stop-color="#6b1421" stop-opacity="1"/>
+      <stop offset="50%" stop-color="#5a1722" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#3b0f16" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- 半球のグロー背景 -->
+  <ellipse cx="600" cy="350" rx="550" ry="380" fill="url(#hemisphereGlow)"/>
+  
+  <!-- 外側のリング（上半分が見える） -->
+  <ellipse cx="600" cy="350" rx="480" ry="360" fill="none" stroke="#6b1421" stroke-opacity="0.85" stroke-width="5"/>
+  
+  <!-- 中間のリング -->
+  <ellipse cx="600" cy="350" rx="380" ry="290" fill="none" stroke="#7a2230" stroke-opacity="0.65" stroke-width="4"/>
+  
+  <!-- 内側のリング -->
+  <ellipse cx="600" cy="350" rx="280" ry="220" fill="none" stroke="#8b2a3a" stroke-opacity="0.5" stroke-width="3"/>
+  
+  <!-- 最内リング -->
+  <ellipse cx="600" cy="350" rx="180" ry="150" fill="none" stroke="#6b1421" stroke-opacity="0.4" stroke-width="2"/>
+  
+  <!-- 方位線（東西） -->
+  <g stroke="#6b1421" stroke-opacity="0.75" stroke-width="5" stroke-linecap="round">
+    <path d="M50 300 L150 270"/>
+    <path d="M1050 270 L1150 300"/>
+  </g>
+  
+  <!-- 放射状の目盛り線 -->
+  <g stroke="#7a2230" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round">
+    <path d="M250 220 L300 195"/>
+    <path d="M370 165 L410 145"/>
+    <path d="M480 120 L510 105"/>
+    <path d="M690 105 L720 120"/>
+    <path d="M790 145 L830 165"/>
+    <path d="M900 195 L950 220"/>
+  </g>
+  
+  <!-- 装飾ドット -->
+  <g fill="#6b1421" fill-opacity="0.7">
+    <circle cx="150" cy="270" r="8"/>
+    <circle cx="300" cy="195" r="7"/>
+    <circle cx="410" cy="145" r="6"/>
+    <circle cx="510" cy="105" r="5"/>
+    <circle cx="600" cy="90" r="10"/>
+    <circle cx="690" cy="105" r="5"/>
+    <circle cx="790" cy="145" r="6"/>
+    <circle cx="900" cy="195" r="7"/>
+    <circle cx="1050" cy="270" r="8"/>
+  </g>
+  
+  <!-- コンパスの針（下向き、半分が見える） -->
+  <g>
+    <polygon points="600,90 660,210 600,240" fill="#6b1421" fill-opacity="0.8"/>
+    <polygon points="600,90 540,210 600,240" fill="#5a1722" fill-opacity="0.55"/>
+  </g>
+  
+  <!-- 中心ドット -->
+  <circle cx="600" cy="260" r="14" fill="#6b1421" fill-opacity="0.85"/>
+  <circle cx="600" cy="260" r="8" fill="#8b2a3a" fill-opacity="0.95"/>
+</svg>
