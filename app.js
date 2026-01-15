@@ -460,10 +460,6 @@ function renderShell(activeTab) {
             <span class="header-search-icon" aria-hidden="true">🔍</span>
             <input class="header-search-input" id="headerSearchInput" type="text" placeholder="検索..." aria-label="検索" />
           </div>
-          <button class="header-notification-btn" id="headerNotificationBtn" aria-label="通知">
-            <span class="header-notification-icon">🔔</span>
-            <span class="header-notification-badge" id="notificationBadge">3</span>
-          </button>
           <button class="header-account-btn" id="headerAccountBtn" aria-label="アカウント">
             ${loggedIn ? `<span class="header-account-icon logged-in">👤</span>` : `<span class="header-account-icon">👤</span>`}
           </button>
@@ -614,16 +610,6 @@ function renderShell(activeTab) {
         const query = headerSearchInput.value.trim();
         nav(`#base?q=${encodeURIComponent(query)}`);
       }
-    };
-  }
-
-  // 通知ボタン（将来の機能拡張用）
-  const headerNotificationBtn = $("#headerNotificationBtn");
-  if (headerNotificationBtn) {
-    headerNotificationBtn.onclick = () => {
-      // 将来的に通知一覧を表示する機能を追加予定
-      // 現時点では、この機能はプレースホルダーとして実装されています
-      console.info("通知機能は準備中です。");
     };
   }
 
@@ -993,7 +979,7 @@ function renderList(osKey, focusOsId = null) {
         ${renderCompactSidebar(currentOS, false, focusOsId)}
       </div>
 
-      <div class="list-main">
+      <div class="list-main base-category-main">
         ${renderMobileSidebarToggle()}
         <div class="list-headline">
           <div class="title">${escapeHtml(meta?.title || currentOS)} の処世術一覧</div>
@@ -1220,11 +1206,11 @@ function renderBaseIndex(params = {}) {
         </div>
 
         <div class="search-form-wrap">
-          <div class="grid">
-            <input class="input" id="q" placeholder="キーワード（例：疲れ / 交渉 / 先延ばし）" value="${escapeHtml(q)}" />
-            <div class="row">
-              <button class="btn primary" id="doSearch">検索</button>
-              <button class="btn ghost" id="clearSearch">クリア</button>
+          <div class="base-search-bar">
+            <input class="input base-search-input" id="q" placeholder="キーワード（例：疲れ / 交渉 / 先延ばし）" value="${escapeHtml(q)}" />
+            <div class="base-search-actions">
+              <button class="base-search-clear" id="clearSearch" type="button" aria-label="検索をクリア">✕</button>
+              <button class="base-search-submit" id="doSearch" type="button">検索</button>
             </div>
           </div>
         </div>
@@ -1501,8 +1487,15 @@ function renderMy() {
       <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.my)}</div>
     </div>
 
+    <div class="tabbar-wrap">
+      <div class="tabbar" id="mypageTabs">
+        <button class="tabbtn active" data-mypage-tab="favorites">お気に入り</button>
+        <button class="tabbtn" data-mypage-tab="personal">マイ処世術</button>
+      </div>
+    </div>
+
     <!-- お気に入り一覧 -->
-    <div class="mypage-section">
+    <div class="mypage-section" data-mypage-panel="favorites">
       <div class="mypage-section-header">
         <span class="mypage-section-icon">★</span>
         <span class="mypage-section-title">お気に入り一覧</span>
@@ -1520,7 +1513,7 @@ function renderMy() {
     </div>
 
     <!-- マイ処世術一覧 -->
-    <div class="mypage-section">
+    <div class="mypage-section" data-mypage-panel="personal" hidden>
       <div class="mypage-section-header">
         <span class="mypage-section-icon">📚</span>
         <span class="mypage-section-title">マイ処世術一覧</span>
@@ -1588,6 +1581,34 @@ function renderMy() {
       </div>
     </div>
   `;
+
+  const mypageTabEntries = Array.from(view.querySelectorAll("[data-mypage-tab]")).map((btn) => ({
+    btn,
+    key: btn.getAttribute("data-mypage-tab")
+  }));
+  const mypagePanelEntries = Array.from(view.querySelectorAll("[data-mypage-panel]")).map((panel) => ({
+    panel,
+    key: panel.getAttribute("data-mypage-panel")
+  }));
+  const setMyPageTab = (key) => {
+    mypageTabEntries.forEach(({ btn, key: tabKey }) => {
+      const isActive = tabKey === key;
+      btn.classList.toggle("active", isActive);
+    });
+    mypagePanelEntries.forEach(({ panel, key: panelKey }) => {
+      const isActive = panelKey === key;
+      if (isActive) {
+        panel.removeAttribute("hidden");
+      } else {
+        panel.setAttribute("hidden", "");
+      }
+    });
+  };
+
+  mypageTabEntries.forEach(({ btn, key: tabKey }) => {
+    btn.onclick = () => setMyPageTab(tabKey);
+  });
+  setMyPageTab("favorites");
 
   // フォルダー作成フォームの表示/非表示
   const showFolderFormBtn = $("#showFolderForm");
@@ -1863,6 +1884,12 @@ function renderTopicGroupPage(topicId) {
 
   const situationTipsData = DATA.situationTips || {};
   const categories = situationTipsData.categories || [];
+  // 处理術一覧のタグは「I-001」形式で表示する
+  const TOPIC_TAG_PREFIX = "I-";
+  const TOPIC_TAG_PAD = 3;
+  const TOPIC_INDEX_OFFSET = 1;
+  const formatFallbackTopicTag = (index) =>
+    `${TOPIC_TAG_PREFIX}${String(index + TOPIC_INDEX_OFFSET).padStart(TOPIC_TAG_PAD, "0")}`;
 
   // Find the topic by topicId
   let topic = null;
@@ -1889,26 +1916,28 @@ function renderTopicGroupPage(topicId) {
 
   const items = topic.items || [];
 
-  const renderTopicRefs = (item) => {
+  const renderTopicRefs = (item, index) => {
     const refs = item.refs || [];
     if (!refs.length) {
       const fallbackTerm = extractJapaneseTerm(item.term) || item.text || "";
       const href = fallbackTerm ? `#base?q=${encodeURIComponent(fallbackTerm)}` : "#base";
+      const fallbackLabel = formatFallbackTopicTag(index);
       return `
         <div class="topic-group-item-refs">
           <span class="topic-group-item-ref-label">判断基盤</span>
-          <a class="topic-group-ref-tag" href="${href}">判断基盤を探す</a>
+          <a class="topic-group-ref-tag" href="${href}" title="${escapeHtml(fallbackLabel)}">${fallbackLabel}</a>
         </div>
       `;
     }
     const links = refs.map((ref) => {
       const card = getCardById(ref);
       const categoryKey = card ? getBaseCategoryKey(card) : null;
-      const label = card ? formatCardTitle(card) : ref;
+      const displayId = card ? card.id : ref;
+      const title = card ? formatCardTitle(card) : displayId;
       const href = categoryKey
         ? `#base-category?key=${encodeURIComponent(categoryKey)}&focus=${encodeURIComponent(ref)}`
         : "#base";
-      return `<a class="topic-group-ref-tag" href="${href}" data-ref="${escapeHtml(ref)}" data-base="${escapeHtml(categoryKey || "")}">${escapeHtml(label)}</a>`;
+      return `<a class="topic-group-ref-tag" href="${href}" data-ref="${escapeHtml(ref)}" data-base="${escapeHtml(categoryKey || "")}" title="${escapeHtml(title)}">${escapeHtml(displayId)}</a>`;
     }).join("");
     return `
       <div class="topic-group-item-refs">
@@ -1952,7 +1981,7 @@ function renderTopicGroupPage(topicId) {
               <span class="topic-group-item-text">${escapeHtml(item.text)}</span>
               ${item.term ? `<span class="topic-group-item-term">（${escapeHtml(extractJapaneseTerm(item.term))}）</span>` : ""}
             </div>
-            ${renderTopicRefs(item)}
+            ${renderTopicRefs(item, idx)}
           </div>
         `).join("")}
       </div>

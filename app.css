@@ -32,6 +32,7 @@
   --hero-border: rgba(248,238,240,.18);
   --hero-title: rgba(0,0,0,.95);
   --hero-subtitle: rgba(0,0,0,.70);
+  --hero-max-width: 960px;
 
   /* Sidebar compact */
   --sb-accent: #d7b15a;
@@ -716,6 +717,15 @@ a:hover{ text-decoration: underline; }
   justify-content:space-between;
   margin-bottom: 10px;
 }
+.base-category-main .list-hero-fullwidth{
+  margin-bottom: 8px;
+}
+.base-category-main .list-headline{
+  margin-bottom: 6px;
+}
+.base-category-main .tabbar-wrap{
+  margin-bottom: 10px;
+}
 .list-headline .title{
   font-weight: 900;
   font-size: 15px;
@@ -895,6 +905,42 @@ a:hover{ text-decoration: underline; }
 .search-form-wrap{
   padding: 10px 12px;
   margin-bottom: 14px;
+}
+.base-search-bar{
+  position: relative;
+  --base-search-actions-width: 112px; /* clear + search buttons */
+}
+.base-search-input{
+  padding-right: var(--base-search-actions-width);
+}
+.base-search-actions{
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.base-search-clear,
+.base-search-submit{
+  border-radius: var(--r-md);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(248,238,240,.88);
+}
+.base-search-clear:hover,
+.base-search-submit:hover{
+  background: rgba(248,238,240,.18);
+  border-color: rgba(248,238,240,.25);
+}
+.base-search-submit{
+  background: rgba(248,238,240,.18);
+  border-color: rgba(248,238,240,.30);
 }
 
 /* ---------- Search Tagbar label ---------- */
@@ -4048,7 +4094,10 @@ input:focus-visible, textarea:focus-visible{
 }
 .top-hero-inner{
   position: relative;
-  max-width: 520px;
+  width: 100%;
+  max-width: var(--hero-max-width);
+  margin: 0 auto;
+  text-align: center;
   color: var(--wine-900);
   z-index: 1;
 }
@@ -4296,7 +4345,7 @@ input:focus-visible, textarea:focus-visible{
 }
 .top-panel-note{
   font-size: 13px;
-  color: var(--ink-500);
+  color: rgba(59,15,22,.78);
   line-height: 1.7;
 }
 .top-panel-principles .top-panel-note{
@@ -4321,7 +4370,7 @@ input:focus-visible, textarea:focus-visible{
 }
 .top-footer-link{
   font-size: 12px;
-  color: var(--ink-500);
+  color: rgba(59,15,22,.65);
   text-decoration: none;
   transition: color .15s ease;
 }
@@ -4332,7 +4381,7 @@ input:focus-visible, textarea:focus-visible{
 .top-footer-copy{
   margin-top: 12px;
   font-size: 11px;
-  color: var(--subtle);
+  color: rgba(59,15,22,.48);
 }
 
 @media (max-width: 960px){
