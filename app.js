@@ -1166,7 +1166,7 @@ function bindCardEvents() {
   });
 }
 
-// ========== 索引 ==========
+// ========== 索引（検索） ==========
 function renderSearch({ q } = {}) {
   renderShell("list");
   const view = $("#view");
