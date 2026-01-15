@@ -1768,6 +1768,14 @@ function renderSituationTips() {
     categories
       .filter((cat) => ids.includes(cat.categoryId))
       .flatMap((cat) => cat.topics || []);
+  const buildSectionItems = (ids) =>
+    categories
+      .filter((cat) => ids.includes(cat.categoryId))
+      .flatMap((cat) => (cat.topics || []).flatMap((topic) => (topic.items || []).map((item) => ({
+        text: item.text,
+        term: item.term,
+        topicName: topic.name
+      }))));
 
   view.innerHTML = `
     <div class="tips-simple-layout">
@@ -1781,6 +1789,7 @@ function renderSituationTips() {
       </div>
       ${sectionMap.map((section) => {
         const topics = buildSectionTopics(section.categoryIds);
+        const items = buildSectionItems(section.categoryIds);
         return `
           <section class="tips-simple-section">
             <h2 class="tips-simple-title">≪${escapeHtml(section.title)}≫</h2>
@@ -1793,6 +1802,21 @@ function renderSituationTips() {
                 </li>
               `).join("")}
             </ul>
+            <div class="tips-simple-category-list">
+              <div class="tips-simple-category-heading">処世術一覧</div>
+              <ol class="tips-simple-items tips-simple-category-items">
+                ${items.map((item, idx) => `
+                  <li class="tips-simple-item">
+                    <span class="tips-simple-item-num">${idx + 1}</span>
+                    <div class="tips-simple-item-body">
+                      <span class="tips-simple-item-text">${escapeHtml(item.text)}</span>
+                      ${item.term ? `<span class="tips-simple-item-term">（${escapeHtml(extractJapaneseTerm(item.term))}）</span>` : ""}
+                      ${item.topicName ? `<span class="tips-simple-item-topic">/ ${escapeHtml(item.topicName.replace(/[（(]\d+[）)]\s*$/, "").trim())}</span>` : ""}
+                    </div>
+                  </li>
+                `).join("")}
+              </ol>
+            </div>
           </section>
         `;
       }).join("")}
