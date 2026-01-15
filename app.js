@@ -1171,7 +1171,7 @@ function renderSearch(params = {}) {
   renderShell("list");
   const view = $("#view");
 
-  const safeParams = (params && typeof params === "object") ? params : {};
+  const safeParams = (params && typeof params === "object" && !Array.isArray(params)) ? params : {};
   const q = safeParams.q ?? "";
   const all = sortById(DATA.all);
   const total = all.length;
@@ -2447,6 +2447,7 @@ async function boot() {
     }
 
     if (hash.startsWith("#search")) {
+      // 検索ルートも索引ビューとして扱う
       const q = parseQuery(hash.split("?")[1] || "");
       return renderSearch({ q: q.q || "" });
     }
