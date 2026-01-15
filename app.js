@@ -18,7 +18,8 @@ const OS_META = [
 ];
 
 const HERO_SIDE_COPY = {
-  system: "処世術一覧を支える「判断の構造」を扱う構造レイヤ。\n7つのOSと命題群によるインデックスで構成。役割は「分類」「照合」「理解」。",
+  system: "人生OS/内部OSなどの分類で処世術を引ける入口。\n目的が決まっているときに素早く探すためのOS別索引。",
+  base: "判断基盤は「なぜ効くか」「いつ使うか」「落とし穴」を学ぶための概念地図。\n6つの機能カテゴリで意思決定の原理を整理する。",
   tips: "「思考術」「対人術」「仕事術」「成功術」「人生術」の5つのカテゴリーで\n人生のあらゆる局面を切り抜ける処世術一覧",
   my: "もう迷わないために、自分のために選択・洗練された”処世術棚”"
 };
@@ -41,6 +42,52 @@ const TAB_ORDER = {
   exection: ["着手", "分解", "集中", "継続", "ペース", "計画", "整理", "停滞", "摩耗", "寿命", "終了", "中断", "再開", "再起動", "再設計", "完走"],
   adapt: ["変化", "学習", "技術変化", "キャリア", "役割", "リスク", "選択肢", "柔軟性", "不確実性", "前提崩壊", "陳腐化", "速度", "疲労", "視野", "撤退", "判断"],
   extra: []
+};
+
+const BASE_CATEGORIES = [
+  { key: "emotion", title: "情動の扱い", subtitle: "感情の波を整える", desc: "不安・怒り・疲れなど情動を扱い、判断が乱れない土台をつくる。", icon: "🫧" },
+  { key: "cognition", title: "認知の扱い", subtitle: "見方・価値基準の整理", desc: "意味づけや価値基準のズレを整え、判断の視点を広げる。", icon: "🧠" },
+  { key: "attention", title: "注意の扱い", subtitle: "変化と情報の拾い方", desc: "変化の兆し・情報の取捨選択を整え、見落としを減らす。", icon: "👀" },
+  { key: "action", title: "行動の扱い", subtitle: "着手・継続の設計", desc: "行動の始動と継続を支える仕組みづくりに集中する。", icon: "🏃" },
+  { key: "relation", title: "対人・境界", subtitle: "距離感と信頼の管理", desc: "対人距離・境界・信頼の取り方を明確にする。", icon: "🤝" },
+  { key: "problem", title: "問題解決", subtitle: "構造化と合意形成", desc: "課題の構造化や交渉・合意形成で迷いを減らす。", icon: "🧩" }
+];
+
+const BASE_CATEGORY_MAP = {
+  internal: "emotion",
+  life: "cognition",
+  adapt: "attention",
+  exection: "action",
+  relation: "relation",
+  operation: "problem",
+  extra: "problem"
+};
+
+const BASE_APPLY_GUIDE = {
+  emotion: [
+    "感情の波で判断が乱れたとき。",
+    "疲労や不安が強いときは先に整える。"
+  ],
+  cognition: [
+    "視点が固定され選択肢が狭くなったとき。",
+    "価値基準を言語化して整理したいとき。"
+  ],
+  attention: [
+    "情報量が多く注意が散っているとき。",
+    "変化の兆しや優先度を見直したいとき。"
+  ],
+  action: [
+    "着手や継続が止まりそうなとき。",
+    "行動設計を組み直したいとき。"
+  ],
+  relation: [
+    "距離感や境界線が曖昧になっているとき。",
+    "信頼関係の摩耗を感じたとき。"
+  ],
+  problem: [
+    "課題の構造が見えず判断が滞るとき。",
+    "交渉や合意形成で迷いがあるとき。"
+  ]
 };
 
 // ========== ユーティリティ ==========
@@ -210,13 +257,119 @@ function normalizeCard(c) {
   return out;
 }
 
+function getBaseCategoryMeta(key) {
+  return BASE_CATEGORIES.find((c) => c.key === key) || null;
+}
+
+function getBaseCategoryKey(cardOrOsKey) {
+  if (!cardOrOsKey) return "cognition";
+  const osKey = typeof cardOrOsKey === "string" ? cardOrOsKey : cardOrOsKey.os;
+  return BASE_CATEGORY_MAP[osKey] || "cognition";
+}
+
+function getBaseCardsByCategory(key) {
+  return sortById(DATA.all).filter((c) => getBaseCategoryKey(c) === key);
+}
+
+function getCardById(id) {
+  return DATA.all.find((c) => String(c.id) === String(id)) || null;
+}
+
+function buildTipReferenceIndex(situationTips = {}) {
+  const refsByCard = new Map();
+  const termByCard = new Map();
+  const categories = situationTips?.categories || [];
+
+  categories.forEach((cat) => {
+    (cat.topics || []).forEach((topic) => {
+      const topicId = String(topic.topicId || "");
+      const topicName = String(topic.name || "");
+      (topic.items || []).forEach((item) => {
+        (item.refs || []).forEach((ref) => {
+          const refKey = String(ref);
+          if (!refsByCard.has(refKey)) refsByCard.set(refKey, new Map());
+          const topicMap = refsByCard.get(refKey);
+          if (topicId && !topicMap.has(topicId)) {
+            topicMap.set(topicId, { topicId, name: topicName });
+          }
+          if (item.term && !termByCard.has(refKey)) {
+            const term = extractJapaneseTerm(item.term);
+            if (term) termByCard.set(refKey, term);
+          }
+        });
+      });
+    });
+  });
+
+  return { refsByCard, termByCard };
+}
+
+function getCardTerm(card) {
+  const term = String(card?.term || "").trim();
+  if (term) return term;
+  const mapped = DATA.cardTerms?.get(String(card?.id || ""));
+  if (mapped) return mapped;
+  const tags = (card?.tags || []).map((t) => String(t).trim()).filter(Boolean);
+  return tags.length ? tags[0] : "";
+}
+
+function formatCardTitle(card) {
+  const baseTitle = String(card?.title || "").trim();
+  if (!baseTitle) return "";
+  if (/[（(].+[）)]/.test(baseTitle)) return baseTitle;
+  const term = getCardTerm(card);
+  if (term && term !== baseTitle) return `${baseTitle}（${term}）`;
+  return baseTitle;
+}
+
+function getCardApplyGuide(card) {
+  const explicit = card?.applyGuide ?? card?.apply ?? card?.application ?? card?.when;
+  const list = splitToBullets(explicit);
+  if (list.length) return list;
+  const baseKey = getBaseCategoryKey(card);
+  return BASE_APPLY_GUIDE[baseKey] || [];
+}
+
+function getRelatedTips(cardId) {
+  const refs = DATA.tipRefs?.get(String(cardId));
+  if (!refs) return [];
+  return Array.from(refs.values());
+}
+
+function getRelatedTipLinks(card) {
+  const related = getRelatedTips(card?.id);
+  if (related.length) {
+    return related.map((topic) => ({
+      label: topic.name,
+      href: `#topic-group?id=${encodeURIComponent(topic.topicId)}`
+    }));
+  }
+  const fallbackTerm = getCardTerm(card) || card?.title || "";
+  const fallbackQuery = fallbackTerm ? `#search?q=${encodeURIComponent(fallbackTerm)}` : "#tips";
+  return [{ label: "処世術一覧で探す", href: fallbackQuery }];
+}
+
+function getTagStats() {
+  const tags = new Map();
+  DATA.all.forEach((card) => {
+    (card.tags || []).forEach((tag) => {
+      const key = String(tag).trim();
+      if (!key) return;
+      tags.set(key, (tags.get(key) || 0) + 1);
+    });
+  });
+  return Array.from(tags.entries())
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag, "ja"));
+}
+
 function osClass(osKey) {
   const k = String(osKey || "extra");
   return `os-${k}`;
 }
 
 // ========== データ読み込み ==========
-let DATA = { byOS: {}, all: [], situations: [], situationTips: [] };
+let DATA = { byOS: {}, all: [], situations: [], situationTips: [], tipRefs: new Map(), cardTerms: new Map() };
 
 async function fetchOS(osKey) {
   const meta = OS_META.find((x) => x.key === osKey);
@@ -260,8 +413,12 @@ async function loadAll() {
     }
   } catch (e) {
     console.error("fetchSituationTips error:", e);
-    DATA.situationTips = [];
+    DATA.situationTips = { categories: [] };
   }
+
+  const tipIndex = buildTipReferenceIndex(DATA.situationTips || {});
+  DATA.tipRefs = tipIndex.refsByCard;
+  DATA.cardTerms = tipIndex.termByCard;
 }
 
 // ========== UI シェル ==========
@@ -287,7 +444,7 @@ function renderShell(activeTab) {
         <nav class="header-nav">
           <button class="header-nav-item ${activeTab === 'home' ? 'active' : ''}" data-nav="#home">トップ</button>
           <button class="header-nav-item ${activeTab === 'tips' ? 'active' : ''}" data-nav="#tips">処世術一覧</button>
-          <button class="header-nav-item ${activeTab === 'list' ? 'active' : ''}" data-nav="#list?os=life">判断基盤</button>
+          <button class="header-nav-item ${activeTab === 'list' ? 'active' : ''}" data-nav="#base">判断基盤</button>
           <button class="header-nav-item ${activeTab === 'my' ? 'active' : ''}" data-nav="#my">マイページ</button>
         </nav>
         <div class="header-right">
@@ -369,7 +526,7 @@ function renderShell(activeTab) {
           <button class="mobile-menu-item" id="mobileMenuList">
             <span class="mobile-menu-subtitle">判断の構造</span>
             <span class="mobile-menu-main">判断基盤</span>
-            <span class="mobile-menu-desc">処世術を支える7つのOSと命題</span>
+            <span class="mobile-menu-desc">6カテゴリで原理を学ぶ判断地図</span>
           </button>
           <button class="mobile-menu-item" id="mobileMenuMy">
             <span class="mobile-menu-subtitle">個人設定</span>
@@ -518,7 +675,7 @@ function renderShell(activeTab) {
   if (mobileMenuList) {
     mobileMenuList.onclick = () => {
       closeMenu();
-      nav("#list?os=life");
+      nav("#base");
     };
   }
 
@@ -618,7 +775,7 @@ function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = nu
 
   return `
     <div class="sidebarCompact">
-      <div class="sidebarCompactTitle">判断基盤</div>
+      <div class="sidebarCompactTitle">OS別処世術</div>
 
       <div class="sidebarCompactList" id="osbar">
         ${items.map((k) => {
@@ -638,7 +795,43 @@ function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = nu
       <div class="sidebarCompactFooter">
         <div class="sidebarCompactSearch" id="goSearch" role="button" tabindex="0">
           <span class="sidebarCompactDot" aria-hidden="true"></span>
-          <span class="sidebarCompactSearchText">検索（OS横断）</span>
+          <span class="sidebarCompactSearchText">判断基盤検索</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderBaseSidebar(activeKey = null) {
+  const navItems = [
+    { key: "home", title: "カテゴリ一覧", subtitle: "判断基盤トップ" },
+    ...BASE_CATEGORIES.map((c) => ({ key: c.key, title: c.title, subtitle: c.subtitle })),
+    { key: "tags", title: "タグ一覧", subtitle: "検索タグから探す" }
+  ];
+
+  return `
+    <div class="sidebarCompact">
+      <div class="sidebarCompactTitle">判断基盤</div>
+      <div class="sidebarCompactList" id="basebar">
+        ${navItems.map((item) => {
+          const isActive = item.key === activeKey;
+          return `
+            <div class="sidebarCompactItem ${isActive ? "isActive" : ""}" data-base-nav="${escapeHtml(item.key)}">
+              <div class="sidebarCompactLeft">
+                <div class="sidebarCompactLabel">
+                  <span class="sidebarCompactMain">${escapeHtml(item.title)}</span>
+                  <span class="sidebarCompactSub">${escapeHtml(item.subtitle)}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+
+      <div class="sidebarCompactFooter">
+        <div class="sidebarCompactSearch" id="goBaseSearch" role="button" tabindex="0">
+          <span class="sidebarCompactDot" aria-hidden="true"></span>
+          <span class="sidebarCompactSearchText">検索（判断基盤）</span>
         </div>
       </div>
     </div>
@@ -664,6 +857,32 @@ function bindSidebarActions(container) {
   });
   const goSearch = container.querySelector("#goSearch");
   if (goSearch) goSearch.onclick = () => nav(`#search?q=`);
+
+  const mobileToggle = container.querySelector("[data-mobile-sidebar-toggle]");
+  const listSide = container.querySelector(".list-side");
+  if (mobileToggle && listSide) {
+    const openLabel = mobileToggle.getAttribute("data-open-label") || "判断基盤を開く";
+    const closeLabel = mobileToggle.getAttribute("data-close-label") || "判断基盤を閉じる";
+    mobileToggle.onclick = () => {
+      const isOpen = listSide.classList.toggle("isOpen");
+      mobileToggle.setAttribute("aria-expanded", String(isOpen));
+      mobileToggle.textContent = isOpen ? closeLabel : openLabel;
+    };
+  }
+}
+
+function bindBaseSidebarActions(container) {
+  container.querySelectorAll("[data-base-nav]").forEach((el) => {
+    el.onclick = () => {
+      const key = el.getAttribute("data-base-nav");
+      if (key === "home") return nav("#base");
+      if (key === "tags") return nav("#base-tags");
+      nav(`#base-category?key=${encodeURIComponent(key)}`);
+    };
+  });
+
+  const goSearch = container.querySelector("#goBaseSearch");
+  if (goSearch) goSearch.onclick = () => nav("#search?q=");
 
   const mobileToggle = container.querySelector("[data-mobile-sidebar-toggle]");
   const listSide = container.querySelector(".list-side");
@@ -722,12 +941,17 @@ function renderList(osKey, focusOsId = null) {
   ];
 
   // ★重要：DOM順を「sidebar → main」にして grid(320px / 1fr) と一致させる
-  const heroSubtitle = "行き方・心の扱い・対人関係などを7つのOSで整理した処世術一覧。";
+  const heroSubtitle = "人生OS・内部OSなど7つのOSで整理した処世術一覧。目的が決まったときに引ける入口。";
   const showSystemHero = osKey === "life" && !focusOsId;
-  const heroTitle = showSystemHero ? "判断基盤" : (meta?.title || currentOS);
-  const heroDescription = showSystemHero ? "" : (meta?.desc || heroSubtitle);
+  const heroTitle = showSystemHero ? "OS別処世術一覧" : (meta?.title || currentOS);
+  const heroDescription = showSystemHero ? heroSubtitle : (meta?.desc || heroSubtitle);
   const heroSideCopy = showSystemHero ? `
     <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.system)}</div>
+  ` : "";
+  const heroAction = showSystemHero ? `
+    <div class="list-hero-actions">
+      <a class="btn ghost" href="#base">判断基盤トップへ</a>
+    </div>
   ` : "";
 
   view.innerHTML = `
@@ -735,6 +959,7 @@ function renderList(osKey, focusOsId = null) {
       <div class="list-hero-main">
         <div class="list-hero-title">${escapeHtml(heroTitle)}</div>
         ${heroDescription ? `<div class="list-hero-subtitle">${escapeHtml(heroDescription)}</div>` : ""}
+        ${heroAction}
       </div>
       ${heroSideCopy}
     </div>
@@ -834,14 +1059,16 @@ function renderCard(c) {
   const isFav = favs.has(String(c.id));
   const osKey = c.os || "extra";
 
-  const title = escapeHtml(c.title || "");
+  const title = escapeHtml(formatCardTitle(c));
   const tags = (c.tags || []).map((t) => String(t).trim()).filter(Boolean);
 
   const ess = splitToBullets(c.essence);
   const pit = splitToBullets(c.pitfalls);
   const strat = splitToBullets(c.strategy);
+  const applyGuide = getCardApplyGuide(c);
+  const tipLinks = getRelatedTipLinks(c);
 
-  const hasExpand = ess.length || pit.length || strat.length;
+  const hasExpand = ess.length || pit.length || strat.length || applyGuide.length || tipLinks.length || tags.length;
 
   return `
     <div class="scard ${osClass(osKey)}" data-cardid="${escapeHtml(c.id)}">
@@ -865,11 +1092,19 @@ function renderCard(c) {
           ${ess.length ? `<h4>要点</h4><ul>${ess.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
           ${pit.length ? `<h4>落とし穴</h4><ul>${pit.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
           ${strat.length ? `<h4>戦略</h4><ul>${strat.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+          ${applyGuide.length ? `<h4>適用の目安</h4><ul>${applyGuide.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+          ${tipLinks.length ? `
+            <h4>処世術一覧へのリンク</h4>
+            <div class="scard-links">
+              ${tipLinks.map((link) => `<a class="scard-link" href="${escapeHtml(link.href)}">${escapeHtml(link.label)}</a>`).join("")}
+            </div>
+          ` : ""}
+          <h4>検索用タグ</h4>
           ${tags.length ? `
             <div class="scard-tags">
               ${tags.map((t) => { const escaped = escapeHtml(t); return `<span class="tagchip" data-tagchip="${escaped}">#${escaped}</span>`; }).join("")}
             </div>
-          ` : ""}
+          ` : `<div class="scard-tags-empty">タグ準備中</div>`}
         </div>
       ` : ""}
     </div>
@@ -934,13 +1169,13 @@ function renderSearch({ q }) {
   view.innerHTML = `
     <div class="list-layout has-mobile-sidebar">
       <div class="list-side">
-        ${renderCompactSidebar(null)}
+        ${renderBaseSidebar(null)}
       </div>
 
       <div class="list-main">
         ${renderMobileSidebarToggle("判断基盤を開く", "判断基盤を閉じる")}
         <div class="list-headline">
-          <div class="title">検索（OS横断）</div>
+          <div class="title">判断基盤検索</div>
           <div class="count">件数：<b>${filtered.length}</b><span class="count-sep">/</span>全体：<b>${all.length}</b></div>
         </div>
 
@@ -961,7 +1196,7 @@ function renderSearch({ q }) {
     </div>
   `;
 
-  bindSidebarActions(view);
+  bindBaseSidebarActions(view);
 
   $("#doSearch").onclick = () => {
     const nq = $("#q").value.trim();
@@ -970,6 +1205,177 @@ function renderSearch({ q }) {
   $("#clearSearch").onclick = () => nav(`#search?q=`);
 
   bindCardEvents();
+}
+
+function renderBaseHome() {
+  renderShell("list");
+  const view = $("#view");
+
+  const total = DATA.all.length;
+
+  view.innerHTML = `
+    <div class="list-hero-fullwidth">
+      <div class="list-hero-main">
+        <div class="list-hero-title">判断基盤</div>
+        <div class="list-hero-subtitle">なぜ効くか／いつ使うか／落とし穴を学ぶための意思決定マップ。</div>
+      </div>
+      <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.base)}</div>
+    </div>
+
+    <div class="list-layout has-mobile-sidebar">
+      <div class="list-side">
+        ${renderBaseSidebar("home")}
+      </div>
+
+      <div class="list-main">
+        ${renderMobileSidebarToggle("判断基盤を開く", "判断基盤を閉じる")}
+        <div class="list-headline">
+          <div class="title">カテゴリ一覧</div>
+          <div class="count">全体：<b>${total}</b></div>
+        </div>
+
+        <div class="base-category-grid">
+          ${BASE_CATEGORIES.map((cat) => {
+            const count = getBaseCardsByCategory(cat.key).length;
+            return `
+              <button class="base-category-card" type="button" data-base-category="${escapeHtml(cat.key)}">
+                <div class="base-category-icon">${escapeHtml(cat.icon || "")}</div>
+                <div class="base-category-info">
+                  <div class="base-category-title">${escapeHtml(cat.title)}</div>
+                  <div class="base-category-desc">${escapeHtml(cat.desc)}</div>
+                </div>
+                <div class="base-category-count">${count}件</div>
+              </button>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+
+  bindBaseSidebarActions(view);
+  view.querySelectorAll("[data-base-category]").forEach((btn) => {
+    btn.onclick = () => {
+      const key = btn.getAttribute("data-base-category");
+      if (key) nav(`#base-category?key=${encodeURIComponent(key)}`);
+    };
+  });
+}
+
+function renderBaseCategory(key, focusId = null) {
+  renderShell("list");
+  const view = $("#view");
+
+  const meta = getBaseCategoryMeta(key);
+  if (!meta) {
+    view.innerHTML = `
+      <div class="card section">
+        <div class="title" style="font-weight:900;">カテゴリが見つかりません</div>
+        <div style="margin-top:10px;"><button class="btn" id="back">戻る</button></div>
+      </div>
+    `;
+    $("#back").onclick = () => nav("#base");
+    return;
+  }
+
+  const cards = getBaseCardsByCategory(meta.key);
+
+  view.innerHTML = `
+    <div class="list-layout has-mobile-sidebar">
+      <div class="list-side">
+        ${renderBaseSidebar(meta.key)}
+      </div>
+
+      <div class="list-main">
+        ${renderMobileSidebarToggle("判断基盤を開く", "判断基盤を閉じる")}
+        <div class="base-breadcrumb">
+          <a href="#base">判断基盤</a>
+          <span class="base-breadcrumb-sep">›</span>
+          <span>${escapeHtml(meta.title)}</span>
+        </div>
+        <div class="list-hero-fullwidth">
+          <div class="list-hero-main">
+            <div class="list-hero-title">${escapeHtml(meta.title)}</div>
+            <div class="list-hero-subtitle">${escapeHtml(meta.desc)}</div>
+          </div>
+        </div>
+
+        <div class="list-headline">
+          <div class="title">${escapeHtml(meta.title)} の判断基盤</div>
+          <div class="count">件数：<b>${cards.length}</b></div>
+        </div>
+
+        <div class="cards-grid" id="cards">
+          ${cards.map((c, i) => renderCard(c, i)).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+
+  bindBaseSidebarActions(view);
+  bindCardEvents();
+
+  if (focusId) {
+    const cardEl = view.querySelector(`[data-cardid="${CSS.escape(focusId)}"]`);
+    if (cardEl) {
+      cardEl.classList.add("scard-focused");
+      const expandBox = view.querySelector(`[data-expand="${CSS.escape(focusId)}"]`);
+      if (expandBox) expandBox.style.display = "block";
+      setTimeout(() => {
+        cardEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+      setTimeout(() => {
+        cardEl.classList.remove("scard-focused");
+      }, 3000);
+    }
+  }
+}
+
+function renderBaseTags() {
+  renderShell("list");
+  const view = $("#view");
+
+  const tagStats = getTagStats();
+
+  view.innerHTML = `
+    <div class="list-layout has-mobile-sidebar">
+      <div class="list-side">
+        ${renderBaseSidebar("tags")}
+      </div>
+
+      <div class="list-main">
+        ${renderMobileSidebarToggle("判断基盤を開く", "判断基盤を閉じる")}
+        <div class="base-breadcrumb">
+          <a href="#base">判断基盤</a>
+          <span class="base-breadcrumb-sep">›</span>
+          <span>タグ一覧</span>
+        </div>
+        <div class="list-hero-fullwidth">
+          <div class="list-hero-main">
+            <div class="list-hero-title">タグ一覧</div>
+            <div class="list-hero-subtitle">専門語・一般語・症状語から判断基盤を絞り込む。</div>
+          </div>
+        </div>
+
+        <div class="base-tag-grid">
+          ${tagStats.length ? tagStats.map((tag) => `
+            <button class="tagchip base-tagchip" type="button" data-tag="${escapeHtml(tag.tag)}">
+              <span>#${escapeHtml(tag.tag)}</span>
+              <span class="base-tag-count">${tag.count}</span>
+            </button>
+          `).join("") : `<div class="base-tag-empty">タグがまだありません。</div>`}
+        </div>
+      </div>
+    </div>
+  `;
+
+  bindBaseSidebarActions(view);
+  view.querySelectorAll("[data-tag]").forEach((el) => {
+    el.onclick = () => {
+      const tag = el.getAttribute("data-tag") || "";
+      nav(`#search?q=${encodeURIComponent(tag)}`);
+    };
+  });
 }
 
 // ========== 詳細 ==========
@@ -992,13 +1398,17 @@ function renderDetail(id) {
   const ess = splitToBullets(card.essence);
   const pit = splitToBullets(card.pitfalls);
   const strat = splitToBullets(card.strategy);
+  const applyGuide = getCardApplyGuide(card);
+  const tipLinks = getRelatedTipLinks(card);
+  const tags = (card.tags || []).map((t) => String(t).trim()).filter(Boolean);
+  const cardTitle = formatCardTitle(card);
 
   view.innerHTML = `
     <div class="card section">
       <div class="row">
         <div>
           <div class="badge id">${escapeHtml(card.id)}</div>
-          <div style="margin-top:8px; font-weight:900; font-size:18px;">${escapeHtml(card.title || "")}</div>
+          <div style="margin-top:8px; font-weight:900; font-size:18px;">${escapeHtml(cardTitle)}</div>
         </div>
         <button class="btn ghost" id="back">戻る</button>
       </div>
@@ -1024,9 +1434,33 @@ function renderDetail(id) {
         <ul>${strat.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
       </div>
     ` : ""}
+
+    ${applyGuide.length ? `
+      <div class="card section">
+        <div style="font-weight:900; margin-bottom:8px;">適用の目安</div>
+        <ul>${applyGuide.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      </div>
+    ` : ""}
+
+    <div class="card section">
+      <div style="font-weight:900; margin-bottom:8px;">処世術一覧へのリンク</div>
+      <div class="scard-links">
+        ${tipLinks.map((link) => `<a class="scard-link" href="${escapeHtml(link.href)}">${escapeHtml(link.label)}</a>`).join("")}
+      </div>
+    </div>
+
+    <div class="card section">
+      <div style="font-weight:900; margin-bottom:8px;">検索用タグ</div>
+      ${tags.length ? `
+        <div class="scard-tags">
+          ${tags.map((t) => { const escaped = escapeHtml(t); return `<span class="tagchip" data-tagchip="${escaped}">#${escaped}</span>`; }).join("")}
+        </div>
+      ` : `<div class="scard-tags-empty">タグ準備中</div>`}
+    </div>
   `;
 
   $("#back").onclick = () => history.back();
+  bindCardEvents();
 }
 
 // ========== マイページ ==========
@@ -1335,6 +1769,10 @@ function renderSituationTips() {
       <div class="tips-simple-hero">
         <div class="tips-simple-hero-title">処世術一覧</div>
         <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.tips)}</div>
+        <div class="tips-simple-actions">
+          <a class="btn ghost" href="#base">判断基盤を学ぶ</a>
+          <a class="btn ghost" href="#list?os=life">OS別で探す</a>
+        </div>
       </div>
       ${sectionMap.map((section) => {
         const topics = buildSectionTopics(section.categoryIds);
@@ -1435,6 +1873,35 @@ function renderTopicGroupPage(topicId) {
   }
 
   const items = topic.items || [];
+
+  const renderTopicRefs = (item) => {
+    const refs = item.refs || [];
+    if (!refs.length) {
+      const fallbackTerm = extractJapaneseTerm(item.term) || item.text || "";
+      const href = fallbackTerm ? `#search?q=${encodeURIComponent(fallbackTerm)}` : "#base";
+      return `
+        <div class="topic-group-item-refs">
+          <span class="topic-group-item-ref-label">判断基盤</span>
+          <a class="topic-group-ref-tag" href="${escapeHtml(href)}">判断基盤を探す</a>
+        </div>
+      `;
+    }
+    const links = refs.map((ref) => {
+      const card = getCardById(ref);
+      const categoryKey = card ? getBaseCategoryKey(card) : null;
+      const label = card ? formatCardTitle(card) : ref;
+      const href = categoryKey
+        ? `#base-category?key=${encodeURIComponent(categoryKey)}&focus=${encodeURIComponent(ref)}`
+        : "#base";
+      return `<a class="topic-group-ref-tag" href="${escapeHtml(href)}" data-ref="${escapeHtml(ref)}" data-base="${escapeHtml(categoryKey || "")}">${escapeHtml(label)}</a>`;
+    }).join("");
+    return `
+      <div class="topic-group-item-refs">
+        <span class="topic-group-item-ref-label">判断基盤</span>
+        ${links}
+      </div>
+    `;
+  };
   
   // Find adjacent topics for navigation
   const { prev, next } = findAdjacentTopics(topicId, categories);
@@ -1470,11 +1937,7 @@ function renderTopicGroupPage(topicId) {
               <span class="topic-group-item-text">${escapeHtml(item.text)}</span>
               ${item.term ? `<span class="topic-group-item-term">（${escapeHtml(extractJapaneseTerm(item.term))}）</span>` : ""}
             </div>
-            ${(item.refs && item.refs.length) ? `
-              <div class="topic-group-item-refs">
-                ${item.refs.map((ref) => `<a class="topic-group-ref-tag" href="#" data-ref="${escapeHtml(ref)}">${escapeHtml(ref)}</a>`).join("")}
-              </div>
-            ` : ""}
+            ${renderTopicRefs(item)}
           </div>
         `).join("")}
       </div>
@@ -1495,20 +1958,13 @@ function renderTopicGroupPage(topicId) {
   }
 
   // Handle clicks on ref tags to navigate to the systematic wisdom
-  view.querySelectorAll(".topic-group-ref-tag[data-ref]").forEach((el) => {
+  view.querySelectorAll(".topic-group-ref-tag[data-base]").forEach((el) => {
     el.onclick = (e) => {
-      e.preventDefault();
+      const baseKey = el.getAttribute("data-base");
       const refId = el.getAttribute("data-ref");
-      // Determine which OS the ref belongs to based on prefix
-      let osKey = "life";
-      if (refId.startsWith("I-")) osKey = "internal";
-      else if (refId.startsWith("O-")) osKey = "operation";
-      else if (refId.startsWith("A-")) osKey = "exection";
-      else if (refId.startsWith("AD-")) osKey = "adapt";
-      else if (refId.startsWith("X-")) osKey = "extra";
-      else if (refId.startsWith("R-")) osKey = "life"; // R- is in both life and relation
-      // Navigate to the list page with the card ID highlighted
-      nav(`#list?os=${encodeURIComponent(osKey)}&focus=${encodeURIComponent(refId)}`);
+      if (!baseKey || !refId) return;
+      e.preventDefault();
+      nav(`#base-category?key=${encodeURIComponent(baseKey)}&focus=${encodeURIComponent(refId)}`);
     };
   });
 }
@@ -1956,6 +2412,19 @@ async function boot() {
     const q = parseQuery(hash.split("?")[1] || "");
     if (!q.focus) {
       window.scrollTo(0, 0);
+    }
+
+    if (hash.startsWith("#base-category")) {
+      const q = parseQuery(hash.split("?")[1] || "");
+      return renderBaseCategory(q.key || "", q.focus || null);
+    }
+
+    if (hash.startsWith("#base-tags")) {
+      return renderBaseTags();
+    }
+
+    if (hash.startsWith("#base")) {
+      return renderBaseHome();
     }
 
     if (hash.startsWith("#list")) {
