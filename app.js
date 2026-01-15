@@ -1785,29 +1785,17 @@ function renderSituationTips() {
           <section class="tips-simple-section">
             <h2 class="tips-simple-title">≪${escapeHtml(section.title)}≫</h2>
             <ul class="tips-simple-topics">
-              ${topics.map((topic) => `
+              ${topics.map((topic, idx) => `
                 <li class="tips-simple-topic">
                   <button class="tips-simple-topic-link" type="button" data-topic-id="${escapeHtml(topic.topicId)}">
-                    <span class="tips-simple-topic-name">${escapeHtml(topic.name)}</span>
+                    <span class="tips-simple-topic-meta">
+                      <span class="tips-simple-topic-num">${idx + 1}</span>
+                      <span class="tips-simple-topic-name">${escapeHtml(topic.name)}</span>
+                    </span>
                   </button>
                 </li>
               `).join("")}
             </ul>
-            <div class="tips-simple-category-list">
-              <div class="tips-simple-category-heading">処世術一覧</div>
-              <ol class="tips-simple-items tips-simple-category-items">
-                ${topics.map((topic, idx) => `
-                  <li class="tips-simple-item">
-                    <span class="tips-simple-item-num">${idx + 1}</span>
-                    <div class="tips-simple-item-body">
-                      <button class="tips-simple-item-link" type="button" data-topic-id="${escapeHtml(topic.topicId)}">
-                        <span class="tips-simple-item-text">${escapeHtml(topic.name)}</span>
-                      </button>
-                    </div>
-                  </li>
-                `).join("")}
-              </ol>
-            </div>
           </section>
         `;
       }).join("")}
@@ -1815,7 +1803,7 @@ function renderSituationTips() {
   `;
 
   // Handle click on topic links to navigate to the topic group page
-  view.querySelectorAll(".tips-simple-topic-link[data-topic-id], .tips-simple-item-link[data-topic-id]").forEach((btn) => {
+  view.querySelectorAll(".tips-simple-topic-link[data-topic-id]").forEach((btn) => {
     btn.onclick = () => {
       const topicId = btn.getAttribute("data-topic-id");
       if (topicId) {
