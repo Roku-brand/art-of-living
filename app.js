@@ -1951,6 +1951,13 @@ async function boot() {
   const onRoute = () => {
     const hash = location.hash || "#home";
 
+    // Reset scroll position to top of page on navigation
+    // Exception: when focus parameter is present, let the specific page handle scrolling
+    const q = parseQuery(hash.split("?")[1] || "");
+    if (!q.focus) {
+      window.scrollTo(0, 0);
+    }
+
     if (hash.startsWith("#list")) {
       const q = parseQuery(hash.split("?")[1] || "");
       const os = q.os || "life";
