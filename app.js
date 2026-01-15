@@ -350,7 +350,7 @@ function getRelatedTipLinks(card) {
     }));
   }
   const fallbackTerm = getCardTerm(card) || card?.title || "";
-  const fallbackQuery = fallbackTerm ? `#search?q=${encodeURIComponent(fallbackTerm)}` : "#tips";
+  const fallbackQuery = fallbackTerm ? `#base?q=${encodeURIComponent(fallbackTerm)}` : "#tips";
   return [{ label: "処世術一覧で探す", href: fallbackQuery }];
 }
 
@@ -612,7 +612,7 @@ function renderShell(activeTab) {
     headerSearchInput.onkeydown = (e) => {
       if (e.key === "Enter") {
         const query = headerSearchInput.value.trim();
-        nav(`#search?q=${encodeURIComponent(query)}`);
+        nav(`#base?q=${encodeURIComponent(query)}`);
       }
     };
   }
@@ -830,7 +830,7 @@ function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = nu
       <div class="sidebarCompactFooter">
         <div class="sidebarCompactSearch" id="goSearch" role="button" tabindex="0">
           <span class="sidebarCompactDot" aria-hidden="true"></span>
-          <span class="sidebarCompactSearchText">判断基盤検索</span>
+          <span class="sidebarCompactSearchText">判断基盤索引</span>
         </div>
       </div>
     </div>
@@ -839,9 +839,8 @@ function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = nu
 
 function renderBaseSidebar(activeKey = null) {
   const navItems = [
-    { key: "home", title: "カテゴリ一覧", subtitle: "判断基盤トップ" },
+    { key: "home", title: "索引", subtitle: "カテゴリ＋検索" },
     ...BASE_CATEGORIES.map((c) => ({ key: c.key, title: c.title, subtitle: c.subtitle })),
-    { key: "tags", title: "タグ一覧", subtitle: "検索タグから探す" }
   ];
 
   return `
@@ -863,12 +862,6 @@ function renderBaseSidebar(activeKey = null) {
         }).join("")}
       </div>
 
-      <div class="sidebarCompactFooter">
-        <div class="sidebarCompactSearch" id="goBaseSearch" role="button" tabindex="0">
-          <span class="sidebarCompactDot" aria-hidden="true"></span>
-          <span class="sidebarCompactSearchText">検索（判断基盤）</span>
-        </div>
-      </div>
     </div>
   `;
 }
@@ -891,7 +884,7 @@ function bindSidebarActions(container) {
     el.onclick = () => nav(`#list?os=${el.getAttribute("data-os")}`);
   });
   const goSearch = container.querySelector("#goSearch");
-  if (goSearch) goSearch.onclick = () => nav(`#search?q=`);
+  if (goSearch) goSearch.onclick = () => nav("#base");
 
   const mobileToggle = container.querySelector("[data-mobile-sidebar-toggle]");
   const listSide = container.querySelector(".list-side");
@@ -911,13 +904,9 @@ function bindBaseSidebarActions(container) {
     el.onclick = () => {
       const key = el.getAttribute("data-base-nav");
       if (key === "home") return nav("#base");
-      if (key === "tags") return nav("#base-tags");
       nav(`#base-category?key=${encodeURIComponent(key)}`);
     };
   });
-
-  const goSearch = container.querySelector("#goBaseSearch");
-  if (goSearch) goSearch.onclick = () => nav("#search?q=");
 
   const mobileToggle = container.querySelector("[data-mobile-sidebar-toggle]");
   const listSide = container.querySelector(".list-side");
@@ -1172,19 +1161,21 @@ function bindCardEvents() {
   view.querySelectorAll("[data-tagchip]").forEach((el) => {
     el.onclick = () => {
       const t = el.getAttribute("data-tagchip");
-      nav(`#search?q=${encodeURIComponent(t)}`);
+      nav(`#base?q=${encodeURIComponent(t)}`);
     };
   });
 }
 
-// ========== 検索 ==========
-function renderSearch({ q }) {
+// ========== 索引 ==========
+function renderBaseIndex(params = {}) {
   renderShell("list");
   const view = $("#view");
 
+  const q = params?.q ?? "";
   const all = sortById(DATA.all);
+  const total = all.length;
 
-  const query = String(q || "").trim().toLowerCase();
+  const query = String(q).trim().toLowerCase();
 
   let filtered = all;
 
@@ -1201,52 +1192,11 @@ function renderSearch({ q }) {
     });
   }
 
-  view.innerHTML = `
-    <div class="list-layout has-mobile-sidebar">
-      <div class="list-side">
-        ${renderBaseSidebar(null)}
-      </div>
-
-      <div class="list-main">
-        ${renderMobileSidebarToggle("判断基盤を開く", "判断基盤を閉じる")}
-        <div class="list-headline">
-          <div class="title">判断基盤検索</div>
-          <div class="count">件数：<b>${filtered.length}</b><span class="count-sep">/</span>全体：<b>${all.length}</b></div>
-        </div>
-
-        <div class="search-form-wrap">
-          <div class="grid">
-            <input class="input" id="q" placeholder="キーワード（例：疲れ / 交渉 / 先延ばし）" value="${escapeHtml(q || "")}" />
-            <div class="row">
-              <button class="btn primary" id="doSearch">検索</button>
-              <button class="btn ghost" id="clearSearch">クリア</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="cards-grid" id="cards">
-          ${filtered.map((c) => renderCard(c)).join("")}
-        </div>
-      </div>
-    </div>
-  `;
-
-  bindBaseSidebarActions(view);
-
-  $("#doSearch").onclick = () => {
-    const nq = $("#q").value.trim();
-    nav(`#search?q=${encodeURIComponent(nq)}`);
-  };
-  $("#clearSearch").onclick = () => nav(`#search?q=`);
-
-  bindCardEvents();
-}
-
-function renderBaseHome() {
-  renderShell("list");
-  const view = $("#view");
-
-  const total = DATA.all.length;
+  const showResults = Boolean(query);
+  const indexCountLabel = showResults
+    ? `全体：<b>${total}</b><span class="count-sep">/</span>検索：<b>${filtered.length}</b>`
+    : `全体：<b>${total}</b>`;
+  const searchCountLabel = `件数：<b>${filtered.length}</b><span class="count-sep">/</span>全体：<b>${total}</b>`;
 
   view.innerHTML = `
     <div class="list-hero-fullwidth">
@@ -1264,6 +1214,31 @@ function renderBaseHome() {
 
       <div class="list-main">
         ${renderMobileSidebarToggle("判断基盤を開く", "判断基盤を閉じる")}
+        <div class="list-headline">
+          <div class="title">索引</div>
+          <div class="count">${indexCountLabel}</div>
+        </div>
+
+        <div class="search-form-wrap">
+          <div class="grid">
+            <input class="input" id="q" placeholder="キーワード（例：疲れ / 交渉 / 先延ばし）" value="${escapeHtml(q)}" />
+            <div class="row">
+              <button class="btn primary" id="doSearch">検索</button>
+              <button class="btn ghost" id="clearSearch">クリア</button>
+            </div>
+          </div>
+        </div>
+
+        ${showResults ? `
+          <div class="list-headline">
+            <div class="title">検索結果</div>
+            <div class="count">${searchCountLabel}</div>
+          </div>
+          <div class="cards-grid" id="cards">
+            ${filtered.map((c) => renderCard(c)).join("")}
+          </div>
+        ` : ""}
+
         <div class="list-headline">
           <div class="title">カテゴリ一覧</div>
           <div class="count">全体：<b>${total}</b></div>
@@ -1295,6 +1270,14 @@ function renderBaseHome() {
       if (key) nav(buildBaseCategoryHash(key));
     };
   });
+
+  $("#doSearch").onclick = () => {
+    const nq = $("#q").value.trim();
+    nav(`#base?q=${encodeURIComponent(nq)}`);
+  };
+  $("#clearSearch").onclick = () => nav("#base");
+
+  bindCardEvents();
 }
 
 function renderBaseCategory(key, focusId = null, osFilter = "") {
@@ -1405,53 +1388,6 @@ function renderBaseCategory(key, focusId = null, osFilter = "") {
       }, 3000);
     }
   }
-}
-
-function renderBaseTags() {
-  renderShell("list");
-  const view = $("#view");
-
-  const tagStats = getTagStats();
-
-  view.innerHTML = `
-    <div class="list-layout has-mobile-sidebar">
-      <div class="list-side">
-        ${renderBaseSidebar("tags")}
-      </div>
-
-      <div class="list-main">
-        ${renderMobileSidebarToggle("判断基盤を開く", "判断基盤を閉じる")}
-        <div class="base-breadcrumb">
-          <a href="#base">判断基盤</a>
-          <span class="base-breadcrumb-sep">›</span>
-          <span>タグ一覧</span>
-        </div>
-        <div class="list-hero-fullwidth">
-          <div class="list-hero-main">
-            <div class="list-hero-title">タグ一覧</div>
-            <div class="list-hero-subtitle">専門語・一般語・症状語から判断基盤を絞り込む。</div>
-          </div>
-        </div>
-
-        <div class="base-tag-grid">
-          ${tagStats.length ? tagStats.map((tag) => `
-            <button class="tagchip base-tagchip" type="button" data-tag="${escapeHtml(tag.tag)}">
-              <span>#${escapeHtml(tag.tag)}</span>
-              <span class="base-tag-count">${tag.count}</span>
-            </button>
-          `).join("") : `<div class="base-tag-empty">タグがまだありません。</div>`}
-        </div>
-      </div>
-    </div>
-  `;
-
-  bindBaseSidebarActions(view);
-  view.querySelectorAll("[data-tag]").forEach((el) => {
-    el.onclick = () => {
-      const tag = el.getAttribute("data-tag") || "";
-      nav(`#search?q=${encodeURIComponent(tag)}`);
-    };
-  });
 }
 
 // ========== 詳細 ==========
@@ -1957,7 +1893,7 @@ function renderTopicGroupPage(topicId) {
     const refs = item.refs || [];
     if (!refs.length) {
       const fallbackTerm = extractJapaneseTerm(item.term) || item.text || "";
-      const href = fallbackTerm ? `#search?q=${encodeURIComponent(fallbackTerm)}` : "#base";
+      const href = fallbackTerm ? `#base?q=${encodeURIComponent(fallbackTerm)}` : "#base";
       return `
         <div class="topic-group-item-refs">
           <span class="topic-group-item-ref-label">判断基盤</span>
@@ -2498,14 +2434,6 @@ async function boot() {
       return renderBaseCategory(q.key || "", q.focus || null, q.os || "");
     }
 
-    if (hash.startsWith("#base-tags")) {
-      return renderBaseTags();
-    }
-
-    if (hash.startsWith("#base")) {
-      return renderBaseHome();
-    }
-
     if (hash.startsWith("#list")) {
       const q = parseQuery(hash.split("?")[1] || "");
       const os = q.os || "life";
@@ -2513,8 +2441,14 @@ async function boot() {
     }
 
     if (hash.startsWith("#search")) {
+      // 旧検索ルートは索引ビューとして扱う（後方互換）
       const q = parseQuery(hash.split("?")[1] || "");
-      return renderSearch({ q: q.q || "" });
+      return renderBaseIndex({ q: q.q || "" });
+    }
+
+    if (hash.startsWith("#base")) {
+      const q = parseQuery(hash.split("?")[1] || "");
+      return renderBaseIndex({ q: q.q || "" });
     }
 
     if (hash.startsWith("#detail")) {
