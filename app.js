@@ -1171,8 +1171,7 @@ function renderSearch(params = {}) {
   renderShell("list");
   const view = $("#view");
 
-  const safeParams = (params && typeof params === "object" && !Array.isArray(params)) ? params : {};
-  const q = safeParams.q ?? "";
+  const q = params?.q ?? "";
   const all = sortById(DATA.all);
   const total = all.length;
 
@@ -1275,11 +1274,6 @@ function renderSearch(params = {}) {
   $("#clearSearch").onclick = () => nav("#base");
 
   bindCardEvents();
-}
-
-function renderBaseHome(q = "") {
-  // #base は索引ビューへのエイリアス
-  renderSearch({ q });
 }
 
 function renderBaseCategory(key, focusId = null, osFilter = "") {
@@ -2436,11 +2430,6 @@ async function boot() {
       return renderBaseCategory(q.key || "", q.focus || null, q.os || "");
     }
 
-    if (hash.startsWith("#base")) {
-      const q = parseQuery(hash.split("?")[1] || "");
-      return renderBaseHome(q.q || "");
-    }
-
     if (hash.startsWith("#list")) {
       const q = parseQuery(hash.split("?")[1] || "");
       const os = q.os || "life";
@@ -2448,7 +2437,12 @@ async function boot() {
     }
 
     if (hash.startsWith("#search")) {
-      // 検索ルートも索引ビューとして扱う
+      // 旧検索ルートは索引ビューとして扱う（後方互換）
+      const q = parseQuery(hash.split("?")[1] || "");
+      return renderSearch({ q: q.q || "" });
+    }
+
+    if (hash.startsWith("#base")) {
       const q = parseQuery(hash.split("?")[1] || "");
       return renderSearch({ q: q.q || "" });
     }
