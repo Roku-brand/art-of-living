@@ -324,7 +324,9 @@ function getCardTerm(card) {
 function getMappedTerm(card) {
   const term = String(card?.term || "").trim();
   if (term) return term;
-  return DATA.cardTerms?.get(String(card?.id || "")) || "";
+  const cardId = card?.id;
+  const idKey = typeof cardId === "string" ? cardId : String(cardId ?? "");
+  return DATA.cardTerms?.get(idKey) || "";
 }
 
 /**
@@ -1100,7 +1102,7 @@ function renderList(osKey, focusOsId = null) {
 }
 
 function renderCard(c, options = {}) {
-  const opts = options ?? {};
+  const opts = options;
   const mode = opts.mode || "default";
   const isBaseMode = mode === "base";
   const favs = loadFavorites();
@@ -1114,7 +1116,8 @@ function renderCard(c, options = {}) {
     ? `<div class="scard-subtitle">${escapeHtml(rawTitle)}</div>`
     : "";
   const baseTags = (c.tags || []).map((t) => String(t).trim()).filter(Boolean);
-  const tags = isBaseMode && termLabel && !baseTags.includes(termLabel)
+  const baseTagSet = new Set(baseTags);
+  const tags = isBaseMode && termLabel && !baseTagSet.has(termLabel)
     ? [termLabel, ...baseTags]
     : [...baseTags];
 
