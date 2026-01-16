@@ -1038,7 +1038,7 @@ function renderList(osKey, focusOsId = null) {
         </div>
 
         <div class="cards-grid" id="cards">
-          ${filtered.map((c) => renderCard(c)).join("")}
+          ${filtered.map((c) => renderCard(c, { mode: "default" })).join("")}
         </div>
       </div>
     </div>
@@ -1100,7 +1100,7 @@ function renderList(osKey, focusOsId = null) {
 }
 
 function renderCard(c, options = {}) {
-  const opts = options && typeof options === "object" ? options : {};
+  const opts = options ?? {};
   const mode = opts.mode || "default";
   const isBaseMode = mode === "base";
   const favs = loadFavorites();
@@ -1577,7 +1577,7 @@ function renderMy() {
         <span class="mypage-section-count">${favList.length}件</span>
       </div>
       <div class="cards-grid">
-        ${favList.length ? favList.map((c) => renderCard(c)).join("") : `
+        ${favList.length ? favList.map((c) => renderCard(c, { mode: "default" })).join("") : `
           <div class="mypage-empty">
             <div class="mypage-empty-icon">☆</div>
             <div class="mypage-empty-text">まだお気に入りがありません</div>
@@ -2360,7 +2360,7 @@ function renderSituationDetail(situationId) {
             <span class="situation-section-count">${cards.length}件</span>
           </div>
           <div class="cards-grid" id="cards">
-            ${cards.map((c) => renderCard(c)).join("")}
+            ${cards.map((c) => renderCard(c, { mode: "default" })).join("")}
           </div>
         </div>
       </div>
