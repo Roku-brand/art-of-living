@@ -1275,8 +1275,6 @@ function renderBaseIndex(params = {}) {
           <div class="count">${indexCountLabel}</div>
         </div>
 
-        ${renderBaseCategoryTabs()}
-
         <div class="search-form-wrap">
           <div class="base-search-bar">
             <input class="input base-search-input" id="q" placeholder="キーワード（例：認知的再評価 / アクティブ・リスニング）" value="${escapeHtml(q)}" />
