@@ -2413,7 +2413,7 @@ input:focus-visible, textarea:focus-visible{
 
 /* ========== ケース別処世術（シンプル表示） ========== */
 .tips-simple-layout{
-  max-width: 920px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 24px 16px 80px;
   display: grid;
@@ -2646,16 +2646,6 @@ input:focus-visible, textarea:focus-visible{
   background: rgba(59,130,246,.22);
   border-color: rgba(59,130,246,.45);
   box-shadow: 0 4px 10px rgba(59,130,246,.18);
-}
-@media (max-width: 1200px){
-  .tips-simple-layout{
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-@media (max-width: 1024px){
-  .tips-simple-layout{
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 @media (max-width: 768px){
   .tips-simple-layout{
