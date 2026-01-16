@@ -1093,8 +1093,10 @@ function renderList(osKey, focusOsId = null) {
   }
 }
 
-function renderCard(c, options = {}) {
-  const opts = options && typeof options === "object" ? options : {};
+function renderCard(c, indexOrOptions = {}) {
+  const opts = typeof indexOrOptions === "number"
+    ? { index: indexOrOptions }
+    : (indexOrOptions && typeof indexOrOptions === "object" ? indexOrOptions : {});
   const mode = opts.mode || "default";
   const isBaseMode = mode === "base";
   const favs = loadFavorites();
@@ -1107,10 +1109,10 @@ function renderCard(c, options = {}) {
   const subtitle = isBaseMode && termLabel && rawTitle && rawTitle !== termLabel
     ? `<div class="scard-subtitle">${escapeHtml(rawTitle)}</div>`
     : "";
-  const tags = (c.tags || []).map((t) => String(t).trim()).filter(Boolean);
-  if (isBaseMode && termLabel && !tags.includes(termLabel)) {
-    tags.unshift(termLabel);
-  }
+  const baseTags = (c.tags || []).map((t) => String(t).trim()).filter(Boolean);
+  const tags = isBaseMode && termLabel && !baseTags.includes(termLabel)
+    ? [termLabel, ...baseTags]
+    : [...baseTags];
 
   const ess = splitToBullets(c.essence);
   const pit = splitToBullets(c.pitfalls);
@@ -1405,7 +1407,7 @@ function renderBaseCategory(key, focusId = null, osFilter = "") {
         </div>
 
         <div class="cards-grid" id="cards">
-          ${filteredCards.map((c, i) => renderCard(c, { mode: "base" })).join("")}
+          ${filteredCards.map((c) => renderCard(c, { mode: "base" })).join("")}
         </div>
       </div>
     </div>
