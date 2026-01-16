@@ -19,7 +19,7 @@ const OS_META = [
 
 const HERO_SIDE_COPY = {
   system: "人生OS/内部OSなどの分類で処世術を引ける入口。\n目的が決まっているときに素早く探すためのOS別索引。",
-  base: "判断基盤は「なぜ効くか」「いつ使うか」「落とし穴」を学ぶための概念地図。\n6つの機能カテゴリで意思決定の原理を整理する。",
+  base: "判断基盤は心理学・行動科学・先人の教えを辞書化した裏側レイヤー。\n用語・原理・適用条件をタグで整理し、処世術一覧と接続する。",
   tips: "「人生術」「思考術」「対人術」「スキル術」「達成術」の5つのカテゴリーで\n人生のあらゆる局面を切り抜ける処世術一覧",
   my: "もう迷わないために、自分のために選択・洗練された”処世術棚”"
 };
@@ -45,12 +45,12 @@ const TAB_ORDER = {
 };
 
 const BASE_CATEGORIES = [
-  { key: "emotion", title: "感情", subtitle: "情緒反応の整理", desc: "不安・怒り・疲れなど感情反応を整え、判断が乱れない土台をつくる。", icon: "🫧" },
-  { key: "cognition", title: "評価", subtitle: "意味づけ・価値判断の整理", desc: "意味づけや価値判断のズレを整え、判断の視点を広げる。", icon: "🧠" },
-  { key: "attention", title: "適応", subtitle: "状況変化への対応", desc: "状況変化への対応や情報の取捨選択を整え、見落としを減らす。", icon: "👀" },
-  { key: "action", title: "行動", subtitle: "着手・継続の設計", desc: "行動の始動と継続を支える仕組みづくりに集中する。", icon: "🏃" },
-  { key: "relation", title: "人間関係", subtitle: "距離感と信頼の管理", desc: "人間関係における距離・信頼・境界の取り方を明確にする。", icon: "🤝" },
-  { key: "problem", title: "問題解決", subtitle: "構造化と合意形成", desc: "課題の構造化や交渉・合意形成で迷いを減らす。", icon: "🧩" }
+  { key: "emotion", title: "感情", subtitle: "情動理論・自己調整", desc: "情動の仕組みと調整原理を整理し、判断の前提を安定させる。", icon: "🫧" },
+  { key: "cognition", title: "評価", subtitle: "認知評価・価値判断", desc: "認知バイアスや価値判断の枠組みを整理し、意味づけの軸を揃える。", icon: "🧠" },
+  { key: "attention", title: "適応", subtitle: "注意資源・環境適応", desc: "環境変化の読み取りと注意資源の配分原理を抽象化する。", icon: "👀" },
+  { key: "action", title: "行動", subtitle: "行動科学・習慣設計", desc: "行動開始・継続の理論と習慣設計の原理を扱う。", icon: "🏃" },
+  { key: "relation", title: "人間関係", subtitle: "社会心理・関係形成", desc: "信頼形成や境界設定など対人原理を辞書化する。", icon: "🤝" },
+  { key: "problem", title: "問題解決", subtitle: "意思決定・交渉構造", desc: "課題構造化と合意形成の理論を整理する。", icon: "🧩" }
 ];
 
 const BASE_CATEGORY_MAP = {
@@ -67,6 +67,7 @@ const BASE_CATEGORY_DEFAULT = "cognition";
 const DEFAULT_OS_KEY = "extra";
 const ALL_OS_KEY = "all";
 const ALL_OS_LABEL = "すべて";
+const TERM_LABEL_CACHE = new Map();
 
 const BASE_APPLY_GUIDE = {
   emotion: [
@@ -318,6 +319,31 @@ function getCardTerm(card) {
   return tags.length ? tags[0] : "";
 }
 
+/**
+ * 処世術一覧側の専門用語対応を取得する（terms → 判断基盤の辞書対応）。
+ */
+function getMappedTerm(card) {
+  const term = String(card?.term || "").trim();
+  if (term) return term;
+  const cardId = card?.id;
+  const idKey = typeof cardId === "string" ? cardId : String(cardId ?? "");
+  return DATA.cardTerms?.get(idKey) || "";
+}
+
+/**
+ * 日本語の用語ラベルだけを抽出する（英語併記を除外）。
+ */
+function getCardTermLabel(card) {
+  const cardId = card?.id;
+  const cacheKey = typeof cardId === "string" ? cardId : String(cardId ?? "");
+  if (cacheKey && TERM_LABEL_CACHE.has(cacheKey)) {
+    return TERM_LABEL_CACHE.get(cacheKey);
+  }
+  const label = extractJapaneseTerm(getMappedTerm(card));
+  if (cacheKey) TERM_LABEL_CACHE.set(cacheKey, label);
+  return label;
+}
+
 function formatCardTitle(card) {
   const baseTitle = String(card?.title || "").trim();
   if (!baseTitle) return "";
@@ -528,9 +554,9 @@ function renderShell(activeTab) {
             <span class="mobile-menu-desc">すぐに使える箇条書きの処世術</span>
           </button>
           <button class="mobile-menu-item" id="mobileMenuList">
-            <span class="mobile-menu-subtitle">判断の構造</span>
+            <span class="mobile-menu-subtitle">裏層・理論</span>
             <span class="mobile-menu-main">判断基盤</span>
-            <span class="mobile-menu-desc">6カテゴリで原理を学ぶ判断地図</span>
+            <span class="mobile-menu-desc">心理学・行動科学の用語辞典で裏側を整理</span>
           </button>
           <button class="mobile-menu-item" id="mobileMenuMy">
             <span class="mobile-menu-subtitle">個人設定</span>
@@ -1022,7 +1048,7 @@ function renderList(osKey, focusOsId = null) {
         </div>
 
         <div class="cards-grid" id="cards">
-          ${filtered.map((c, i) => renderCard(c, i)).join("")}
+          ${filtered.map((c) => renderCard(c, { mode: "default" })).join("")}
         </div>
       </div>
     </div>
@@ -1083,21 +1109,43 @@ function renderList(osKey, focusOsId = null) {
   }
 }
 
-function renderCard(c) {
+function renderCard(c, options = {}) {
+  const opts = options;
+  const mode = opts.mode || "default";
+  const isBaseMode = mode === "base";
   const favs = loadFavorites();
   const isFav = favs.has(String(c.id));
   const osKey = c.os || "extra";
 
-  const title = escapeHtml(formatCardTitle(c));
-  const tags = (c.tags || []).map((t) => String(t).trim()).filter(Boolean);
+  const termLabel = isBaseMode ? getCardTermLabel(c) : "";
+  const rawTitle = String(c?.title || "").trim();
+  const displayTitle = isBaseMode && termLabel ? termLabel : formatCardTitle(c);
+  const title = escapeHtml(displayTitle);
+  const shouldShowSubtitle = isBaseMode && termLabel && rawTitle && rawTitle !== termLabel;
+  const subtitle = shouldShowSubtitle
+    ? `<div class="scard-subtitle">${escapeHtml(rawTitle)}</div>`
+    : "";
+  const baseTags = (c.tags || []).map((t) => String(t).trim()).filter(Boolean);
+  const shouldPrependTermLabel = isBaseMode && termLabel && !baseTags.includes(termLabel);
+  const tags = shouldPrependTermLabel ? [termLabel, ...baseTags] : [...baseTags];
 
   const ess = splitToBullets(c.essence);
   const pit = splitToBullets(c.pitfalls);
   const strat = splitToBullets(c.strategy);
   const applyGuide = getCardApplyGuide(c);
   const tipLinks = getRelatedTipLinks(c);
+  const summary = isBaseMode ? String(c.summary || "").trim() : "";
 
-  const hasExpand = ess.length || pit.length || strat.length || applyGuide.length || tipLinks.length;
+  const hasExpand = ess.length || pit.length || strat.length || applyGuide.length || tipLinks.length || (isBaseMode && summary);
+  const essenceLabel = isBaseMode ? "理論の要点" : "要点";
+  const pitfallLabel = isBaseMode ? "誤解しやすい点" : "落とし穴";
+  const strategyLabel = isBaseMode ? "運用示唆" : "戦略";
+  const applyLabel = isBaseMode ? "適用条件" : "適用の目安";
+  const tipsLabel = isBaseMode ? "処世術一覧（具体論）" : "処世術一覧へのリンク";
+  const tagsLabel = isBaseMode ? "概念タグ" : "検索用タグ";
+  const definitionSection = isBaseMode && summary
+    ? `<h4>定義</h4><p class="scard-definition">${escapeHtml(summary)}</p>`
+    : "";
 
   return `
     <div class="scard ${osClass(osKey)}" data-cardid="${escapeHtml(c.id)}">
@@ -1107,6 +1155,7 @@ function renderCard(c) {
             <span class="scard-num">${escapeHtml(c.id)}</span>
             <h3 class="scard-title">${title}</h3>
           </div>
+          ${subtitle}
         </div>
 
         <div class="scard-side">
@@ -1118,17 +1167,18 @@ function renderCard(c) {
 
       ${hasExpand ? `
         <div class="scard-expand" style="display:none;" data-expand="${escapeHtml(c.id)}">
-          ${ess.length ? `<h4>要点</h4><ul>${ess.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
-          ${pit.length ? `<h4>落とし穴</h4><ul>${pit.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
-          ${strat.length ? `<h4>戦略</h4><ul>${strat.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
-          ${applyGuide.length ? `<h4>適用の目安</h4><ul>${applyGuide.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+          ${definitionSection}
+          ${ess.length ? `<h4>${essenceLabel}</h4><ul>${ess.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+          ${pit.length ? `<h4>${pitfallLabel}</h4><ul>${pit.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+          ${strat.length ? `<h4>${strategyLabel}</h4><ul>${strat.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+          ${applyGuide.length ? `<h4>${applyLabel}</h4><ul>${applyGuide.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
           ${tipLinks.length ? `
-            <h4>処世術一覧へのリンク</h4>
+            <h4>${tipsLabel}</h4>
             <div class="scard-links">
               ${tipLinks.map((link) => `<a class="scard-link" href="${escapeHtml(link.href)}">${escapeHtml(link.label)}</a>`).join("")}
             </div>
           ` : ""}
-          <h4>検索用タグ</h4>
+          <h4>${tagsLabel}</h4>
           ${tags.length ? `
             <div class="scard-tags">
               ${tags.map((t) => { const escaped = escapeHtml(t); return `<span class="tagchip" data-tagchip="${escaped}">#${escaped}</span>`; }).join("")}
@@ -1186,8 +1236,9 @@ function renderBaseIndex(params = {}) {
 
   if (query) {
     filtered = filtered.filter((c) => {
+      const termLabel = getCardTermLabel(c);
       const hay = [
-        c.id, c.title, c.summary, c.tab,
+        c.id, c.title, c.summary, c.tab, termLabel,
         ...(c.tags || []),
         ...splitToBullets(c.essence),
         ...splitToBullets(c.pitfalls),
@@ -1207,7 +1258,7 @@ function renderBaseIndex(params = {}) {
     <div class="list-hero-fullwidth">
       <div class="list-hero-main">
         <div class="list-hero-title">判断基盤</div>
-        <div class="list-hero-subtitle">なぜ効くか／いつ使うか／落とし穴を学ぶための意思決定マップ。</div>
+        <div class="list-hero-subtitle">用語・原理・適用条件を辞書化して整理する意思決定の裏側マップ。</div>
       </div>
       <div class="hero-right-copy">${formatHeroSide(HERO_SIDE_COPY.base)}</div>
     </div>
@@ -1228,7 +1279,7 @@ function renderBaseIndex(params = {}) {
 
         <div class="search-form-wrap">
           <div class="base-search-bar">
-            <input class="input base-search-input" id="q" placeholder="キーワード（例：疲れ / 交渉 / 先延ばし）" value="${escapeHtml(q)}" />
+            <input class="input base-search-input" id="q" placeholder="キーワード（例：認知的再評価 / アクティブ・リスニング）" value="${escapeHtml(q)}" />
             <div class="base-search-actions">
               <button class="base-search-clear" id="clearSearch" type="button" aria-label="検索をクリア">✕</button>
               <button class="base-search-submit" id="doSearch" type="button">検索</button>
@@ -1242,7 +1293,7 @@ function renderBaseIndex(params = {}) {
             <div class="count">${searchCountLabel}</div>
           </div>
           <div class="cards-grid" id="cards">
-            ${filtered.map((c) => renderCard(c)).join("")}
+            ${filtered.map((c) => renderCard(c, { mode: "base" })).join("")}
           </div>
         ` : ""}
 
@@ -1371,7 +1422,7 @@ function renderBaseCategory(key, focusId = null, osFilter = "") {
         </div>
 
         <div class="cards-grid" id="cards">
-          ${filteredCards.map((c, i) => renderCard(c, i)).join("")}
+          ${filteredCards.map((c) => renderCard(c, { mode: "base" })).join("")}
         </div>
       </div>
     </div>
@@ -1537,7 +1588,7 @@ function renderMy() {
         <span class="mypage-section-count">${favList.length}件</span>
       </div>
       <div class="cards-grid">
-        ${favList.length ? favList.map((c) => renderCard(c)).join("") : `
+        ${favList.length ? favList.map((c) => renderCard(c, { mode: "default" })).join("") : `
           <div class="mypage-empty">
             <div class="mypage-empty-icon">☆</div>
             <div class="mypage-empty-text">まだお気に入りがありません</div>
@@ -2320,7 +2371,7 @@ function renderSituationDetail(situationId) {
             <span class="situation-section-count">${cards.length}件</span>
           </div>
           <div class="cards-grid" id="cards">
-            ${cards.map((c) => renderCard(c)).join("")}
+            ${cards.map((c) => renderCard(c, { mode: "default" })).join("")}
           </div>
         </div>
       </div>
