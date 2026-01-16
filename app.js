@@ -1126,8 +1126,7 @@ function renderCard(c, options = {}) {
     ? `<div class="scard-subtitle">${escapeHtml(rawTitle)}</div>`
     : "";
   const baseTags = (c.tags || []).map((t) => String(t).trim()).filter(Boolean);
-  const baseTagSet = new Set(baseTags);
-  const shouldPrependTermLabel = isBaseMode && termLabel && !baseTagSet.has(termLabel);
+  const shouldPrependTermLabel = isBaseMode && termLabel && !baseTags.includes(termLabel);
   const tags = shouldPrependTermLabel ? [termLabel, ...baseTags] : [...baseTags];
 
   const ess = splitToBullets(c.essence);
