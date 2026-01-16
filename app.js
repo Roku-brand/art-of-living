@@ -67,6 +67,7 @@ const BASE_CATEGORY_DEFAULT = "cognition";
 const DEFAULT_OS_KEY = "extra";
 const ALL_OS_KEY = "all";
 const ALL_OS_LABEL = "すべて";
+const TERM_LABEL_CACHE = new Map();
 
 const BASE_APPLY_GUIDE = {
   emotion: [
@@ -333,7 +334,14 @@ function getMappedTerm(card) {
  * 日本語の用語ラベルだけを抽出する（英語併記を除外）。
  */
 function getCardTermLabel(card) {
-  return extractJapaneseTerm(getMappedTerm(card));
+  const cardId = card?.id;
+  const cacheKey = typeof cardId === "string" ? cardId : String(cardId ?? "");
+  if (cacheKey && TERM_LABEL_CACHE.has(cacheKey)) {
+    return TERM_LABEL_CACHE.get(cacheKey);
+  }
+  const label = extractJapaneseTerm(getMappedTerm(card));
+  if (cacheKey) TERM_LABEL_CACHE.set(cacheKey, label);
+  return label;
 }
 
 function formatCardTitle(card) {
@@ -1111,15 +1119,16 @@ function renderCard(c, options = {}) {
 
   const termLabel = isBaseMode ? getCardTermLabel(c) : "";
   const rawTitle = String(c?.title || "").trim();
-  const title = escapeHtml(isBaseMode && termLabel ? termLabel : formatCardTitle(c));
-  const subtitle = isBaseMode && termLabel && rawTitle && rawTitle !== termLabel
+  const displayTitle = isBaseMode && termLabel ? termLabel : formatCardTitle(c);
+  const title = escapeHtml(displayTitle);
+  const shouldShowSubtitle = isBaseMode && termLabel && rawTitle && rawTitle !== termLabel;
+  const subtitle = shouldShowSubtitle
     ? `<div class="scard-subtitle">${escapeHtml(rawTitle)}</div>`
     : "";
   const baseTags = (c.tags || []).map((t) => String(t).trim()).filter(Boolean);
   const baseTagSet = new Set(baseTags);
-  const tags = isBaseMode && termLabel && !baseTagSet.has(termLabel)
-    ? [termLabel, ...baseTags]
-    : [...baseTags];
+  const shouldPrependTermLabel = isBaseMode && termLabel && !baseTagSet.has(termLabel);
+  const tags = shouldPrependTermLabel ? [termLabel, ...baseTags] : [...baseTags];
 
   const ess = splitToBullets(c.essence);
   const pit = splitToBullets(c.pitfalls);
