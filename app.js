@@ -318,12 +318,18 @@ function getCardTerm(card) {
   return tags.length ? tags[0] : "";
 }
 
+/**
+ * 処世術一覧側の専門用語対応を取得する（terms → 判断基盤の辞書対応）。
+ */
 function getMappedTerm(card) {
   const term = String(card?.term || "").trim();
   if (term) return term;
   return DATA.cardTerms?.get(String(card?.id || "")) || "";
 }
 
+/**
+ * 日本語の用語ラベルだけを抽出する（英語併記を除外）。
+ */
 function getCardTermLabel(card) {
   return extractJapaneseTerm(getMappedTerm(card));
 }
@@ -1032,7 +1038,7 @@ function renderList(osKey, focusOsId = null) {
         </div>
 
         <div class="cards-grid" id="cards">
-          ${filtered.map((c, i) => renderCard(c, i)).join("")}
+          ${filtered.map((c) => renderCard(c)).join("")}
         </div>
       </div>
     </div>
@@ -1093,10 +1099,8 @@ function renderList(osKey, focusOsId = null) {
   }
 }
 
-function renderCard(c, indexOrOptions = {}) {
-  const opts = typeof indexOrOptions === "number"
-    ? { index: indexOrOptions }
-    : (indexOrOptions && typeof indexOrOptions === "object" ? indexOrOptions : {});
+function renderCard(c, options = {}) {
+  const opts = options && typeof options === "object" ? options : {};
   const mode = opts.mode || "default";
   const isBaseMode = mode === "base";
   const favs = loadFavorites();
