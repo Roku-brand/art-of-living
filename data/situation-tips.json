@@ -451,7 +451,7 @@
         },
         {
           "topicId": "T-RENAI-MAN",
-          "name": "恋愛戦略の処世術（男→女）（12）",
+          "name": "恋愛戦略の処世術（男→女）（22）",
           "items": [
             {
               "text": "追いかけすぎずに適度な距離感を保つ",
@@ -538,12 +538,62 @@
                 "I-007",
                 "R-005"
               ]
+            },
+            {
+              "text": "印象（清潔感・姿勢・声）で7割決まると割り切る",
+              "term": "第一印象の割り切り / First-Impression Commitment",
+              "refs": []
+            },
+            {
+              "text": "初期は「理解者」ポジションを取る",
+              "term": "理解者ポジション / Supporter Positioning",
+              "refs": []
+            },
+            {
+              "text": "会話は情報交換ではなく感情操作",
+              "term": "感情主導の会話 / Emotion-Led Conversation",
+              "refs": []
+            },
+            {
+              "text": "好意は出し切らず6割で止める",
+              "term": "好意の抑制 / Affection Moderation",
+              "refs": []
+            },
+            {
+              "text": "距離（物理・心理）を一段ずつ詰める",
+              "term": "段階的距離接近 / Stepwise Distance Closing",
+              "refs": []
+            },
+            {
+              "text": "他にも選択肢がある感を匂わせる",
+              "term": "選択肢の余白 / Optionality Signaling",
+              "refs": []
+            },
+            {
+              "text": "価値判断を相手に委ねる",
+              "term": "評価委任 / Evaluation Delegation",
+              "refs": []
+            },
+            {
+              "text": "余白と不完全さを残す",
+              "term": "余白設計 / Deliberate Incompleteness",
+              "refs": []
+            },
+            {
+              "text": "自分の軸を持っている",
+              "term": "自己軸維持 / Internal Axis",
+              "refs": []
+            },
+            {
+              "text": "相手の温度が上がった瞬間に決断する",
+              "term": "温度上昇の決断 / Timing Commitment",
+              "refs": []
             }
           ]
         },
         {
           "topicId": "T-RENAI-WOMAN",
-          "name": "恋愛戦略の処世術（女→男）（12）",
+          "name": "恋愛戦略の処世術（女→男）（24）",
           "items": [
             {
               "text": "興味を見せつつも追わせる余地を残す",
@@ -630,6 +680,66 @@
                 "R-018",
                 "R-035"
               ]
+            },
+            {
+              "text": "第一印象で「安心＋少しの特別感」を作る",
+              "term": "安心と特別感 / Comfort-Plus Distinction",
+              "refs": []
+            },
+            {
+              "text": "好意は早めに示すが、重くしない",
+              "term": "軽めの好意表明 / Light Affection Signaling",
+              "refs": []
+            },
+            {
+              "text": "聞き役に回り、承認で自尊心を満たす",
+              "term": "承認的傾聴 / Affirming Listening",
+              "refs": []
+            },
+            {
+              "text": "リアクションは大きめに、否定は控える",
+              "term": "肯定リアクション / Positive Reactivity",
+              "refs": []
+            },
+            {
+              "text": "頼るが、依存しない",
+              "term": "適度な依存抑制 / Balanced Reliance",
+              "refs": []
+            },
+            {
+              "text": "他の予定・世界を持っている感を出す",
+              "term": "独立性の演出 / Independence Signaling",
+              "refs": []
+            },
+            {
+              "text": "相手を立てるが、下に回らない",
+              "term": "尊重と対等性 / Respectful Parity",
+              "refs": []
+            },
+            {
+              "text": "距離は一気に詰めず、段階を作る",
+              "term": "段階的距離設計 / Stepwise Closeness",
+              "refs": []
+            },
+            {
+              "text": "連絡は「返す人」になりすぎない",
+              "term": "応答の余白 / Response Boundaries",
+              "refs": []
+            },
+            {
+              "text": "相手が踏み出しやすい空気を作る",
+              "term": "踏み出し空気づくり / Initiative-Friendly Atmosphere",
+              "refs": []
+            },
+            {
+              "text": "感情の起伏を出しすぎない",
+              "term": "感情安定性 / Emotional Stability",
+              "refs": []
+            },
+            {
+              "text": "関係を急かさず、余白を残す",
+              "term": "関係の余白 / Relationship Breathing Room",
+              "refs": []
             }
           ]
         }
