@@ -19,7 +19,7 @@ const OS_META = [
 
 const HERO_SIDE_COPY = {
   system: "人生OS/内部OSなどの分類で処世術を引ける入口。\n目的が決まっているときに素早く探すためのOS別索引。",
-  base: "判断基盤は心理学・行動科学・先人の教えを辞書化した裏側レイヤー。\n用語・原理・適用条件をタグで整理し、処世術一覧と接続する。",
+  base: "判断基盤は心理学・行動科学・先人の教えを辞書化した理論レイヤー。\n用語・原理・適用条件を整理し、判断の軸として参照する。",
   tips: "「人生術」「思考術」「対人術」「スキル術」「達成術」の5つのカテゴリーで\n人生のあらゆる局面を切り抜ける処世術一覧",
   my: "もう迷わないために、自分のために選択・洗練された”処世術棚”"
 };
@@ -65,8 +65,6 @@ const BASE_CATEGORY_MAP = {
 
 const BASE_CATEGORY_DEFAULT = "cognition";
 const DEFAULT_OS_KEY = "extra";
-const ALL_OS_KEY = "all";
-const ALL_OS_LABEL = "すべて";
 const TERM_LABEL_CACHE = new Map();
 
 const BASE_APPLY_GUIDE = {
@@ -775,22 +773,6 @@ function buildTabStats(cards, maxTabs = 7, osKey = null) {
   return { tabs, shownKeys: shown, totalTabs: sorted.length };
 }
 
-function getCardOsKey(card) {
-  return String((card && card.os) || DEFAULT_OS_KEY);
-}
-
-function buildBaseOsTabs(cards) {
-  const counts = new Map();
-  cards.forEach((c) => {
-    const osKey = getCardOsKey(c);
-    counts.set(osKey, (counts.get(osKey) || 0) + 1);
-  });
-  return OS_META.flatMap((meta) => {
-    const count = counts.get(meta.key);
-    return count ? [{ key: meta.key, label: meta.title, count }] : [];
-  });
-}
-
 function osLabel(osKey) {
   const meta = OS_META.find((m) => m.key === osKey);
   return meta ? meta.title : osKey;
@@ -801,34 +783,8 @@ function osSubtitle(osKey) {
   return meta ? meta.subtitle : "";
 }
 
-function resolveOsKey(osKey) {
-  if (!osKey) return "";
-  return osKey === ALL_OS_LABEL ? ALL_OS_KEY : osKey;
-}
-
-function buildBaseCategoryHash(key, osKey) {
-  const normalizedOsKey = osKey || ALL_OS_KEY;
-  const osParam = normalizedOsKey !== ALL_OS_KEY ? `&os=${encodeURIComponent(normalizedOsKey)}` : "";
-  return `#base-category?key=${encodeURIComponent(key)}${osParam}`;
-}
-
-function renderBaseCategoryTabs(activeKey = "") {
-  return `
-    <div class="tabbar-wrap">
-      <div class="tabbar-label">分類タブ</div>
-      <div class="tabbar" id="baseCategoryTabs">
-        ${BASE_CATEGORIES.map((cat) => {
-          const count = getBaseCardsByCategory(cat.key).length;
-          return `
-            <button class="tabbtn ${cat.key === activeKey ? "active" : ""}" data-base-category-tab="${escapeHtml(cat.key)}">
-              <span>${escapeHtml(cat.title)}</span>
-              <span class="tabcount">${count}</span>
-            </button>
-          `;
-        }).join("")}
-      </div>
-    </div>
-  `;
+function buildBaseCategoryHash(key) {
+  return `#base-category?key=${encodeURIComponent(key)}`;
 }
 
 function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = null) {
@@ -1133,7 +1089,7 @@ function renderCard(c, options = {}) {
   const pit = splitToBullets(c.pitfalls);
   const strat = splitToBullets(c.strategy);
   const applyGuide = getCardApplyGuide(c);
-  const tipLinks = getRelatedTipLinks(c);
+  const tipLinks = isBaseMode ? [] : getRelatedTipLinks(c);
   const summary = isBaseMode ? String(c.summary || "").trim() : "";
 
   const hasExpand = ess.length || pit.length || strat.length || applyGuide.length || tipLinks.length || (isBaseMode && summary);
@@ -1320,12 +1276,6 @@ function renderBaseIndex(params = {}) {
   `;
 
   bindBaseSidebarActions(view);
-  view.querySelectorAll("[data-base-category-tab]").forEach((btn) => {
-    btn.onclick = () => {
-      const key = btn.getAttribute("data-base-category-tab");
-      if (key) nav(buildBaseCategoryHash(key));
-    };
-  });
   view.querySelectorAll("[data-base-category]").forEach((btn) => {
     btn.onclick = () => {
       const key = btn.getAttribute("data-base-category");
@@ -1342,7 +1292,7 @@ function renderBaseIndex(params = {}) {
   bindCardEvents();
 }
 
-function renderBaseCategory(key, focusId = null, osFilter = "") {
+function renderBaseCategory(key, focusId = null) {
   renderShell("list");
   const view = $("#view");
 
@@ -1359,26 +1309,7 @@ function renderBaseCategory(key, focusId = null, osFilter = "") {
   }
 
   const cards = getBaseCardsByCategory(meta.key);
-  const osTabs = buildBaseOsTabs(cards);
-  const focusCard = focusId ? getCardById(focusId) : null;
-  const fallbackOs = focusCard ? getCardOsKey(focusCard) : "";
-  const osKeys = new Set(osTabs.map((tab) => tab.key));
-  const normalizedFilter = resolveOsKey(osFilter);
-  const normalizedFallback = resolveOsKey(fallbackOs);
-  let activeOsKey = normalizedFilter || normalizedFallback || ALL_OS_KEY;
-  if (activeOsKey !== ALL_OS_KEY && !osKeys.has(activeOsKey)) {
-    activeOsKey = ALL_OS_KEY;
-  }
-  const filteredCards = activeOsKey === ALL_OS_KEY
-    ? cards
-    : cards.filter((c) => getCardOsKey(c) === activeOsKey);
-  const tabButtons = [
-    { key: ALL_OS_KEY, label: ALL_OS_LABEL, count: cards.length },
-    ...osTabs
-  ];
-  const countLabel = activeOsKey === ALL_OS_KEY
-    ? `件数：<b>${cards.length}</b>`
-    : `件数：<b>${filteredCards.length}</b><span class="count-sep">/</span>全体：<b>${cards.length}</b>`;
+  const countLabel = `件数：<b>${cards.length}</b>`;
 
   view.innerHTML = `
     <div class="list-layout has-mobile-sidebar">
@@ -1405,22 +1336,8 @@ function renderBaseCategory(key, focusId = null, osFilter = "") {
           <div class="count">${countLabel}</div>
         </div>
 
-        ${renderBaseCategoryTabs(meta.key)}
-
-        <div class="tabbar-wrap">
-          <div class="tabbar-label">分類タブ（OS別）</div>
-          <div class="tabbar" id="baseTabbar">
-            ${tabButtons.map((tab) => `
-              <button class="tabbtn ${tab.key === activeOsKey ? "active" : ""}" data-base-tab="${escapeHtml(tab.key)}">
-                <span>${escapeHtml(tab.label)}</span>
-                <span class="tabcount">${tab.count}</span>
-              </button>
-            `).join("")}
-          </div>
-        </div>
-
         <div class="cards-grid" id="cards">
-          ${filteredCards.map((c) => renderCard(c, { mode: "base" })).join("")}
+          ${cards.map((c) => renderCard(c, { mode: "base" })).join("")}
         </div>
       </div>
     </div>
@@ -1428,21 +1345,6 @@ function renderBaseCategory(key, focusId = null, osFilter = "") {
 
   bindBaseSidebarActions(view);
   bindCardEvents();
-  view.querySelectorAll("[data-base-category-tab]").forEach((btn) => {
-    btn.onclick = () => {
-      const tabKey = btn.getAttribute("data-base-category-tab");
-      if (tabKey) nav(buildBaseCategoryHash(tabKey));
-    };
-  });
-  const baseTabbar = $("#baseTabbar");
-  if (baseTabbar) {
-    baseTabbar.querySelectorAll("[data-base-tab]").forEach((btn) => {
-      btn.onclick = () => {
-        const tabKey = btn.getAttribute("data-base-tab") || ALL_OS_KEY;
-        nav(buildBaseCategoryHash(meta.key, tabKey));
-      };
-    });
-  }
 
   if (focusId) {
     const cardEl = view.querySelector(`[data-cardid="${CSS.escape(focusId)}"]`);
@@ -2545,7 +2447,7 @@ async function boot() {
 
     if (hash.startsWith("#base-category")) {
       const q = parseQuery(hash.split("?")[1] || "");
-      return renderBaseCategory(q.key || "", q.focus || null, q.os || "");
+      return renderBaseCategory(q.key || "", q.focus || null);
     }
 
     if (hash.startsWith("#list")) {
