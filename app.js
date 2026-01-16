@@ -3,7 +3,7 @@
 // - サイドバー（OS）は左固定
 // - 2次フィルター（タブ）= card.tab 参照
 // - タグ検索 = card.tags のまま
-// - JSONファイル名：life/internal/relation/operation/exection/adapt
+// - JSONファイル名：life/internal/relation/operation/execution/adapt
 // =========================================================
 
 // ========== 設定 ==========
@@ -12,7 +12,7 @@ const OS_META = [
   { key: "internal",  osId: "OS-02", title: "内部心理OS",   subtitle: "②心の扱い方",     desc: "不安・自己否定・怒り・疲れ・回復。",       file: "./data/internal.json" },
   { key: "relation",  osId: "OS-03", title: "対人関係OS",   subtitle: "③人との関わり方", desc: "印象・距離感・信頼・境界線。",             file: "./data/relation.json" },
   { key: "operation", osId: "OS-04", title: "環境操作OS",   subtitle: "④影響力を行使する技術", desc: "報告・会議・交渉・評価・根回し。",         file: "./data/operation.json" },
-  { key: "exection",  osId: "OS-05", title: "行動OS",       subtitle: "⑤行動・習慣の技術", desc: "着手・集中・習慣化・継続・仕組み化。",     file: "./data/exection.json" },
+  { key: "execution",  osId: "OS-05", title: "行動OS",       subtitle: "⑤行動・習慣の技術", desc: "着手・集中・習慣化・継続・仕組み化。",     file: "./data/execution.json" },
   { key: "adapt",     osId: "OS-06", title: "適応OS",       subtitle: "⑥キャッチアップの極意", desc: "変化察知・AI・キャリア・資産・撤退。",     file: "./data/adapt.json" },
   { key: "extra",     osId: "OS-07", title: "追加OS（仮）", subtitle: "⑦追加・実験枠",   desc: "調整枠・実験枠。",                          file: "./data/extra.json" }
 ];
@@ -27,6 +27,10 @@ const HERO_SIDE_COPY = {
 // OS-ID to OS key mapping
 const OS_ID_MAP = {};
 OS_META.forEach(m => { OS_ID_MAP[m.osId] = m.key; });
+const OS_KEY_ALIASES = {
+  exection: "execution"
+};
+const normalizeOsKey = (key) => OS_KEY_ALIASES[key] || key;
 
 const LS_FAV = "shoseijutsu:favorites";
 const LS_PERSONAL = "shoseijutsu:personalCards";
@@ -39,7 +43,7 @@ const TAB_ORDER = {
   internal: ["不安", "自己否定", "怒り", "疲れ・回復", "焦り", "モヤモヤ", "無力感", "自責", "先延ばし", "自己信頼", "納得感", "感情鈍化", "内的ブレーキ", "再起動"],
   relation: ["①距離感", "②印象", "③雑談・やり取り", "④信頼・期待", "⑤衝突・違和感", "⑥維持・選択"],
   operation: ["報告・合意", "交渉術", "構造", "承認・制度", "管理", "判断"],
-  exection: ["着手", "分解", "集中", "継続", "ペース", "計画", "整理", "停滞", "摩耗", "寿命", "終了", "中断", "再開", "再起動", "再設計", "完走"],
+  execution: ["着手", "分解", "集中", "継続", "ペース", "計画", "整理", "停滞", "摩耗", "寿命", "終了", "中断", "再開", "再起動", "再設計", "完走"],
   adapt: ["変化", "学習", "技術変化", "キャリア", "役割", "リスク", "選択肢", "柔軟性", "不確実性", "前提崩壊", "陳腐化", "速度", "疲労", "視野", "撤退", "判断"],
   extra: []
 };
@@ -57,7 +61,7 @@ const BASE_CATEGORY_MAP = {
   internal: "emotion",
   life: "cognition",
   adapt: "attention",
-  exection: "action",
+  execution: "action",
   relation: "relation",
   operation: "problem",
   extra: "problem"
@@ -789,7 +793,7 @@ function buildBaseCategoryHash(key) {
 
 function renderCompactSidebar(currentOS, activeSituation = false, focusOsId = null) {
   const items = [
-    "life", "internal", "relation", "operation", "exection", "adapt", "extra"
+    "life", "internal", "relation", "operation", "execution", "adapt", "extra"
   ];
   
   // If focusOsId is provided, highlight that OS in the sidebar
@@ -913,7 +917,8 @@ function renderList(osKey, focusOsId = null) {
   const view = $("#view");
 
   // If focus is provided, navigate to the corresponding OS
-  let currentOS = OS_META.find((m) => m.key === osKey) ? osKey : "life";
+  const normalizedKey = normalizeOsKey(osKey);
+  let currentOS = OS_META.find((m) => m.key === normalizedKey) ? normalizedKey : "life";
   
   // If focusOsId is provided, find the corresponding OS
   if (focusOsId && OS_ID_MAP[focusOsId]) {
@@ -953,7 +958,7 @@ function renderList(osKey, focusOsId = null) {
 
   // ★重要：DOM順を「sidebar → main」にして grid(320px / 1fr) と一致させる
   const heroSubtitle = "人生の難局は、無数にあるようでいて、行き詰まる構造は限られている。ここには、そのすべてに対処するための完成した処世術の体系がある。";
-  const showSystemHero = osKey === "life" && !focusOsId;
+  const showSystemHero = normalizedKey === "life" && !focusOsId;
   const heroTitle = showSystemHero ? "OS別処世術一覧" : (meta?.title || currentOS);
   const heroDescription = showSystemHero ? heroSubtitle : (meta?.desc || heroSubtitle);
   const heroSideCopy = showSystemHero ? `

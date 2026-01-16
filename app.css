@@ -47,7 +47,7 @@
   --os-internal: #16a34a; /* green */
   --os-relation: #3b82f6; /* blue */
   --os-operation:#8b5cf6; /* purple */
-  --os-exection: #f59e0b; /* amber */
+  --os-execution: #f59e0b; /* amber */
   --os-adapt:    #06b6d4; /* cyan */
   --os-extra:    #64748b; /* slate */
 
@@ -1028,7 +1028,7 @@ a:hover{ text-decoration: underline; }
 .scard.os-internal{ --os-line: var(--os-internal); }
 .scard.os-relation{ --os-line: var(--os-relation); }
 .scard.os-operation{ --os-line: var(--os-operation); }
-.scard.os-exection{ --os-line: var(--os-exection); }
+.scard.os-execution{ --os-line: var(--os-execution); }
 .scard.os-adapt{ --os-line: var(--os-adapt); }
 .scard.os-extra{ --os-line: var(--os-extra); }
 
