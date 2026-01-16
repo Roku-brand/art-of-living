@@ -339,6 +339,117 @@
           ]
         },
         {
+          "topicId": "T-GROUP",
+          "name": "集団の処世術（21）",
+          "items": [
+            {
+              "text": "正論・訂正・説明は場の満足度を下げやすい",
+              "term": "場の満足度低下 / Satisfaction Dip",
+              "refs": []
+            },
+            {
+              "text": "評価・善悪判断を口に出すと分断が起きる",
+              "term": "価値判断の分断 / Judgment Polarization",
+              "refs": []
+            },
+            {
+              "text": "全員が「経験ベース」で語れる話題を選ぶ",
+              "term": "経験共有 / Shared Experience Focus",
+              "refs": []
+            },
+            {
+              "text": "知識差が出る話題は避け、感情共有型を使う",
+              "term": "知識差回避 / Knowledge Gap Avoidance",
+              "refs": []
+            },
+            {
+              "text": "深掘りより「あるある」で横展開する",
+              "term": "あるある展開 / Relatable Expansion",
+              "refs": []
+            },
+            {
+              "text": "テンポを最優先し、完成度は求めない",
+              "term": "テンポ優先 / Tempo Priority",
+              "refs": []
+            },
+            {
+              "text": "面白さより「流れに乗る」ことを優先する",
+              "term": "流れ優先 / Flow Alignment",
+              "refs": []
+            },
+            {
+              "text": "引く・振る・拾うを切り替えて主導権を保つ",
+              "term": "会話主導の切替 / Turn Leadership Switching",
+              "refs": []
+            },
+            {
+              "text": "仕切りすぎず、放置しすぎない中間を取る",
+              "term": "中間運営 / Balanced Moderation",
+              "refs": []
+            },
+            {
+              "text": "俯瞰しすぎると冷め役になり孤立しやすい",
+              "term": "冷め役回避 / Detachment Avoidance",
+              "refs": []
+            },
+            {
+              "text": "理解していても「分からない側」に一度降りる",
+              "term": "わからない側に降りる / Strategic Novice Stance",
+              "refs": []
+            },
+            {
+              "text": "浅い会話を「無意味」と切り捨てない",
+              "term": "浅さ容認 / Shallow Talk Acceptance",
+              "refs": []
+            },
+            {
+              "text": "浅さ＝安心のシグナルとして機能する",
+              "term": "安心シグナル / Safety Signal",
+              "refs": []
+            },
+            {
+              "text": "否定せず受け取り、評価をズラして返す",
+              "term": "評価ずらし応答 / Reframing Response",
+              "refs": []
+            },
+            {
+              "text": "軽いいじり・ノリ重視の場では即応してテンポを維持する",
+              "term": "即応テンポ維持 / Quick Response Timing",
+              "refs": []
+            },
+            {
+              "text": "立場が不安定／いじりが強い場面では一拍置いて余裕を示す",
+              "term": "一拍置き / Delayed Composure",
+              "refs": []
+            },
+            {
+              "text": "自虐は限定的に使い、恒常化させない",
+              "term": "自虐の限定 / Limited Self-Deprecation",
+              "refs": []
+            },
+            {
+              "text": "目立つ人より「場を壊さない人」が評価される",
+              "term": "場の安定評価 / Stability Recognition",
+              "refs": []
+            },
+            {
+              "text": "立場が弱い人を守ると信頼が集まりやすい",
+              "term": "弱者保護 / Protecting the Vulnerable",
+              "refs": []
+            },
+            {
+              "text": "感情の安定性は地味だが長期評価が高い",
+              "term": "感情安定性 / Emotional Stability",
+              "refs": []
+            },
+            {
+              "text": "解散後に悪く言われない振る舞いを優先する",
+              "term": "事後評価 / Post-Event Reputation",
+              "refs": []
+            }
+          ]
+        },
+        {
           "topicId": "T-RENAI-MAN",
           "name": "恋愛戦略の処世術（男→女）（12）",
           "items": [
