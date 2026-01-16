@@ -4047,17 +4047,7 @@ input:focus-visible, textarea:focus-visible{
 }
 /* 中央に大きく配置する羅針盤/紋章モチーフ - 8〜15%の透明度 */
 .top-hero::before{
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120%;
-  height: 120%;
-  background:
-    url("./assets/bg/watermark-compass.svg") center center / contain no-repeat;
-  opacity: 0.18;
-  pointer-events: none;
+  content: none;
 }
 /* テキスト可読性のための暗めグラデーションオーバーレイ */
 .top-hero::after{
