@@ -642,48 +642,90 @@
       "topics": [
         {
           "topicId": "T-KAIWA",
-          "name": "会話・雑談の処世術（11）",
+          "name": "会話・雑談の処世術（17）",
           "items": [
             {
-              "text": "相手が話したいことを聞く",
+              "text": "相手主導で話題を回す",
               "term": "話題の引き出し / Topic Elicitation",
               "refs": [
                 "R-032"
               ]
             },
             {
-              "text": "相槌は大げさにする",
+              "text": "結論やオチを急がない",
+              "term": "プロセス重視 / Process Focus",
+              "refs": [
+                "R-031"
+              ]
+            },
+            {
+              "text": "相手の話題を奪わない",
+              "term": "発言順配慮 / Speaking Order Consideration",
+              "refs": [
+                "R-037"
+              ]
+            },
+            {
+              "text": "知識で優位に立たない",
+              "term": "認知的優位性抑制 / Cognitive Advantage Restraint",
+              "refs": [
+                "R-041"
+              ]
+            },
+            {
+              "text": "評価より反応を返す",
+              "term": "反応優先 / Reaction First",
+              "refs": [
+                "R-007"
+              ]
+            },
+            {
+              "text": "相槌はやや大げさにする",
               "term": "リアクション強調 / Reaction Amplification",
               "refs": [
                 "R-007"
               ]
             },
             {
-              "text": "自分の話は短くする",
+              "text": "共感を要約で示す",
+              "term": "要約共感 / Summarized Empathy",
+              "refs": [
+                "R-007"
+              ]
+            },
+            {
+              "text": "否定から入らない",
+              "term": "初期同意 / Initial Agreement",
+              "refs": [
+                "R-024"
+              ]
+            },
+            {
+              "text": "質問しすぎない",
+              "term": "尋問回避 / Interrogation Avoidance",
+              "refs": [
+                "R-032"
+              ]
+            },
+            {
+              "text": "オープン質問で広げる",
+              "term": "開放型質問 / Open-Ended Questions",
+              "refs": [
+                "R-032"
+              ]
+            },
+            {
+              "text": "自分の話は短く切る",
               "term": "発言量調整 / Speaking Time Control",
               "refs": [
                 "R-037"
               ]
             },
             {
-              "text": "質問で会話を広げる",
-              "term": "オープンクエスチョン / Open-Ended Questions",
+              "text": "話題を深掘りしすぎない",
+              "term": "適度な浅さ / Balanced Shallowness",
               "refs": [
-                "R-032"
-              ]
-            },
-            {
-              "text": "否定から入らない",
-              "term": "イエス・アンド / Yes-And Technique",
-              "refs": [
-                "R-024"
-              ]
-            },
-            {
-              "text": "相手の発言を要約して返す",
-              "term": "バックトラッキング / Backtracking",
-              "refs": [
-                "R-007"
+                "R-031"
               ]
             },
             {
@@ -694,31 +736,31 @@
               ]
             },
             {
-              "text": "沈黙を埋めようとしない",
+              "text": "共通点を軽く拾う",
+              "term": "類似性強調 / Similarity Emphasis",
+              "refs": [
+                "R-031"
+              ]
+            },
+            {
+              "text": "沈黙を失敗扱いしない",
               "term": "沈黙耐性 / Silence Tolerance",
               "refs": [
                 "R-008"
               ]
             },
             {
-              "text": "共通点を見つける",
-              "term": "類似性の強調 / Similarity Emphasis",
+              "text": "場の空気を言語化しない",
+              "term": "メタ発言抑制 / Meta-Comment Restraint",
               "refs": [
                 "R-031"
               ]
             },
             {
-              "text": "話のオチを求めない",
-              "term": "プロセス重視 / Process Focus",
+              "text": "会話の余韻を残して終える",
+              "term": "ピーク・エンド / Peak-End",
               "refs": [
                 "R-031"
-              ]
-            },
-            {
-              "text": "知っていても聞く",
-              "term": "戦略的無知 / Strategic Ignorance",
-              "refs": [
-                "R-041"
               ]
             }
           ]
